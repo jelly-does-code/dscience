@@ -5,6 +5,8 @@ from xgboost import XGBRegressor
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+import matplotlib.pyplot as plt
 
 def load_data(train_file, test_file):
     """Load the training and testing data from CSV files."""
@@ -60,22 +62,41 @@ def run_models(X_train, y_train, X_valid, y_valid):
 
     return model_rf, model_xgb
 
+
 def plot_feature_importance(model_rf, model_xgb, feature_names):
-    """Plot the feature importance from both models."""
+    """Plot the feature importance from both models, showing only the top 10 features."""
+    
+    # Get feature importances
     rf_importances = model_rf.feature_importances_
     xgb_importances = model_xgb.feature_importances_
 
+    # Get the indices of the top 10 features or top 30% features
+
+    rf_features_plot = -1 * min(10, len(rf_importances))
+    xgb_features_plot  = -1 * min(10, len(xgb_importances))
+
+    rf_indices = np.argsort(rf_importances)[rf_features_plot :]
+    xgb_indices = np.argsort(xgb_importances)[xgb_features_plot:]
+
+    # Get the top 10 feature names and importances for Random Forest
+    rf_top_features = [feature_names[i] for i in rf_indices]
+    rf_top_importances = rf_importances[rf_indices]
+
     # Plot feature importances for Random Forest
     plt.figure(figsize=(10, 5))
-    plt.barh(feature_names, rf_importances)
+    plt.barh(rf_top_features, rf_top_importances)
     plt.title('Feature Importance - Random Forest')
     plt.xlabel('Importance')
     plt.savefig('feature_importance_rf.png')  # Save the figure instead of showing
     plt.close()  # Close the figure
 
+    # Get the top 10 feature names and importances for XGBoost
+    xgb_top_features = [feature_names[i] for i in xgb_indices]
+    xgb_top_importances = xgb_importances[xgb_indices]
+
     # Plot feature importances for XGBoost
     plt.figure(figsize=(10, 5))
-    plt.barh(feature_names, xgb_importances)
+    plt.barh(xgb_top_features, xgb_top_importances)
     plt.title('Feature Importance - XGBoost')
     plt.xlabel('Importance')
     plt.savefig('feature_importance_xgb.png')  # Save the figure instead of showing
