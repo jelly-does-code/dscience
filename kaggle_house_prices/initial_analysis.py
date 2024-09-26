@@ -72,8 +72,8 @@ def plot_feature_importance(model_rf, model_xgb, feature_names):
 
     # Get the indices of the top 10 features or top 30% features
 
-    rf_features_plot = -1 * min(10, len(rf_importances))
-    xgb_features_plot  = -1 * min(10, len(xgb_importances))
+    rf_features_plot = -1 * min(10, 0.3 * len(rf_importances))
+    xgb_features_plot  = -1 * min(10, 0.3 * len(xgb_importances))
 
     rf_indices = np.argsort(rf_importances)[rf_features_plot :]
     xgb_indices = np.argsort(xgb_importances)[xgb_features_plot:]
