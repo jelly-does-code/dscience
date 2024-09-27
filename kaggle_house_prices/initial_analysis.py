@@ -14,23 +14,37 @@ def load_data(train_file, test_file):
     test_data = pd.read_csv(test_file)
     return train_data, test_data
 
-def preprocess_data(data, target_column):
+def preprocess_data(train_data, test_data, target_column):
     """Preprocess the data by handling missing values and encoding categorical features."""
     # Separate features and target
-    X = data.drop(columns=[target_column])
-    y = data[target_column]
+    X_train = train_data.drop(columns=[target_column])
+    y_train = train_data[target_column]
+    X_test = test_data
+
 
     # Fill missing values
-    for col in X.columns:
-        if X[col].dtype == 'object':  # Categorical
-            X[col] = X[col].fillna(X[col].mode()[0])
+    for col in X_train.columns:
+        if X_train[col].dtype == 'object':  # Categorical
+            X_train[col] = X_train[col].fillna(X_train[col].mode()[0])
         else:  # Numerical
-            X[col] = X[col].fillna(X[col].mean())
+            X_train[col] = X_train[col].fillna(X_train[col].mean())
+
+    
+    # Fill missing values
+    for col in X_test.columns:
+        if X_test[col].dtype == 'object':  # Categorical
+            X_test[col] = X_test[col].fillna(X_test[col].mode()[0])
+        else:  # Numerical
+            X_test[col] = X_test[col].fillna(X_test[col].mean())
 
     # One-hot encode categorical features
-    X = pd.get_dummies(X, drop_first=True)
+    X_train = pd.get_dummies(X_train, drop_first=True)
     
-    return X, y
+    
+    # Align the test set with the training set, filling missing columns with 0
+    X_test, _ = X_test.align(X_train, join='right', axis=1, fill_value=0)
+
+    return X_train, y_train, X_test
 
 def run_models(X_train, y_train, X_valid, y_valid):
     """Train Random Forest and XGBoost models and evaluate performance."""
@@ -130,20 +144,20 @@ def main():
     target_column = 'SalePrice'  # Example target column
 
     # Preprocess the data
-    X, y = preprocess_data(train_data, target_column)
+    X_train, y_train, X_test = preprocess_data(train_data, test_data, target_column)
 
     # Split the dataset
-    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.3, random_state=42)
 
     # Run models
     model_rf, model_xgb = run_models(X_train, y_train, X_valid, y_valid)
 
     # Plot feature importance
-    plot_feature_importance(model_rf, model_xgb, X.columns)
+    plot_feature_importance(model_rf, model_xgb, X_test.columns)
 
     # Visualize top columns distributions
-    visualize_top_columns(X, model_rf.feature_importances_, top_n=10)
-    visualize_top_columns(X, model_xgb.feature_importances_, top_n=10)
+    visualize_top_columns(X_train, model_rf.feature_importances_, top_n=10)
+    visualize_top_columns(X_train, model_xgb.feature_importances_, top_n=10)
 
 if __name__ == "__main__":
     main()
