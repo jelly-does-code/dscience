@@ -159,5 +159,20 @@ def main():
     visualize_top_columns(X_train, model_rf.feature_importances_, top_n=10)
     visualize_top_columns(X_train, model_xgb.feature_importances_, top_n=10)
 
+    test_rf_predictions = model_rf.predict(X_test)
+    # Create a submission file
+    submission_rf = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_rf_predictions})
+    submission_rf.to_csv('submission_rf.csv', index=False)
+
+
+
+    test_xgb_predictions = model_xgb.predict(X_test)
+    # Create a submission file
+    submission_xgb = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_xgb_predictions})
+    submission_xgb.to_csv('submission_xgb.csv', index=False)
+
+
+    print("Submission file(s) created successfully.")
+
 if __name__ == "__main__":
     main()
