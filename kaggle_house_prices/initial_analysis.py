@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
+from catboost import CatBoostRegressor
 
 def load_data(train_file, test_file):
     """Load the training and testing data from CSV files."""
@@ -23,7 +24,6 @@ def preprocess_data(train_data, test_data, target_column):
     y_train = train_data[target_column]
     X_test = test_data
 
-
     # Fill missing values
     for col in X_train.columns:
         if X_train[col].dtype == 'object':  # Categorical
@@ -31,7 +31,6 @@ def preprocess_data(train_data, test_data, target_column):
         else:  # Numerical
             X_train[col] = X_train[col].fillna(X_train[col].mean())
 
-    
     # Fill missing values
     for col in X_test.columns:
         if X_test[col].dtype == 'object':  # Categorical
@@ -41,49 +40,51 @@ def preprocess_data(train_data, test_data, target_column):
 
     # One-hot encode categorical features
     X_train = pd.get_dummies(X_train, drop_first=True)
-    
+    X_test = pd.get_dummies(X_test, drop_first=True)
     
     # Align the test set with the training set, filling missing columns with 0
-    X_test, _ = X_test.align(X_train, join='right', axis=1, fill_value=0)
+    X_train, X_test = X_train.align(X_test, join='left', axis=1, fill_value=0)
 
     return X_train, y_train, X_test
 
-def run_models(X_train, y_train, X_valid, y_valid):
+def run_models(X_train, y_train, X_valid, y_valid, model_names):
     """Train Random Forest and XGBoost models and evaluate performance."""
-    # Train Random Forest
+    # Choose models
     model_rf = RandomForestRegressor(random_state=42)
-    model_rf.fit(X_train, y_train)
-
-    # Train XGBoost
     model_xgb = XGBRegressor(random_state=42)
+    model_cat = CatBoostRegressor(random_state=42, silent=True)
+
+    # Train models
+    model_rf.fit(X_train, y_train)
     model_xgb.fit(X_train, y_train)
+    model_cat.fit(X_train, y_train)
 
-    # Predictions
-    y_pred_rf = model_rf.predict(X_valid)
-    y_pred_xgb = model_xgb.predict(X_valid)
-
+    # Collect models
+    models = [model_rf, model_xgb, model_cat]
+    
+    # Predict with all models
+    y_pred_rf, y_pred_xgb, y_pred_cat = model_rf.predict(X_valid), model_xgb.predict(X_valid), model_cat.predict(X_valid)
 
     kfold = KFold(n_splits=5, shuffle=True, random_state=7)
-    rf_cross_val = cross_val_score(model_rf, X_train, y_train, cv=kfold)
-    xgb_cross_val = cross_val_score(model_xgb, X_train, y_train, cv=kfold)
-
-    
-
+    cross_val_scores = [cross_val_score(model, X_train, y_train, cv=kfold) for model in models]
 
     perf_data = {
-        'Model': ['Random Forest', 'XGB'],
+        'Model': model_names,
         'MSE': [mean_squared_error(y_valid, y_pred_rf)
-            ,mean_squared_error(y_valid, y_pred_xgb)],
+            ,mean_squared_error(y_valid, y_pred_xgb)
+            ,mean_squared_error(y_valid, y_pred_cat)],
         'R²': [r2_score(y_valid, y_pred_rf)
-            ,r2_score(y_valid, y_pred_xgb)],
-        'KFold Validation (mean, std)': ["%.2f%% (%.2f%%)" % (rf_cross_val.mean()*100, rf_cross_val.std()*100)
-                                        ,"%.2f%% (%.2f%%)" % (xgb_cross_val.mean()*100, xgb_cross_val.std()*100)]}
+            ,r2_score(y_valid, y_pred_xgb)
+            ,r2_score(y_valid, y_pred_cat)],
+        'KFold Validation (mean, std)': ["%.2f%% (%.2f%%)" % (cross_val_scores[0].mean()*100, cross_val_scores[0].std()*100)
+                                        ,"%.2f%% (%.2f%%)" % (cross_val_scores[1].mean()*100, cross_val_scores[1].std()*100)
+                                        ,"%.2f%% (%.2f%%)" % (cross_val_scores[2].mean()*100, cross_val_scores[2].std()*100)]}
 
     perf = pd.DataFrame(perf_data)
     
     print(perf)
 
-    return model_rf, model_xgb
+    return models[0], models[1], models[2]
 
 def plot_feature_importance(models, model_names, feature_names, top_n=10):
     """Plot the feature importance from multiple models, showing only the top N features."""
@@ -108,21 +109,25 @@ def plot_feature_importance(models, model_names, feature_names, top_n=10):
         plt.savefig(f'feature_importance_{model_name}.png')  # Save the figure for the model
         plt.close()  # Close the figure
 
-def visualize_top_columns(X, feature_importances, top_n=10):
-    """Visualize distributions of the top N most important features."""
-    # Get the indices of the top N features
-    top_indices = feature_importances.argsort()[-top_n:][::-1]
-    top_features = X.columns[top_indices]
+def visualize_top_columns(X_train, models, top_n=10):
     
-    # Plot distributions for top features
-    plt.figure(figsize=(15, 10))
-    for i, feature in enumerate(top_features):
-        plt.subplot(5, 2, i + 1)
-        sns.histplot(X[feature], kde=True)
-        plt.title(feature)
-    plt.tight_layout()
-    plt.savefig(f'top_features_distribution.png')  # Save the figure instead of showing
-    plt.close()  # Close the figure
+    for model in models:
+        """Visualize distributions of the top N most important features for all models."""
+        feature_importances = model.feature_importances_
+        
+        # Get the indices of the top N features
+        top_indices = feature_importances.argsort()[-top_n:][::-1]
+        top_features = X_train.columns[top_indices]
+        
+        # Plot distributions for top features
+        plt.figure(figsize=(15, 10))
+        for i, feature in enumerate(top_features):
+            plt.subplot(5, 2, i + 1)
+            sns.histplot(X[feature], kde=True)
+            plt.title(feature)
+        plt.tight_layout()
+        plt.savefig(f'top_features_distribution.png')  # Save the figure instead of showing
+        plt.close()  # Close the figure
 
 def main():
     # Specify your files
@@ -141,28 +146,19 @@ def main():
     # Split the dataset
     X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.3, random_state=42)
 
-    # Run models
-    model_rf, model_xgb = run_models(X_train, y_train, X_valid, y_valid)
-
-    models = [model_rf, model_xgb]  # List of models
-    model_names = ['Random Forest', 'XGBoost']  # List of model names (used for saving files)
+    # Train and evaluate models
+    model_names = ['Random Forest', 'XGBoost', 'CatBoost']  # List of model names (used for saving files)
+    model_rf, model_xgb, model_cat = run_models(X_train, y_train, X_valid, y_valid, model_names)
+    trained_models = [model_rf, model_xgb, model_cat]  # List of models
 
     # Plot feature importance
-    plot_feature_importance(models, model_names, X_test.columns)
+    plot_feature_importance(trained_models, model_names, X_test.columns)
 
-    # Visualize top columns distributions
-    visualize_top_columns(X_train, model_rf.feature_importances_, top_n=10)
-    visualize_top_columns(X_train, model_xgb.feature_importances_, top_n=10)
-
-    test_rf_predictions = model_rf.predict(X_test)
-    # rf submission file
-    submission_rf = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_rf_predictions})
-    submission_rf.to_csv('submission_rf.csv', index=False)
-
-    test_xgb_predictions = model_xgb.predict(X_test)
-    # xgb submission file
-    submission_xgb = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_xgb_predictions})
-    submission_xgb.to_csv('submission_xgb.csv', index=False)
+    for model in trained_models:
+        # predict and submit with rf
+        predictions = model.predict(X_test)
+        submission = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': predictions})
+        submission.to_csv('submission_{model}.csv', index=False)
 
     print("Submission file(s) created successfully.")
 
