@@ -7,6 +7,8 @@ import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
 
 def load_data(train_file, test_file):
     """Load the training and testing data from CSV files."""
@@ -60,22 +62,28 @@ def run_models(X_train, y_train, X_valid, y_valid):
     y_pred_rf = model_rf.predict(X_valid)
     y_pred_xgb = model_xgb.predict(X_valid)
 
-    # Calculate performance metrics
-    metrics_rf = {
-        'MSE': mean_squared_error(y_valid, y_pred_rf),
-        'R²': r2_score(y_valid, y_pred_rf)
-    }
-    
-    metrics_xgb = {
-        'MSE': mean_squared_error(y_valid, y_pred_xgb),
-        'R²': r2_score(y_valid, y_pred_xgb)
-    }
 
-    print("Random Forest Metrics:", metrics_rf)
-    print("XGBoost Metrics:", metrics_xgb)
+    kfold = KFold(n_splits=5, shuffle=True, random_state=7)
+    rf_cross_val = cross_val_score(model_rf, X_train, y_train, cv=kfold)
+    xgb_cross_val = cross_val_score(model_xgb, X_train, y_train, cv=kfold)
+
+    
+
+
+    perf_data = {
+        'Model': ['Random Forest', 'XGB'],
+        'MSE': [mean_squared_error(y_valid, y_pred_rf)
+            ,mean_squared_error(y_valid, y_pred_xgb)],
+        'R²': [r2_score(y_valid, y_pred_rf)
+            ,r2_score(y_valid, y_pred_xgb)],
+        'KFold Validation (mean, std)': ["%.2f%% (%.2f%%)" % (rf_cross_val.mean()*100, rf_cross_val.std()*100)
+                                        ,"%.2f%% (%.2f%%)" % (xgb_cross_val.mean()*100, xgb_cross_val.std()*100)]}
+
+    perf = pd.DataFrame(perf_data)
+    
+    print(perf)
 
     return model_rf, model_xgb
-
 
 def plot_feature_importance(model_rf, model_xgb, feature_names):
     """Plot the feature importance from both models, showing only the top 10 features."""
