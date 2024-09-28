@@ -85,44 +85,28 @@ def run_models(X_train, y_train, X_valid, y_valid):
 
     return model_rf, model_xgb
 
-def plot_feature_importance(model_rf, model_xgb, feature_names):
-    """Plot the feature importance from both models, showing only the top 10 features."""
+def plot_feature_importance(models, model_names, feature_names, top_n=10):
+    """Plot the feature importance from multiple models, showing only the top N features."""
     
-    # Get feature importances
-    rf_importances = model_rf.feature_importances_
-    xgb_importances = model_xgb.feature_importances_
+    for model, model_name in zip(models, model_names):
+        # Get feature importances
+        importances = model.feature_importances_
 
-    # Get the indices of the top 10 features or top 30% features
+        # Get the indices of the top N features or top 30% features
+        num_features_to_plot = int(min(top_n, 0.3 * len(importances)))
+        top_indices = np.argsort(importances)[-num_features_to_plot:]
 
-    rf_features_plot = -1 * min(10, 0.3 * len(rf_importances))
-    xgb_features_plot  = -1 * min(10, 0.3 * len(xgb_importances))
+        # Get the top feature names and their importances
+        top_features = [feature_names[i] for i in top_indices]
+        top_importances = importances[top_indices]
 
-    rf_indices = np.argsort(rf_importances)[rf_features_plot :]
-    xgb_indices = np.argsort(xgb_importances)[xgb_features_plot:]
-
-    # Get the top 10 feature names and importances for Random Forest
-    rf_top_features = [feature_names[i] for i in rf_indices]
-    rf_top_importances = rf_importances[rf_indices]
-
-    # Plot feature importances for Random Forest
-    plt.figure(figsize=(10, 5))
-    plt.barh(rf_top_features, rf_top_importances)
-    plt.title('Feature Importance - Random Forest')
-    plt.xlabel('Importance')
-    plt.savefig('feature_importance_rf.png')  # Save the figure instead of showing
-    plt.close()  # Close the figure
-
-    # Get the top 10 feature names and importances for XGBoost
-    xgb_top_features = [feature_names[i] for i in xgb_indices]
-    xgb_top_importances = xgb_importances[xgb_indices]
-
-    # Plot feature importances for XGBoost
-    plt.figure(figsize=(10, 5))
-    plt.barh(xgb_top_features, xgb_top_importances)
-    plt.title('Feature Importance - XGBoost')
-    plt.xlabel('Importance')
-    plt.savefig('feature_importance_xgb.png')  # Save the figure instead of showing
-    plt.close()  # Close the figure
+        # Plot feature importances for the current model
+        plt.figure(figsize=(10, 5))
+        plt.barh(top_features, top_importances)
+        plt.title(f'Feature Importance - {model_name}')
+        plt.xlabel('Importance')
+        plt.savefig(f'feature_importance_{model_name}.png')  # Save the figure for the model
+        plt.close()  # Close the figure
 
 def visualize_top_columns(X, feature_importances, top_n=10):
     """Visualize distributions of the top N most important features."""
@@ -160,25 +144,25 @@ def main():
     # Run models
     model_rf, model_xgb = run_models(X_train, y_train, X_valid, y_valid)
 
+    models = [model_rf, model_xgb]  # List of models
+    model_names = ['Random Forest', 'XGBoost']  # List of model names (used for saving files)
+
     # Plot feature importance
-    plot_feature_importance(model_rf, model_xgb, X_test.columns)
+    plot_feature_importance(models, model_names, X_test.columns)
 
     # Visualize top columns distributions
     visualize_top_columns(X_train, model_rf.feature_importances_, top_n=10)
     visualize_top_columns(X_train, model_xgb.feature_importances_, top_n=10)
 
     test_rf_predictions = model_rf.predict(X_test)
-    # Create a submission file
+    # rf submission file
     submission_rf = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_rf_predictions})
     submission_rf.to_csv('submission_rf.csv', index=False)
 
-
-
     test_xgb_predictions = model_xgb.predict(X_test)
-    # Create a submission file
+    # xgb submission file
     submission_xgb = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': test_xgb_predictions})
     submission_xgb.to_csv('submission_xgb.csv', index=False)
-
 
     print("Submission file(s) created successfully.")
 
