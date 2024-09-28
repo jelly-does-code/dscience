@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from catboost import CatBoostRegressor
+import optuna
 
 def load_data(train_file, test_file):
     """Load the training and testing data from CSV files."""
@@ -47,14 +48,77 @@ def preprocess_data(train_data, test_data, target_column):
 
     return X_train, y_train, X_test
 
-def run_models(X_train, y_train, X_valid, y_valid, model_names):
-    """Train Random Forest and XGBoost models and evaluate performance."""
-    # Choose models
-    model_rf = RandomForestRegressor(random_state=42)
-    model_xgb = XGBRegressor(random_state=42)
-    model_cat = CatBoostRegressor(random_state=42, silent=True)
+def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
+    """Train all models (with hyperparameter tuning) evaluate final performance and make final predictions."""
 
-    # Train models
+    # Objective function for Random Forest
+    def objective_rf(trial):
+        param = {
+            'n_estimators': trial.suggest_int('n_estimators', 50, 300),
+            'max_depth': trial.suggest_int('max_depth', 3, 10),
+            'min_samples_split': trial.suggest_int('min_samples_split', 2, 10),
+            'random_state': 42
+        }
+        
+        model = RandomForestRegressor(**param)
+        model.fit(X_train, y_train)
+        preds = model.predict(X_valid)
+        return mean_squared_error(y_valid, preds)
+
+    # Objective function for XGBoost
+    def objective_xgb(trial):
+        param = {
+            'objective': 'reg:squarederror',
+            'max_depth': trial.suggest_int('max_depth', 3, 10),
+            'learning_rate': trial.suggest_loguniform('learning_rate', 1e-3, 1),
+            'n_estimators': trial.suggest_int('n_estimators', 50, 300),
+            'subsample': trial.suggest_float('subsample', 0.5, 1.0),
+            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
+        }
+        model = XGBRegressor(**param)
+        model.fit(X_train, y_train)
+        preds = model.predict(X_valid)
+        return mean_squared_error(y_valid, preds)
+
+    # Objective function for CatBoost
+    def objective_cat(trial):
+        param = {
+            'iterations': trial.suggest_int('iterations', 50, 300),
+            'depth': trial.suggest_int('depth', 3, 10),
+            'learning_rate': trial.suggest_loguniform('learning_rate', 1e-3, 1),
+            'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 1e-2, 10.0),
+            'random_seed': 42,
+            'verbose': 0  # Disable output
+        }
+        
+        model = CatBoostRegressor(**param)
+        model.fit(X_train, y_train)
+        preds = model.predict(X_valid)
+        return mean_squared_error(y_valid, preds)
+
+    # Optimize Random Forest Regressor
+    study_rf = optuna.create_study(direction='minimize')
+    study_rf.optimize(objective_rf, n_trials=50)
+    best_rf_params = study_rf.best_params
+    print("Best Random Forest Parameters:", best_rf_params)
+    
+    # Optimize XGBoost
+    study_xgb = optuna.create_study(direction='minimize')
+    study_xgb.optimize(objective_xgb, n_trials=50)
+    best_xgb_params = study_xgb.best_params
+    print("Best XGBoost Parameters:", best_xgb_params)
+
+    # Optimize CatBoost
+    study_cat = optuna.create_study(direction='minimize')
+    study_cat.optimize(objective_cat, n_trials=50)
+    best_cat_params = study_cat.best_params
+    print("Best CatBoost Parameters:", best_cat_params)
+
+    # Choose and train models
+    model_rf = RandomForestRegressor(**best_rf_params)
+    model_xgb = XGBRegressor(**best_xgb_params)
+    model_cat = CatBoostRegressor(**best_cat_params, silent=True)
+
     model_rf.fit(X_train, y_train)
     model_xgb.fit(X_train, y_train)
     model_cat.fit(X_train, y_train)
@@ -148,17 +212,19 @@ def main():
 
     # Train and evaluate models
     model_names = ['Random Forest', 'XGBoost', 'CatBoost']  # List of model names (used for saving files)
-    model_rf, model_xgb, model_cat = run_models(X_train, y_train, X_valid, y_valid, model_names)
+    model_rf, model_xgb, model_cat = tune_train_models(X_train, y_train, X_valid, y_valid, model_names)
     trained_models = [model_rf, model_xgb, model_cat]  # List of models
 
     # Plot feature importance
     plot_feature_importance(trained_models, model_names, X_test.columns)
 
     for model in trained_models:
-        # predict and submit with rf
+        # predict and submit
         predictions = model.predict(X_test)
         submission = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': predictions})
-        submission.to_csv('submission_{model}.csv', index=False)
+        # Get the model class name
+        model_name = model.__class__.__name__  # E.g., 'XGBRegressor'
+        submission.to_csv(f'submission_{model_name}.csv', index=False)
 
     print("Submission file(s) created successfully.")
 
