@@ -11,6 +11,34 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from catboost import CatBoostRegressor
 import optuna
+import json
+import os
+
+def save_best_params_to_file(filename, params):
+    with open(filename, 'w') as f:
+        json.dump(params, f, indent=4)
+
+def load_best_params_from_file(filename):
+    with open(filename, 'r') as f:
+        return json.load(f)
+
+def get_best_params(model_name, objective_func, n_trials=50):
+    params_file = f"best_params_{model_name}.txt"
+    
+    # Check if params file exists
+    if os.path.exists(params_file):
+        print(f"Loading best parameters for {model_name} from file.")
+        best_params = load_best_params_from_file(params_file)
+    else:
+        print(f"Optimizing parameters for {model_name}.")
+        study = optuna.create_study(direction='minimize')
+        study.optimize(objective_func, n_trials=n_trials)
+        best_params = study.best_params
+        
+        # Save the best params to a file
+        save_best_params_to_file(params_file, best_params)
+    
+    return best_params
 
 def load_data(train_file, test_file):
     """Load the training and testing data from CSV files."""
@@ -19,7 +47,8 @@ def load_data(train_file, test_file):
     return train_data, test_data
 
 def preprocess_data(train_data, test_data, target_column):
-    """Preprocess the data by handling missing values and encoding categorical features."""
+    """Preprocess the data by handling missing values, encoding categorical features and dropping fully duplicated rows."""
+    train_data.drop_duplicates(inplace=True)
     # Separate features and target
     X_train = train_data.drop(columns=[target_column])
     y_train = train_data[target_column]
@@ -96,23 +125,9 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
         preds = model.predict(X_valid)
         return mean_squared_error(y_valid, preds)
 
-    # Optimize Random Forest Regressor
-    study_rf = optuna.create_study(direction='minimize')
-    study_rf.optimize(objective_rf, n_trials=50)
-    best_rf_params = study_rf.best_params
-    print("Best Random Forest Parameters:", best_rf_params)
-    
-    # Optimize XGBoost
-    study_xgb = optuna.create_study(direction='minimize')
-    study_xgb.optimize(objective_xgb, n_trials=50)
-    best_xgb_params = study_xgb.best_params
-    print("Best XGBoost Parameters:", best_xgb_params)
-
-    # Optimize CatBoost
-    study_cat = optuna.create_study(direction='minimize')
-    study_cat.optimize(objective_cat, n_trials=50)
-    best_cat_params = study_cat.best_params
-    print("Best CatBoost Parameters:", best_cat_params)
+    best_rf_params = get_best_params("RandomForestRegressor", objective_rf)
+    best_xgb_params = get_best_params("XGBRegressor", objective_xgb)
+    best_cat_params = get_best_params("CatBoostRegressor", objective_cat)
 
     # Choose and train models
     model_rf = RandomForestRegressor(**best_rf_params)
