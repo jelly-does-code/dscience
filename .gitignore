@@ -1,1 +1,3 @@
+.gitignore
 venv
+kaggle_house_prices/catboost_info
