@@ -23,7 +23,7 @@ def load_best_params_from_file(filename):
         return json.load(f)
 
 def get_best_params(model_name, objective_func, n_trials=50):
-    params_file = f"best_params_{model_name}.txt"
+    params_file = f"best_params/{model_name}.txt"
     
     # Check if params file exists
     if os.path.exists(params_file):
@@ -167,7 +167,6 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
 
 def plot_feature_importance(models, model_names, feature_names, top_n=10):
     """Plot the feature importance from multiple models, showing only the top N features."""
-    
     for model, model_name in zip(models, model_names):
         # Get feature importances
         importances = model.feature_importances_
@@ -185,7 +184,7 @@ def plot_feature_importance(models, model_names, feature_names, top_n=10):
         plt.barh(top_features, top_importances)
         plt.title(f'Feature Importance - {model_name}')
         plt.xlabel('Importance')
-        plt.savefig(f'feature_importance_{model_name}.png')  # Save the figure for the model
+        plt.savefig(f'graphs/feature_importance_{model_name}.png')  # Save the figure for the model
         plt.close()  # Close the figure
 
 def visualize_top_columns(X_train, models, top_n=10):
@@ -210,8 +209,8 @@ def visualize_top_columns(X_train, models, top_n=10):
 
 def main():
     # Specify your files
-    train_file = 'train.csv'
-    test_file = 'test.csv'
+    train_file = 'input_data/train.csv'
+    test_file = 'input_data/test.csv'
     
     # Load your data
     train_data, test_data = load_data(train_file, test_file)
@@ -239,7 +238,7 @@ def main():
         submission = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': predictions})
         # Get the model class name
         model_name = model.__class__.__name__  # E.g., 'XGBRegressor'
-        submission.to_csv(f'submission_{model_name}.csv', index=False)
+        submission.to_csv(f'submissions/submission_{model_name}.csv', index=False)
 
     print("Submission file(s) created successfully.")
 
