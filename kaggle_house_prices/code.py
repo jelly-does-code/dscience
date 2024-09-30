@@ -40,19 +40,65 @@ def get_best_params(model_name, objective_func, n_trials=50):
     
     return best_params
 
-def load_data(train_file, test_file):
+def load_data(train_file, pred_file):
     """Load the training and testing data from CSV files."""
     train_data = pd.read_csv(train_file)
-    test_data = pd.read_csv(test_file)
-    return train_data, test_data
+    pred_data = pd.read_csv(pred_file)
+    return train_data, pred_data
 
-def preprocess_data(train_data, test_data, target_column):
+def intelligent_train_test_split(X, y):
+    # Determine the size of the dataset
+    num_samples = len(X)
+    print(f"Number of samples in the dataset: {num_samples}")
+
+    # Decide the train/test split ratio
+    if num_samples < 100:
+        train_size = 0.5  # 50/50 split for small datasets
+        print("Using 50/50 split for small dataset.")
+    elif num_samples < 1000:
+        train_size = 0.7  # 70/30 split for medium datasets
+        print("Using 70/30 split for medium dataset.")
+    else:
+        train_size = 0.8  # 80/20 split for large datasets
+        print("Using 80/20 split for large dataset.")
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=train_size, random_state=42)
+
+    return X_train, X_test, y_train, y_test
+
+def fill_missing_values(df, column):
+    # Check for NaN values
+    if df[column].isna().sum() == 0:
+        print("No missing values to fill.")
+        return df
+
+    # Calculate skewness and visualize the column distribution
+    skewness = df[column].skew()
+    sns.histplot(df[column], kde=True)
+    plt.title(f'Distribution of {column} (skew={skewness})')
+    plt.savefig(f'Distribution of {column} (skew={skewness}).png')
+    plt.close()
+
+
+    # Decide whether to use mean or mode
+    if abs(skewness) < 0.5:  # Approximately normal distribution
+        mean_value = df[column].mean()
+        df[column].fillna(mean_value, inplace=True)
+        print(f'Filled missing values with mean: {mean_value}')
+    else:  # Skewed distribution
+        mode_value = df[column].mode()[0]
+        df[column].fillna(mode_value, inplace=True)
+        print(f'Filled missing values with mode: {mode_value}')
+
+    return df
+
+def prep_data(train_data, pred_data, target_column):
     """Preprocess the data by handling missing values, encoding categorical features and dropping fully duplicated rows."""
     train_data.drop_duplicates(inplace=True)
     # Separate features and target
     X_train = train_data.drop(columns=[target_column])
     y_train = train_data[target_column]
-    X_test = test_data
+    X_pred = pred_data
 
     # Fill missing values
     for col in X_train.columns:
@@ -60,25 +106,26 @@ def preprocess_data(train_data, test_data, target_column):
             X_train[col] = X_train[col].fillna(X_train[col].mode()[0])
         else:  # Numerical
             X_train[col] = X_train[col].fillna(X_train[col].mean())
+            X_train = fill_missing_values(X_train, col)
 
     # Fill missing values
-    for col in X_test.columns:
-        if X_test[col].dtype == 'object':  # Categorical
-            X_test[col] = X_test[col].fillna(X_test[col].mode()[0])
+    for col in X_pred.columns:
+        if X_pred[col].dtype == 'object':  # Categorical
+            X_pred[col] = X_pred[col].fillna(X_pred[col].mode()[0])
         else:  # Numerical
-            X_test[col] = X_test[col].fillna(X_test[col].mean())
+            X_pred = fill_missing_values(X_pred, col)
 
     # One-hot encode categorical features
     X_train = pd.get_dummies(X_train, drop_first=True)
-    X_test = pd.get_dummies(X_test, drop_first=True)
+    X_pred = pd.get_dummies(X_pred, drop_first=True)
     
     # Align the test set with the training set, filling missing columns with 0
-    X_train, X_test = X_train.align(X_test, join='left', axis=1, fill_value=0)
+    X_train, X_pred = X_train.align(X_pred, join='left', axis=1, fill_value=0)
 
-    return X_train, y_train, X_test
+    return X_train, y_train, X_pred
 
-def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
-    """Train all models (with hyperparameter tuning) evaluate final performance and make final predictions."""
+def tune_train_models(X_train, y_train, X_test, y_test, model_names):
+    """Train models (with hyperparameter tuning) and evaluate final performance"""
 
     # Objective function for Random Forest
     def objective_rf(trial):
@@ -91,8 +138,8 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
         
         model = RandomForestRegressor(**param)
         model.fit(X_train, y_train)
-        preds = model.predict(X_valid)
-        return mean_squared_error(y_valid, preds)
+        preds = model.predict(X_test)
+        return mean_squared_error(y_test, preds)
 
     # Objective function for XGBoost
     def objective_xgb(trial):
@@ -106,8 +153,8 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
         }
         model = XGBRegressor(**param)
         model.fit(X_train, y_train)
-        preds = model.predict(X_valid)
-        return mean_squared_error(y_valid, preds)
+        preds = model.predict(X_test)
+        return mean_squared_error(y_test, preds)
 
     # Objective function for CatBoost
     def objective_cat(trial):
@@ -117,13 +164,12 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
             'learning_rate': trial.suggest_loguniform('learning_rate', 1e-3, 1),
             'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 1e-2, 10.0),
             'random_seed': 42,
-            'verbose': 0  # Disable output
-        }
+            'verbose': 0}
         
         model = CatBoostRegressor(**param)
         model.fit(X_train, y_train)
-        preds = model.predict(X_valid)
-        return mean_squared_error(y_valid, preds)
+        preds = model.predict(X_test)
+        return mean_squared_error(y_test, preds)
 
     best_rf_params = get_best_params("RandomForestRegressor", objective_rf)
     best_xgb_params = get_best_params("XGBRegressor", objective_xgb)
@@ -142,26 +188,24 @@ def tune_train_models(X_train, y_train, X_valid, y_valid, model_names):
     models = [model_rf, model_xgb, model_cat]
     
     # Predict with all models
-    y_pred_rf, y_pred_xgb, y_pred_cat = model_rf.predict(X_valid), model_xgb.predict(X_valid), model_cat.predict(X_valid)
+    y_pred_rf, y_pred_xgb, y_pred_cat = model_rf.predict(X_test), model_xgb.predict(X_test), model_cat.predict(X_test)
 
-    kfold = KFold(n_splits=5, shuffle=True, random_state=7)
-    cross_val_scores = [cross_val_score(model, X_train, y_train, cv=kfold) for model in models]
-
-    perf_data = {
-        'Model': model_names,
-        'MSE': [mean_squared_error(y_valid, y_pred_rf)
-            ,mean_squared_error(y_valid, y_pred_xgb)
-            ,mean_squared_error(y_valid, y_pred_cat)],
-        'R²': [r2_score(y_valid, y_pred_rf)
-            ,r2_score(y_valid, y_pred_xgb)
-            ,r2_score(y_valid, y_pred_cat)],
-        'KFold Validation (mean, std)': ["%.2f%% (%.2f%%)" % (cross_val_scores[0].mean()*100, cross_val_scores[0].std()*100)
-                                        ,"%.2f%% (%.2f%%)" % (cross_val_scores[1].mean()*100, cross_val_scores[1].std()*100)
-                                        ,"%.2f%% (%.2f%%)" % (cross_val_scores[2].mean()*100, cross_val_scores[2].std()*100)]}
-
-    perf = pd.DataFrame(perf_data)
-    
-    print(perf)
+    for kfold_splits in [5, 10]:
+        kfold = KFold(n_splits=kfold_splits, shuffle=True, random_state=7)
+        cross_val_scores = [cross_val_score(model, X_train, y_train, cv=kfold) for model in models]
+        perf_data = {
+            'Model': model_names,
+            'MSE': [mean_squared_error(y_test, y_pred_rf)
+                ,mean_squared_error(y_test, y_pred_xgb)
+                ,mean_squared_error(y_test, y_pred_cat)],
+            'R²': [r2_score(y_test, y_pred_rf)
+                ,r2_score(y_test, y_pred_xgb)
+                ,r2_score(y_test, y_pred_cat)],
+            'KFold Validation (mean, std)': ["%.2f%% (%.2f%%)" % (cross_val_scores[0].mean()*100, cross_val_scores[0].std()*100)
+                                            ,"%.2f%% (%.2f%%)" % (cross_val_scores[1].mean()*100, cross_val_scores[1].std()*100)
+                                            ,"%.2f%% (%.2f%%)" % (cross_val_scores[2].mean()*100, cross_val_scores[2].std()*100)]}
+        print(f"Performance with k = {kfold_splits} folds.")
+        print(pd.DataFrame(perf_data))
 
     return models[0], models[1], models[2]
 
@@ -184,8 +228,8 @@ def plot_feature_importance(models, model_names, feature_names, top_n=10):
         plt.barh(top_features, top_importances)
         plt.title(f'Feature Importance - {model_name}')
         plt.xlabel('Importance')
-        plt.savefig(f'graphs/feature_importance_{model_name}.png')  # Save the figure for the model
-        plt.close()  # Close the figure
+        plt.savefig(f'graphs/feature_importance_{model_name}.png')
+        plt.close()
 
 def visualize_top_columns(X_train, models, top_n=10):
     
@@ -210,34 +254,28 @@ def visualize_top_columns(X_train, models, top_n=10):
 def main():
     # Specify your files
     train_file = 'input_data/train.csv'
-    test_file = 'input_data/test.csv'
-    
-    # Load your data
-    train_data, test_data = load_data(train_file, test_file)
+    pred_file = 'input_data/test.csv'
+    target_column = 'SalePrice'
 
-    # Specify your target column
-    target_column = 'SalePrice'  # Example target column
+    # Load/preprocess
+    train_data, pred_data = load_data(train_file, pred_file)
+    X_train, y_train, X_pred = prep_data(train_data, pred_data, target_column)
 
-    # Preprocess the data
-    X_train, y_train, X_test = preprocess_data(train_data, test_data, target_column)
-
-    # Split the dataset
-    X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.3, random_state=42)
+    # train test split
+    X_train, X_test, y_train, y_test = intelligent_train_test_split(X_train, y_train)
 
     # Train and evaluate models
-    model_names = ['Random Forest', 'XGBoost', 'CatBoost']  # List of model names (used for saving files)
-    model_rf, model_xgb, model_cat = tune_train_models(X_train, y_train, X_valid, y_valid, model_names)
-    trained_models = [model_rf, model_xgb, model_cat]  # List of models
-
+    model_names = ['Random Forest', 'XGBoost', 'CatBoost']
+    model_rf, model_xgb, model_cat = tune_train_models(X_train, y_train, X_test, y_test, model_names)
+    trained_models = [model_rf, model_xgb, model_cat]
     # Plot feature importance
-    plot_feature_importance(trained_models, model_names, X_test.columns)
+    plot_feature_importance(trained_models, model_names, X_pred.columns)
 
     for model in trained_models:
         # predict and submit
-        predictions = model.predict(X_test)
-        submission = pd.DataFrame({'Id': X_test['Id'], 'SalePrice': predictions})
-        # Get the model class name
-        model_name = model.__class__.__name__  # E.g., 'XGBRegressor'
+        predictions = model.predict(X_pred)
+        submission = pd.DataFrame({'Id': X_pred['Id'], 'SalePrice': predictions})
+        model_name = model.__class__.__name__
         submission.to_csv(f'submissions/submission_{model_name}.csv', index=False)
 
     print("Submission file(s) created successfully.")
