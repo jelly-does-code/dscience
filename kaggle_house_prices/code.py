@@ -7,6 +7,7 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 
+from sklearn.feature_selection import mutual_info_regression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.model_selection import cross_val_score
@@ -24,6 +25,7 @@ def log(msg):
     if isinstance(msg, str):
         with open(fname, 'a') as file:
             file.write(msg + '\n')
+            file.write('' + '\n')
     elif isinstance(msg, pd.DataFrame):
         with open(fname, 'a') as file:
             msg.to_csv(fname, index=False)
@@ -59,13 +61,36 @@ def load_data(train_file, pred_file):
     pred_data = pd.read_csv(pred_file)
     return train_data, pred_data
 
-def eda(X_train):
-    # Investigate_correlations
-    print('EDA: Investigating correlations ..')
-    corr_matrix = X_train.corr().where(np.triu(np.abs(corr_matrix) > 0.5, k=1))
+def preprocessed_eda(X_train_full, y_train_full):
+    # Calculate skewness for all columns and visualize the column distributions
+    print('EDA: Investigating skewness..')
+    for col in X_train_full.columns:
+        skewness = round(X_train_full[col].skew(), 2)
+        sns.histplot(X_train_full[col], kde=True)
+        plt.title(f'Distribution of {col} (skew = {skewness})')
+        plt.savefig(f'graphs/column_distribution/skew={skewness}_col={col}.png')
+        plt.close()
 
+    # Calculate mutual information scores on prepped data. This ensures dummified cat cols are included too.
+    mi_scores = mutual_info_regression(X_train_full, y_train_full)
+    mi_scores = pd.Series(mi_scores, name="MI Scores", index=X_train_full.columns)
+    mi_scores = mi_scores.sort_values(ascending=False)
+    top_10_mi_scores = mi_scores.nlargest(10)
+
+    plt.figure(dpi=100, figsize=(8, 5))
+    plt.barh(top_10_mi_scores.index, top_10_mi_scores.values)
+    plt.xlabel("Mutual Information Score")
+    plt.title("Mutual Information Scores")
+    plt.savefig(f'graphs/mutual_information.png')
+    plt.close()
+
+    # Investigate_correlations on prepped data. (.corr() can't handle NaNs)
+    print('EDA: Investigating correlations ..')
+    corr_matrix = X_train_full.corr()
+    corr_matrix = corr_matrix.where(np.triu(np.abs(corr_matrix) > 0.5, k=1))
+    
     plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', vmin=-1, vmax=1, linewidths=0.5)
+    sns.heatmap(corr_matrix, annot=True, fmt='.2f', cmap='coolwarm', vmin=-1, vmax=1, linewidths=1)
     plt.title('Significant correlation matrix heatmap')
     plt.savefig(f'graphs/correlation_matrix.png')
     plt.close()
@@ -85,15 +110,6 @@ def eda(X_train):
             log(f"{pair[0]} and {pair[1]}: {pair[2]:.2f}")
     else:
         log("No highly correlated feature pairs found with correlation > 0.8")
-
-    # Calculate skewness for all columns and visualize the column distributions
-    print('EDA: Investigating skewness..')
-    for col in X_train.columns:
-        skewness = round(X_train[col].skew(), 2)
-        sns.histplot(X_train[col], kde=True)
-        plt.title(f'Distribution of {col} (skew = {skewness})')
-        plt.savefig(f'graphs/column_distribution/skew={skewness}_col={col}.png')
-        plt.close()
 
 def intelligent_train_test_split(X, y):
     # Determine the size of the dataset
@@ -115,32 +131,33 @@ def intelligent_train_test_split(X, y):
 
     return X_train, X_test, y_train, y_test
 
-def prep_data(train_data, pred_data, target_column):
+def prep_data(train_data, pred_data, target_col, drop_cols):
     """Preprocess the data by handling missing values, encoding categorical features and dropping fully duplicated rows."""
     def fill_missing_values(df):
         for col in df.columns:
             if df[col].isna().sum() == 0:
                 pass
             elif df[col].dtype in ['object', 'bool']:  # Categorical
-                df[col] = df[col].fillna(df[col].mode()[0], inplace=True)
+                df.fillna({col: df[col].mode()}, inplace=True)
             else:   
                 # Numerical
                 skewness = round(df[col].skew(), 2)  # Decide whether to use mean or mode
                 if abs(skewness) < 0.5:  # Approximately normal distribution
                     mean_value = df[col].mean()
-                    df[col].fillna(mean_value, inplace=True)
+                    df.fillna({col: mean_value}, inplace=True)
                     log(f'{col}: Filled missing values with mean {mean_value}')
                 else:  
                     # Skewed distribution
                     median_value = df[col].median()
-                    df[col].fillna(median_value, inplace=True)
+                    df.fillna({col: median_value}, inplace=True)
                     log(f'{col}: Filled missing values with mode {median_value}')
         return df
 
     train_data.drop_duplicates(inplace=True)
+    train_data.drop(drop_cols, axis=1, inplace=True)
     # Separate features and target
-    X_train = train_data.drop(columns=[target_column])
-    y_train = train_data[target_column]
+    X_train = train_data.drop(columns=[target_col])
+    y_train = train_data[target_col]
     X_pred = pred_data
 
     fill_missing_values(X_train)
@@ -210,13 +227,13 @@ def tune_train_models(X_train, y_train, X_test, y_test, model_names, task_type):
         preds = model.predict(X_test)
         return mean_squared_error(y_test, preds)
 
-    print('Training: Finding best params for RandomForestRegressor..')
+    print('\nTraining: hyperparameter optimization for RandomForestRegressor..')
     best_rf_params = get_best_params("RandomForestRegressor", objective_rf)
-    print('Training: Finding best params for XGB..')
+    print('Training: hyperparameter optimization for XGB..')
     best_xgb_params = get_best_params("XGBRegressor", objective_xgb)
-    print('Training: Finding best params for CatBoost..')
+    print('Training: hyperparameter optimization for CatBoost..')
     best_cat_params = get_best_params("CatBoostRegressor", objective_cat)
-    print('Training: Finding best params for Ridge regression..')
+    print('Training: hyperparameter optimization for Ridge regression..')
     best_ridge_params = get_best_params("RidgeRegression", objective_ridge)
 
     # Choose and train models
@@ -225,7 +242,7 @@ def tune_train_models(X_train, y_train, X_test, y_test, model_names, task_type):
     model_cat = CatBoostRegressor(**best_cat_params, silent=True)
     model_ridge = Ridge(**best_ridge_params)
 
-    print('Fitting all models and prediction on test set..')
+    print('Training: fitting all models..')
     model_rf.fit(X_train, y_train)
     model_xgb.fit(X_train, y_train)
     model_cat.fit(X_train, y_train)
@@ -234,13 +251,14 @@ def tune_train_models(X_train, y_train, X_test, y_test, model_names, task_type):
     # Collect models
     models = [model_rf, model_xgb, model_cat, model_ridge]
     
+    print('Training: predicting on test set..')
     # Predict with all models
     y_pred_rf =  model_rf.predict(X_test)
     y_pred_xgb = model_xgb.predict(X_test)
     y_pred_cat = model_cat.predict(X_test)
     y_pred_ridge = model_ridge.predict(X_test)
-
-    print('Checking KFold performance..')
+    
+    print('Training: checking KFold performance..')
     if task_type == 'classification':
         kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=7)
     else:
@@ -261,12 +279,13 @@ def tune_train_models(X_train, y_train, X_test, y_test, model_names, task_type):
                                         ,"%.2f%% (%.2f%%)" % (cross_val_scores[1].mean()*100, cross_val_scores[1].std()*100)
                                         ,"%.2f%% (%.2f%%)" % (cross_val_scores[2].mean()*100, cross_val_scores[2].std()*100)
                                         ,"%.2f%% (%.2f%%)" % (cross_val_scores[3].mean()*100, cross_val_scores[3].std()*100)]}
-    log(f"Performance with k = 5 folds.")
+    log(f"\nPerformance with k = 5 folds.")
     log(pd.DataFrame(perf_data))
-
+    log('')
+    
     return models[0], models[1], models[2], models[3]
 
-def plot_feature_importance(models, model_names, feature_names, top_n=10):
+def log_feature_importance(models, model_names, feature_names, top_n=10):
     """Plot the feature importance from multiple models, showing only the top N features."""
     for model, model_name in zip(models, model_names):
         if model_name == 'RidgeRegression':
@@ -278,7 +297,7 @@ def plot_feature_importance(models, model_names, feature_names, top_n=10):
 
             # Sort by absolute value of coefficients
             feature_importance['Importance'] = feature_importance['Coefficient'].abs()
-            feature_importance = feature_importance.sort_values(by='Importance', ascending=True)
+            feature_importance.sort_values(by='Importance', ascending=False, inplace=True)
 
             # Get the top N feature names and importances
             top_features = feature_importance['Feature'].head(top_n).values
@@ -293,8 +312,9 @@ def plot_feature_importance(models, model_names, feature_names, top_n=10):
             top_features = [feature_names[i] for i in top_indices]
             top_importances = importances[top_indices]
 
-        log(f"The top features are: {top_features}")
-        log(f"The top feature importances are: {top_importances}")
+        log(f"The top features for {model_name} are: {top_features}")
+        log(f"The top feature importances for {model_name} are: {top_importances}")
+
 
         # Plot feature importances for the current model
         plt.figure(figsize=(10, 5))
@@ -320,8 +340,8 @@ def plot_top_columns(X_train, models, top_n=10):
             sns.histplot(X_train[feature], kde=True)
             plt.title(feature)
         plt.tight_layout()
-        plt.savefig(f'{model.__class__.__name__}_top_features_distribution.png')  # Save the figure instead of showing
-        plt.close()  # Close the figure
+        plt.savefig(f'{model.__class__.__name__}_top_features_distribution.png')
+        plt.close()
 
 def main():
     # Clean up previous logs
@@ -331,31 +351,33 @@ def main():
     # Specify data
     train_file = 'input_data/train.csv'
     pred_file = 'input_data/test.csv'
-    target_column = 'SalePrice'
+    target_col = 'SalePrice'
+    drop_cols = []
     task_type = 'number'
 
     # Load/preprocess
-    print('Loading data..')
+    print('\nLoading data..')
     train_data, pred_data = load_data(train_file, pred_file)
-    print('Preprocessing data..')
-    X_train, y_train, X_pred = prep_data(train_data, pred_data, target_column)
+    print('Preprocessing..')
+    X_train, y_train, X_pred = prep_data(train_data, pred_data, target_col, drop_cols)
+    X_train_full, y_train_full = X_train, y_train   # full data needed for preprocessed eda (before train/test split)
 
     # train test split
-    print('Splitting data into train and test..')
+    print('Splitting train and test..')
     X_train, X_test, y_train, y_test = intelligent_train_test_split(X_train, y_train)
 
     # Train and evaluate models
     model_names = ['Random Forest', 'XGBoost', 'CatBoost',  'RidgeRegression']
-    print('Training models..')
     model_rf, model_xgb, model_cat, model_reg = tune_train_models(X_train, y_train, X_test, y_test, model_names, task_type)
     trained_models = [model_rf, model_xgb, model_cat, model_reg]
     
     # Plot feature importance
-    print('Plotting feature importance')
-    plot_feature_importance(trained_models, model_names, X_pred.columns)
+    print('\nEDA: Feature importance')
+    log_feature_importance(trained_models, model_names, X_pred.columns)
 
-    print('Performing exploratory data analysis..')
-    eda(X_train)
+    # Perform EDA
+    preprocessed_eda(X_train_full, y_train_full)
+
     # predict and submit
     for model in trained_models:
         predictions = model.predict(X_pred)
@@ -363,7 +385,7 @@ def main():
         model_name = model.__class__.__name__
         submission.to_csv(f'submissions/submission_{model_name}.csv', index=False)
 
-    log("Submission file(s) created successfully.")
+    log("\nSubmission file(s) created successfully.")
 
 if __name__ == "__main__":
     main()

@@ -1,37 +1,35 @@
 Model,MSE,R²,"KFold Validation (mean, std)"
-Random Forest,895332770.2965213,0.883273182116089,84.04% (2.77%)
-XGBoost,651142256.4426079,0.9151089191436768,86.16% (3.53%)
-CatBoost,861380139.3070781,0.8876996732551007,87.77% (2.64%)
-RidgeRegression,966696726.5838715,0.873969281035522,79.84% (9.76%)
-The top features are: ['YearBuilt', 'GarageArea', 'LotArea', 'GarageCars', '2ndFlrSF', 'BsmtFinSF1', '1stFlrSF', 'TotalBsmtSF', 'GrLivArea', 'OverallQual']
-The top feature importances are: [0.01424808 0.01671715 0.01684262 0.01906181 0.02599992 0.03013322
- 0.03145878 0.03448019 0.12419044 0.56029508]
-The top features are: ['1stFlrSF', 'TotRmsAbvGrd', 'FullBath', 'ExterQual_Gd', 'KitchenQual_TA', 'GrLivArea', 'RoofStyle_Hip', 'GarageCars', 'OverallQual', 'ExterQual_TA']
-The top feature importances are: [0.01132222 0.01424632 0.02548639 0.02584481 0.02647137 0.02886193
- 0.05455254 0.12968089 0.15524942 0.21689884]
-The top features are: ['2ndFlrSF', 'GarageYrBlt', 'YearBuilt', 'LotArea', 'GarageCars', 'BsmtFinSF1', '1stFlrSF', 'TotalBsmtSF', 'GrLivArea', 'OverallQual']
-The top feature importances are: [ 2.38682268  2.68407404  3.10407349  3.4245271   4.24982413  4.76642601
-  5.22541046  5.79702673 15.69274623 21.02682092]
-The top features are: ['RoofMatl_Membran' 'LotArea' 'BsmtFinSF2' 'MiscVal' 'Id' 'PoolArea'
- 'OpenPorchSF' '1stFlrSF' 'BsmtUnfSF' 'TotalBsmtSF']
-The top feature importances are: [0.         0.39064793 0.52192149 0.80930586 1.15851828 1.2690427
- 2.50296713 2.54475195 3.14072865 3.93153415]
-Highly correlated feature pairs (correlation > 0.8):
-1stFlrSF and TotalBsmtSF: 0.83
-TotRmsAbvGrd and GrLivArea: 0.82
-GarageArea and GarageCars: 0.88
-MSZoning_RM and MSZoning_RL: -0.81
-Neighborhood_Somerst and MSZoning_FV: 0.87
-HouseStyle_2Story and 2ndFlrSF: 0.80
-RoofStyle_Hip and RoofStyle_Gable: -0.93
-Exterior2nd_CBlock and Exterior1st_CBlock: 1.00
-Exterior2nd_CmentBd and Exterior1st_CemntBd: 0.97
-Exterior2nd_HdBoard and Exterior1st_HdBoard: 0.88
-Exterior2nd_MetalSd and Exterior1st_MetalSd: 0.97
-Exterior2nd_VinylSd and Exterior1st_VinylSd: 0.97
-Exterior2nd_Wd Sdng and Exterior1st_Wd Sdng: 0.85
-ExterQual_TA and ExterQual_Gd: -0.91
-ExterCond_TA and ExterCond_Gd: -0.89
-KitchenQual_TA and KitchenQual_Gd: -0.83
-SaleCondition_Partial and SaleType_New: 0.99
+Random Forest,860758568.830617,0.8877807089841782,83.64% (3.09%)
+XGBoost,670848745.716892,0.9125397205352783,85.58% (3.77%)
+CatBoost,724128437.4381174,0.9055935278528824,87.58% (3.14%)
+RidgeRegression,924696641.1760533,0.8794449393417442,79.79% (9.48%)
+
+
+The top features for Random Forest are: ['YearBuilt', 'LotArea', 'GarageArea', 'GarageCars', 'BsmtFinSF1', '2ndFlrSF', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'OverallQual']
+
+The top feature importances for Random Forest are: [0.01253373 0.01473946 0.01506361 0.01950274 0.02666566 0.02974401
+ 0.03156043 0.03175643 0.12431108 0.56591036]
+
+The top features for XGBoost are: ['KitchenAbvGr', 'TotalBsmtSF', '2ndFlrSF', 'GarageType_Detchd', 'KitchenQual_TA', 'GrLivArea', 'FullBath', 'ExterQual_TA', 'GarageCars', 'OverallQual']
+
+The top feature importances for XGBoost are: [0.01341874 0.01378125 0.01384744 0.0149452  0.01930109 0.0306646
+ 0.034218   0.08372055 0.14659506 0.1874927 ]
+
+The top features for CatBoost are: ['YearRemodAdd', 'FullBath', 'GarageArea', 'GarageCars', 'BsmtFinSF1', 'LotArea', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'OverallQual']
+
+The top feature importances for CatBoost are: [ 2.56675499  2.95981732  3.07612059  3.37842025  3.58538414  3.79993215
+  4.50924201  5.5768738  12.17764638 25.6286098 ]
+
+The top features for RidgeRegression are: ['PoolQC_Gd' 'Condition2_PosN' 'Neighborhood_StoneBr' 'RoofMatl_WdShngl'
+ 'Neighborhood_NoRidge' 'Exterior2nd_ImStucc' 'Neighborhood_NridgHt'
+ 'LandContour_HLS' 'KitchenQual_TA' 'KitchenQual_Gd']
+
+The top feature importances for RidgeRegression are: [52997.1228771  51681.93963517 37406.23596707 36763.94363608
+ 31591.08082186 28733.21206417 27535.35452415 24628.87401241
+ 23446.00989922 23273.0593757 ]
+
+No highly correlated feature pairs found with correlation > 0.8
+
+
 Submission file(s) created successfully.
+
