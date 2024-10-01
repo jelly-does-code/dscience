@@ -1,0 +1,37 @@
+Model,MSE,R²,"KFold Validation (mean, std)"
+Random Forest,895332770.2965213,0.883273182116089,84.04% (2.77%)
+XGBoost,651142256.4426079,0.9151089191436768,86.16% (3.53%)
+CatBoost,861380139.3070781,0.8876996732551007,87.77% (2.64%)
+RidgeRegression,966696726.5838715,0.873969281035522,79.84% (9.76%)
+The top features are: ['YearBuilt', 'GarageArea', 'LotArea', 'GarageCars', '2ndFlrSF', 'BsmtFinSF1', '1stFlrSF', 'TotalBsmtSF', 'GrLivArea', 'OverallQual']
+The top feature importances are: [0.01424808 0.01671715 0.01684262 0.01906181 0.02599992 0.03013322
+ 0.03145878 0.03448019 0.12419044 0.56029508]
+The top features are: ['1stFlrSF', 'TotRmsAbvGrd', 'FullBath', 'ExterQual_Gd', 'KitchenQual_TA', 'GrLivArea', 'RoofStyle_Hip', 'GarageCars', 'OverallQual', 'ExterQual_TA']
+The top feature importances are: [0.01132222 0.01424632 0.02548639 0.02584481 0.02647137 0.02886193
+ 0.05455254 0.12968089 0.15524942 0.21689884]
+The top features are: ['2ndFlrSF', 'GarageYrBlt', 'YearBuilt', 'LotArea', 'GarageCars', 'BsmtFinSF1', '1stFlrSF', 'TotalBsmtSF', 'GrLivArea', 'OverallQual']
+The top feature importances are: [ 2.38682268  2.68407404  3.10407349  3.4245271   4.24982413  4.76642601
+  5.22541046  5.79702673 15.69274623 21.02682092]
+The top features are: ['RoofMatl_Membran' 'LotArea' 'BsmtFinSF2' 'MiscVal' 'Id' 'PoolArea'
+ 'OpenPorchSF' '1stFlrSF' 'BsmtUnfSF' 'TotalBsmtSF']
+The top feature importances are: [0.         0.39064793 0.52192149 0.80930586 1.15851828 1.2690427
+ 2.50296713 2.54475195 3.14072865 3.93153415]
+Highly correlated feature pairs (correlation > 0.8):
+1stFlrSF and TotalBsmtSF: 0.83
+TotRmsAbvGrd and GrLivArea: 0.82
+GarageArea and GarageCars: 0.88
+MSZoning_RM and MSZoning_RL: -0.81
+Neighborhood_Somerst and MSZoning_FV: 0.87
+HouseStyle_2Story and 2ndFlrSF: 0.80
+RoofStyle_Hip and RoofStyle_Gable: -0.93
+Exterior2nd_CBlock and Exterior1st_CBlock: 1.00
+Exterior2nd_CmentBd and Exterior1st_CemntBd: 0.97
+Exterior2nd_HdBoard and Exterior1st_HdBoard: 0.88
+Exterior2nd_MetalSd and Exterior1st_MetalSd: 0.97
+Exterior2nd_VinylSd and Exterior1st_VinylSd: 0.97
+Exterior2nd_Wd Sdng and Exterior1st_Wd Sdng: 0.85
+ExterQual_TA and ExterQual_Gd: -0.91
+ExterCond_TA and ExterCond_Gd: -0.89
+KitchenQual_TA and KitchenQual_Gd: -0.83
+SaleCondition_Partial and SaleType_New: 0.99
+Submission file(s) created successfully.
