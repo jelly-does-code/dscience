@@ -1,3 +1,5 @@
 .gitignore
 venv
 kaggle_house_prices/catboost_info
+kaggle_house_prices/graphs
+kaggle_house_prices/log.txt
