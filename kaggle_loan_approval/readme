@@ -1,0 +1,7 @@
+https://www.kaggle.com/competitions/playground-series-s4e10/overview
+
+This challenge is a ROC-AUC evaluated synthetically generated dataset in the Playground Kaggle Series. 
+
+The target is to predict probability of customer getting a loan. (output: [0, 1])
+
+It uses Classifiers, no regressors.

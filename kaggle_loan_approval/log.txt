@@ -1,0 +1,15 @@
+Number of samples in the dataset: 58645
+
+Using 80/20 split for large dataset.
+
+Hyperparameter tuning done for RandomForestClassifier. Time elapsed: -656.3764793872833 for 50.
+
+Hyperparameter tuning done for XGBClassifier. Time elapsed: -51.122779846191406 for 50.
+
+Hyperparameter tuning done for CatBoostClassifier. Time elapsed: -250.07911562919617 for 50.
+
+Hyperparameter tuning done for RidgeClassifier. Time elapsed: -3.7435708045959473 for 50.
+
+
+Submission file(s) created successfully.
+

@@ -1,0 +1,5 @@
+name,perf,kfold_perf,params,timestamp
+RandomForestClassifier,0.9394116497072303,93.13% (0.20%),"{'n_estimators': 473, 'max_depth': 13, 'min_samples_split': 6, 'min_samples_leaf': 2, 'max_features': 'log2'}",2024-10-07 15:15:47
+XGBoostClassifier,0.9578958433129944,94.57% (0.23%),"{'max_depth': 13, 'learning_rate': 0.019163137574155987, 'n_estimators': 435, 'subsample': 0.8654995887318396, 'colsample_bytree': 0.6910659169661819, 'gamma': 1.027936442778662, 'min_child_weight': 7}",2024-10-07 15:15:47
+CatBoostClassifier,0.9568539335068702,95.13% (0.10%),"{'iterations': 461, 'depth': 4, 'learning_rate': 0.2997691744567756, 'l2_leaf_reg': 2.9772339649004347, 'bagging_temperature': 0.8670792461120367}",2024-10-07 15:15:47
+RidgeClassifier,0.8945067679760987,88.94% (0.29%),{'alpha': 78.4529062531413},2024-10-07 15:15:47
