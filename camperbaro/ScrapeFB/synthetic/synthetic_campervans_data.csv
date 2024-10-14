@@ -1,0 +1,1001 @@
+brand,price,year,currency,country,zip_code,odometer,service_history,doy,moy
+Toyota Hiace,56507,2023,AUD,australia,3350,64901,n,1,12
+Volkswagen California,16603,2024,AUD,australia,6000,57003,y,325,1
+Mercedes-Benz Sprinter,16586,2018,AUD,australia,2300,84057,n,350,7
+Dodge Ram Promaster,36037,2025,AUD,australia,3500,77014,y,230,6
+Chevrolet Express,19922,2015,AUD,australia,3550,82880,n,30,9
+Mercedes-Benz Sprinter,26324,2023,AUD,australia,4810,74424,y,108,4
+Toyota Hiace,55597,2018,AUD,australia,4217,79931,y,284,2
+Volkswagen California,55623,2016,AUD,australia,6230,96991,y,202,12
+Mercedes-Benz Sprinter,12775,2017,AUD,australia,4670,53382,n,341,7
+Volkswagen California,46912,2016,AUD,australia,3630,52474,n,259,8
+Ford Transit,30774,2016,AUD,australia,4655,99327,n,274,8
+Nissan NV200,50961,2016,AUD,australia,4217,55982,y,180,3
+Hymer Aktiv,20699,2024,AUD,australia,2830,69022,n,267,8
+Mercedes-Benz Sprinter,12838,2023,AUD,australia,4217,83225,n,194,12
+Mercedes-Benz Sprinter,46357,2022,AUD,australia,2000,87053,y,235,7
+Fiat Ducato,57003,2025,AUD,australia,7250,71813,y,134,8
+Ford Transit,40209,2017,AUD,australia,4810,56173,n,38,5
+Dodge Ram Promaster,37298,2020,AUD,australia,3550,94754,y,230,4
+Dodge Ram Promaster,52162,2024,AUD,australia,2000,74615,y,281,12
+Chevrolet Express,51640,2024,AUD,australia,2300,97589,y,106,6
+Toyota Hiace,24845,2023,AUD,australia,4670,96110,y,228,3
+Toyota Hiace,47512,2023,AUD,australia,6230,84309,y,71,11
+Nissan NV200,37827,2017,AUD,australia,3220,64719,n,24,2
+Toyota Hiace,25949,2018,AUD,australia,4551,79728,y,106,6
+Volkswagen Westfalia,36300,2024,AUD,australia,3500,59368,n,296,12
+Ford Transit,45659,2024,AUD,australia,4000,64239,n,205,13
+Fiat Ducato,28801,2025,AUD,australia,7250,94226,n,269,2
+Fiat Ducato,28299,2017,AUD,australia,2450,94578,y,333,10
+Volkswagen Westfalia,55434,2025,AUD,australia,2450,59373,y,337,11
+Nissan NV200,39406,2015,AUD,australia,2600,78190,n,357,1
+Volkswagen Westfalia,36167,2023,AUD,australia,3550,99145,n,81,12
+Hymer Aktiv,48478,2021,AUD,australia,2650,84309,y,22,11
+Mercedes-Benz Sprinter,57863,2017,AUD,australia,6000,96772,n,167,12
+Chevrolet Express,28852,2022,AUD,australia,3350,81394,y,42,6
+Fiat Ducato,23291,2018,AUD,australia,5000,65380,n,124,4
+Hymer Aktiv,37712,2022,AUD,australia,4700,55286,y,326,9
+Hymer Aktiv,15241,2020,AUD,australia,2450,74753,y,229,11
+Volkswagen California,43709,2019,AUD,australia,3630,76292,y,179,4
+Fiat Ducato,34794,2020,AUD,australia,2600,93559,y,197,5
+Chevrolet Express,47628,2015,AUD,australia,4670,56573,y,88,12
+Hymer Aktiv,46149,2022,AUD,australia,2640,87477,y,91,7
+Volkswagen California,43478,2024,AUD,australia,4000,91715,n,246,4
+Nissan NV200,59701,2018,AUD,australia,2650,98044,n,15,13
+Fiat Ducato,42382,2019,AUD,australia,2500,75178,n,66,10
+Dodge Ram Promaster,18319,2023,AUD,australia,3000,99578,n,359,7
+Nissan NV200,43012,2016,AUD,australia,4350,84781,n,132,7
+Toyota Hiace,27024,2021,AUD,australia,2640,71519,y,279,9
+Volkswagen California,40461,2017,AUD,australia,3630,76412,y,230,13
+Volkswagen Westfalia,40200,2021,AUD,australia,4810,98762,n,299,3
+Dodge Ram Promaster,26794,2019,AUD,australia,7250,66234,n,83,10
+Hymer Aktiv,47323,2018,AUD,australia,2300,86580,n,213,9
+Toyota Hiace,32669,2015,AUD,australia,4700,82456,n,296,13
+Ford Transit,10623,2017,AUD,australia,2500,81311,n,360,9
+Hymer Aktiv,51957,2017,AUD,australia,2450,83632,n,227,4
+Nissan NV200,19693,2017,AUD,australia,2450,55903,n,82,2
+Chevrolet Express,46923,2016,AUD,australia,3000,95015,y,210,8
+Volkswagen Westfalia,36221,2020,AUD,australia,2300,95634,y,219,11
+Chevrolet Express,49209,2023,AUD,australia,2450,74046,y,47,13
+Volkswagen California,17975,2024,AUD,australia,4217,52403,n,36,10
+Chevrolet Express,34947,2015,AUD,australia,4655,68129,y,307,3
+Ford Transit,28263,2019,AUD,australia,6230,66396,n,186,13
+Nissan NV200,54471,2022,AUD,australia,4217,86241,y,8,6
+Chevrolet Express,46290,2016,AUD,australia,4655,82876,y,51,13
+Fiat Ducato,39217,2024,AUD,australia,4000,92146,n,259,9
+Dodge Ram Promaster,57893,2018,AUD,australia,4740,73525,n,105,11
+Toyota Hiace,58622,2015,AUD,australia,2600,50051,y,149,6
+Chevrolet Express,28550,2017,AUD,australia,3630,66960,n,191,10
+Toyota Hiace,36246,2024,AUD,australia,7250,60891,n,116,8
+Toyota Hiace,33413,2020,AUD,australia,2450,74346,n,313,1
+Volkswagen Westfalia,12416,2015,AUD,australia,4551,99693,y,360,13
+Hymer Aktiv,47530,2022,AUD,australia,2650,63975,n,117,5
+Mercedes-Benz Sprinter,43351,2015,AUD,australia,2300,55686,n,175,10
+Volkswagen California,26783,2018,AUD,australia,6000,86286,n,80,12
+Volkswagen Westfalia,34304,2015,AUD,australia,7000,92349,n,20,10
+Ford Transit,28913,2019,AUD,australia,3350,53292,y,202,4
+Chevrolet Express,45463,2023,AUD,australia,4551,81128,y,307,7
+Fiat Ducato,54350,2023,AUD,australia,4000,81463,n,49,6
+Mercedes-Benz Sprinter,53128,2024,AUD,australia,3630,61825,y,80,10
+Fiat Ducato,54732,2020,AUD,australia,2450,66384,y,102,1
+Nissan NV200,45336,2025,AUD,australia,4740,77322,n,205,1
+Nissan NV200,26792,2021,AUD,australia,4350,68918,n,177,2
+Dodge Ram Promaster,37791,2016,AUD,australia,4655,97928,n,268,11
+Nissan NV200,34071,2023,AUD,australia,2000,90234,y,20,4
+Nissan NV200,27750,2024,AUD,australia,3500,55494,n,315,1
+Dodge Ram Promaster,50315,2020,AUD,australia,2300,85706,n,79,11
+Mercedes-Benz Sprinter,19198,2019,AUD,australia,4551,53028,y,64,6
+Hymer Aktiv,17300,2022,AUD,australia,4217,94343,y,36,10
+Chevrolet Express,53688,2016,AUD,australia,6000,93106,y,361,8
+Chevrolet Express,25060,2024,AUD,australia,3350,68344,n,15,6
+Mercedes-Benz Sprinter,14677,2025,AUD,australia,3500,64409,y,176,13
+Fiat Ducato,46842,2015,AUD,australia,2300,98948,y,182,6
+Dodge Ram Promaster,11051,2018,AUD,australia,3220,88565,y,67,9
+Volkswagen Westfalia,33939,2017,AUD,australia,3500,82875,n,234,6
+Toyota Hiace,51694,2025,AUD,australia,4700,76987,y,318,9
+Chevrolet Express,17994,2024,AUD,australia,4655,58318,y,321,5
+Toyota Hiace,22345,2024,AUD,australia,6000,93418,y,9,3
+Ford Transit,15926,2018,AUD,australia,4740,66236,y,286,5
+Toyota Hiace,34528,2025,AUD,australia,2300,89671,y,175,8
+Hymer Aktiv,31135,2015,AUD,australia,2300,66054,y,252,5
+Dodge Ram Promaster,54599,2025,AUD,australia,3220,84578,n,276,3
+Nissan NV200,29365,2020,AUD,australia,3500,64289,y,221,12
+Volkswagen California,43518,2022,AUD,australia,4870,83395,n,18,3
+Dodge Ram Promaster,50121,2023,AUD,australia,3550,64124,y,279,6
+Hymer Aktiv,53076,2022,AUD,australia,3350,61769,n,300,13
+Volkswagen California,15229,2024,AUD,australia,2500,58883,y,73,3
+Chevrolet Express,54267,2017,AUD,australia,3220,82541,n,235,13
+Mercedes-Benz Sprinter,25195,2020,AUD,australia,3000,92623,y,73,8
+Toyota Hiace,25468,2016,AUD,australia,3500,62118,n,174,12
+Fiat Ducato,55286,2015,AUD,australia,7000,52654,n,121,7
+Dodge Ram Promaster,20830,2015,AUD,australia,4870,79907,n,162,9
+Volkswagen California,50191,2021,AUD,australia,6000,69986,n,219,4
+Volkswagen California,18617,2021,AUD,australia,6000,90377,y,364,3
+Fiat Ducato,55370,2024,AUD,australia,3350,68849,n,39,6
+Nissan NV200,37929,2018,AUD,australia,4670,86705,n,194,1
+Hymer Aktiv,45819,2020,AUD,australia,4810,91507,y,223,9
+Volkswagen California,18251,2020,AUD,australia,6230,76818,y,73,2
+Dodge Ram Promaster,52170,2024,AUD,australia,4000,70677,n,360,10
+Hymer Aktiv,30670,2019,AUD,australia,3550,75333,y,176,1
+Volkswagen Westfalia,48587,2016,AUD,australia,2500,64351,y,197,12
+Toyota Hiace,55016,2023,AUD,australia,2600,64457,n,174,8
+Volkswagen California,55873,2020,AUD,australia,4000,52189,n,220,6
+Nissan NV200,32793,2021,AUD,australia,5000,92405,n,186,7
+Toyota Hiace,48452,2015,AUD,australia,7000,67739,n,107,4
+Mercedes-Benz Sprinter,49050,2016,AUD,australia,6000,60050,n,51,6
+Fiat Ducato,43432,2021,AUD,australia,6000,88088,n,134,9
+Hymer Aktiv,17697,2019,AUD,australia,2500,96863,y,214,4
+Fiat Ducato,36282,2023,AUD,australia,4655,56285,y,89,1
+Mercedes-Benz Sprinter,39777,2018,AUD,australia,4810,51823,n,212,5
+Chevrolet Express,34764,2016,AUD,australia,4740,63244,n,224,4
+Nissan NV200,27380,2023,AUD,australia,5000,85910,n,277,3
+Hymer Aktiv,54828,2023,AUD,australia,7250,54751,n,352,5
+Dodge Ram Promaster,12860,2019,AUD,australia,3350,76989,n,179,11
+Ford Transit,58733,2017,AUD,australia,2600,57755,n,300,12
+Volkswagen Westfalia,42599,2019,AUD,australia,7250,51336,n,86,9
+Mercedes-Benz Sprinter,33209,2019,AUD,australia,2000,57154,y,24,2
+Toyota Hiace,58087,2020,AUD,australia,3350,81931,n,362,7
+Nissan NV200,50419,2022,AUD,australia,4700,97680,y,85,9
+Nissan NV200,50599,2023,AUD,australia,3350,58309,y,324,6
+Ford Transit,27431,2015,AUD,australia,4655,90583,n,155,8
+Mercedes-Benz Sprinter,31172,2019,AUD,australia,2300,99480,y,163,10
+Volkswagen California,44010,2025,AUD,australia,4000,59218,n,157,6
+Nissan NV200,22255,2020,AUD,australia,7000,69695,n,27,13
+Dodge Ram Promaster,58000,2025,AUD,australia,4350,97808,n,241,3
+Mercedes-Benz Sprinter,43587,2017,AUD,australia,5000,57184,y,149,11
+Dodge Ram Promaster,36424,2018,AUD,australia,2650,82300,y,110,10
+Mercedes-Benz Sprinter,46516,2020,AUD,australia,2830,73577,y,187,13
+Volkswagen Westfalia,45171,2024,AUD,australia,4740,83777,y,271,8
+Ford Transit,42930,2021,AUD,australia,4670,51813,n,163,13
+Ford Transit,30524,2016,AUD,australia,4655,81678,y,359,9
+Hymer Aktiv,38424,2019,AUD,australia,6230,82565,n,276,13
+Nissan NV200,47023,2015,AUD,australia,7250,64293,n,140,1
+Nissan NV200,49966,2020,AUD,australia,3550,80624,n,69,10
+Chevrolet Express,48735,2016,AUD,australia,4740,99991,y,37,1
+Volkswagen Westfalia,52785,2016,AUD,australia,4870,91599,y,251,6
+Hymer Aktiv,18525,2022,AUD,australia,4000,58724,n,78,1
+Volkswagen Westfalia,55949,2016,AUD,australia,2650,96286,y,290,6
+Dodge Ram Promaster,32500,2018,AUD,australia,6230,61513,n,56,5
+Nissan NV200,33330,2022,AUD,australia,2640,79178,y,353,11
+Volkswagen Westfalia,45032,2018,AUD,australia,2640,60452,y,239,1
+Ford Transit,46692,2017,AUD,australia,4000,61027,y,270,6
+Volkswagen Westfalia,28715,2017,AUD,australia,2640,60776,y,106,8
+Fiat Ducato,18793,2023,AUD,australia,2000,88425,n,110,13
+Dodge Ram Promaster,22147,2022,AUD,australia,4217,99164,n,309,1
+Hymer Aktiv,44737,2017,AUD,australia,2300,77728,y,315,6
+Volkswagen California,40293,2016,AUD,australia,2600,52765,n,57,2
+Mercedes-Benz Sprinter,50554,2022,AUD,australia,4700,91842,n,45,13
+Volkswagen California,10820,2019,AUD,australia,2500,53477,n,60,11
+Toyota Hiace,54835,2021,AUD,australia,2640,79266,y,279,6
+Chevrolet Express,20007,2017,AUD,australia,7250,65466,y,17,1
+Dodge Ram Promaster,41881,2017,AUD,australia,4740,86280,n,229,6
+Volkswagen Westfalia,31132,2016,AUD,australia,3630,84689,n,275,9
+Ford Transit,33775,2020,AUD,australia,4870,89440,n,273,6
+Volkswagen Westfalia,56490,2015,AUD,australia,3220,96260,y,25,9
+Volkswagen California,21493,2017,AUD,australia,2650,68634,n,183,12
+Hymer Aktiv,48724,2025,AUD,australia,4700,79203,y,11,13
+Ford Transit,21560,2022,AUD,australia,3000,52121,n,204,2
+Hymer Aktiv,28022,2022,AUD,australia,4000,61321,y,13,2
+Dodge Ram Promaster,56432,2019,AUD,australia,3630,73792,y,24,6
+Volkswagen Westfalia,23423,2015,AUD,australia,4740,91115,n,76,3
+Mercedes-Benz Sprinter,54677,2017,AUD,australia,2000,82837,y,22,3
+Fiat Ducato,52128,2020,AUD,australia,4700,96556,n,357,10
+Volkswagen California,41492,2025,AUD,australia,4217,54593,n,138,4
+Nissan NV200,46827,2020,AUD,australia,2300,59987,n,243,10
+Hymer Aktiv,12036,2020,AUD,australia,4870,54740,y,27,5
+Hymer Aktiv,51815,2023,AUD,australia,2000,99699,n,124,11
+Dodge Ram Promaster,55083,2023,AUD,australia,2600,84858,n,119,12
+Volkswagen California,26549,2020,AUD,australia,4810,79605,n,236,13
+Fiat Ducato,55255,2019,AUD,australia,3350,50046,y,287,12
+Chevrolet Express,18328,2024,AUD,australia,6230,55989,n,351,4
+Toyota Hiace,43218,2019,AUD,australia,3350,52637,n,48,8
+Toyota Hiace,12632,2023,AUD,australia,2500,93083,y,80,6
+Toyota Hiace,34268,2022,AUD,australia,2500,81635,n,280,4
+Dodge Ram Promaster,22849,2025,AUD,australia,2300,60721,y,91,11
+Fiat Ducato,25635,2017,AUD,australia,4000,94690,y,240,4
+Toyota Hiace,31149,2023,AUD,australia,2650,51803,n,91,11
+Toyota Hiace,24230,2022,AUD,australia,3000,76802,y,33,12
+Fiat Ducato,21950,2018,AUD,australia,6000,77243,n,150,6
+Fiat Ducato,57686,2020,AUD,australia,2300,61675,n,9,7
+Nissan NV200,20893,2021,AUD,australia,2600,66313,n,96,2
+Dodge Ram Promaster,40527,2017,AUD,australia,4810,90010,n,30,8
+Nissan NV200,29792,2015,AUD,australia,2600,65092,y,173,9
+Mercedes-Benz Sprinter,58003,2021,AUD,australia,4670,99307,n,319,8
+Volkswagen Westfalia,56494,2020,AUD,australia,2450,99737,y,265,13
+Mercedes-Benz Sprinter,55480,2016,AUD,australia,2600,69165,n,169,12
+Volkswagen Westfalia,35288,2018,AUD,australia,3000,71034,y,25,2
+Chevrolet Express,33249,2022,AUD,australia,2300,89302,n,183,5
+Mercedes-Benz Sprinter,22856,2021,AUD,australia,3500,92518,y,174,12
+Hymer Aktiv,22451,2015,AUD,australia,2000,63779,y,206,4
+Dodge Ram Promaster,44936,2024,AUD,australia,4000,51812,y,136,2
+Mercedes-Benz Sprinter,53753,2016,AUD,australia,7000,58815,n,56,1
+Volkswagen Westfalia,42156,2015,AUD,australia,3500,94802,y,185,9
+Mercedes-Benz Sprinter,42567,2022,AUD,australia,3500,55477,y,33,3
+Hymer Aktiv,51672,2016,AUD,australia,3350,57804,y,105,9
+Dodge Ram Promaster,21310,2021,AUD,australia,7250,68737,y,49,8
+Fiat Ducato,12832,2017,AUD,australia,7250,84676,y,327,1
+Nissan NV200,18550,2021,AUD,australia,7250,72964,n,195,4
+Fiat Ducato,33676,2019,AUD,australia,3550,91319,y,205,8
+Hymer Aktiv,20208,2015,AUD,australia,2600,81812,y,53,4
+Volkswagen California,49527,2025,AUD,australia,4700,75685,y,265,1
+Volkswagen Westfalia,24859,2018,AUD,australia,3550,53219,y,15,11
+Ford Transit,55858,2023,AUD,australia,2450,57392,y,303,11
+Nissan NV200,46121,2019,AUD,australia,3550,90601,n,87,6
+Nissan NV200,36772,2016,AUD,australia,3000,75312,n,285,3
+Mercedes-Benz Sprinter,28378,2021,AUD,australia,2300,93266,y,12,13
+Chevrolet Express,57468,2021,AUD,australia,6230,95314,y,236,10
+Mercedes-Benz Sprinter,11268,2024,AUD,australia,4670,66692,y,309,7
+Volkswagen California,11468,2020,AUD,australia,3350,59465,y,238,2
+Volkswagen Westfalia,52757,2018,AUD,australia,2300,56025,n,237,12
+Volkswagen Westfalia,17074,2019,AUD,australia,3630,57995,n,178,1
+Volkswagen California,58203,2015,AUD,australia,3220,97762,y,95,6
+Ford Transit,49952,2021,AUD,australia,4870,54974,n,20,12
+Chevrolet Express,34208,2023,AUD,australia,3630,59694,n,252,9
+Toyota Hiace,14758,2019,AUD,australia,2000,97979,y,251,8
+Toyota Hiace,41526,2019,AUD,australia,3500,68565,y,4,6
+Volkswagen California,58129,2022,AUD,australia,6000,54675,n,121,5
+Volkswagen California,58996,2016,AUD,australia,3220,63280,y,71,9
+Nissan NV200,15090,2025,AUD,australia,7250,60400,y,314,1
+Hymer Aktiv,34778,2019,AUD,australia,4655,86981,n,161,8
+Toyota Hiace,48210,2025,AUD,australia,3000,94170,y,112,8
+Dodge Ram Promaster,29202,2015,AUD,australia,2830,92426,y,290,12
+Volkswagen California,42093,2019,AUD,australia,6230,96170,n,39,4
+Mercedes-Benz Sprinter,41273,2021,AUD,australia,2640,87218,n,51,9
+Hymer Aktiv,24570,2021,AUD,australia,3630,87252,n,230,9
+Volkswagen Westfalia,43209,2015,AUD,australia,3220,86328,n,309,13
+Chevrolet Express,14121,2023,AUD,australia,3630,58740,n,231,5
+Chevrolet Express,31281,2015,AUD,australia,2830,58982,n,292,12
+Nissan NV200,19927,2015,AUD,australia,3350,98169,y,69,10
+Volkswagen Westfalia,17786,2020,AUD,australia,6230,63638,y,237,4
+Fiat Ducato,46362,2020,AUD,australia,2000,94349,y,166,3
+Dodge Ram Promaster,56873,2023,AUD,australia,3000,65819,y,118,7
+Nissan NV200,35009,2020,AUD,australia,4217,78578,y,270,9
+Nissan NV200,43122,2024,AUD,australia,3350,94470,y,216,11
+Hymer Aktiv,42995,2020,AUD,australia,2600,97795,n,198,4
+Fiat Ducato,10381,2022,AUD,australia,3550,76325,y,230,13
+Volkswagen Westfalia,34257,2021,AUD,australia,2830,95456,n,296,6
+Mercedes-Benz Sprinter,24545,2020,AUD,australia,4810,50036,n,79,2
+Volkswagen California,11092,2017,AUD,australia,2650,94224,y,126,10
+Volkswagen California,16258,2021,AUD,australia,4350,50185,y,79,7
+Nissan NV200,12491,2020,AUD,australia,3000,72880,y,192,12
+Dodge Ram Promaster,57289,2021,AUD,australia,4870,99235,n,342,6
+Ford Transit,48900,2023,AUD,australia,4217,72873,n,297,9
+Dodge Ram Promaster,55204,2023,AUD,australia,3350,73067,y,346,9
+Volkswagen California,47333,2016,AUD,australia,4000,77307,y,112,2
+Nissan NV200,25214,2024,AUD,australia,4810,52800,n,206,8
+Mercedes-Benz Sprinter,40117,2016,AUD,australia,2450,72085,n,334,11
+Nissan NV200,31853,2021,AUD,australia,2600,88866,y,108,11
+Nissan NV200,24278,2023,AUD,australia,4217,71095,n,131,6
+Hymer Aktiv,49554,2019,AUD,australia,3550,75724,n,216,4
+Nissan NV200,32718,2021,AUD,australia,4350,63888,n,258,6
+Toyota Hiace,32060,2020,AUD,australia,3000,86019,n,299,13
+Nissan NV200,37998,2017,AUD,australia,4551,85041,y,60,7
+Hymer Aktiv,33395,2023,AUD,australia,4350,97530,n,304,11
+Mercedes-Benz Sprinter,31828,2018,AUD,australia,4870,96728,y,169,11
+Chevrolet Express,57878,2024,AUD,australia,4670,55968,y,228,4
+Hymer Aktiv,10061,2017,AUD,australia,4551,60915,n,344,8
+Toyota Hiace,39124,2020,AUD,australia,3550,51436,y,305,9
+Mercedes-Benz Sprinter,39746,2024,AUD,australia,3220,89057,y,273,9
+Fiat Ducato,28958,2019,AUD,australia,3350,76498,n,83,7
+Toyota Hiace,57418,2015,AUD,australia,5000,70140,n,216,4
+Nissan NV200,46583,2019,AUD,australia,3000,68908,y,106,8
+Toyota Hiace,27095,2019,AUD,australia,2500,61894,n,4,7
+Toyota Hiace,16328,2025,AUD,australia,2000,67146,y,230,9
+Volkswagen Westfalia,36126,2015,AUD,australia,4700,72903,y,279,2
+Volkswagen California,39588,2015,AUD,australia,2000,88068,n,53,5
+Hymer Aktiv,15142,2018,AUD,australia,2830,82964,y,147,6
+Toyota Hiace,35584,2019,AUD,australia,3500,59074,n,266,2
+Chevrolet Express,45804,2016,AUD,australia,4551,68561,y,335,13
+Nissan NV200,44803,2020,AUD,australia,2640,65137,y,251,2
+Nissan NV200,52657,2024,AUD,australia,4700,69674,n,351,6
+Chevrolet Express,58709,2017,AUD,australia,4217,55618,y,309,3
+Fiat Ducato,51514,2025,AUD,australia,5000,52894,n,228,12
+Dodge Ram Promaster,11902,2025,AUD,australia,4551,96731,n,78,8
+Dodge Ram Promaster,12871,2024,AUD,australia,7250,83584,n,350,6
+Fiat Ducato,43872,2016,AUD,australia,2600,96070,y,24,9
+Nissan NV200,27273,2018,AUD,australia,3550,84350,y,192,6
+Dodge Ram Promaster,19048,2019,AUD,australia,7250,84430,n,159,7
+Ford Transit,11884,2019,AUD,australia,6230,71995,n,66,1
+Nissan NV200,21135,2020,AUD,australia,2450,78934,n,107,10
+Nissan NV200,27281,2021,AUD,australia,4217,55030,y,129,5
+Hymer Aktiv,40645,2017,AUD,australia,4217,69064,y,293,2
+Hymer Aktiv,50422,2020,AUD,australia,7250,81048,n,178,5
+Volkswagen California,24346,2015,AUD,australia,2450,82141,n,161,12
+Hymer Aktiv,12735,2016,AUD,australia,2300,82601,y,318,8
+Nissan NV200,51681,2015,AUD,australia,4700,58977,y,11,7
+Ford Transit,16117,2016,AUD,australia,4700,97414,n,292,11
+Mercedes-Benz Sprinter,29368,2015,AUD,australia,3220,61643,y,55,9
+Mercedes-Benz Sprinter,25002,2024,AUD,australia,3000,76143,y,161,4
+Nissan NV200,21725,2025,AUD,australia,3550,74956,n,231,2
+Mercedes-Benz Sprinter,52525,2022,AUD,australia,2830,53623,n,207,10
+Fiat Ducato,27296,2017,AUD,australia,4670,94474,y,166,12
+Volkswagen California,43671,2019,AUD,australia,3000,64905,n,85,2
+Toyota Hiace,59399,2020,AUD,australia,3350,64640,n,17,8
+Hymer Aktiv,28147,2016,AUD,australia,2600,55084,y,170,5
+Volkswagen Westfalia,17382,2025,AUD,australia,2650,89813,y,315,9
+Ford Transit,38214,2016,AUD,australia,2650,86596,y,216,11
+Dodge Ram Promaster,36132,2024,AUD,australia,2300,56578,y,117,1
+Mercedes-Benz Sprinter,32734,2019,AUD,australia,3350,72994,y,127,4
+Dodge Ram Promaster,22938,2024,AUD,australia,2450,58736,n,268,1
+Dodge Ram Promaster,58597,2025,AUD,australia,4350,98577,n,175,13
+Mercedes-Benz Sprinter,15833,2023,AUD,australia,3630,50453,n,209,7
+Chevrolet Express,26782,2022,AUD,australia,4217,78261,n,12,7
+Mercedes-Benz Sprinter,35794,2015,AUD,australia,4655,92847,y,307,13
+Chevrolet Express,37194,2016,AUD,australia,2650,79750,n,293,3
+Toyota Hiace,16290,2017,AUD,australia,3000,86259,n,252,10
+Chevrolet Express,39356,2024,AUD,australia,3350,72074,n,99,8
+Volkswagen California,17681,2018,AUD,australia,4655,61157,y,210,12
+Toyota Hiace,17752,2025,AUD,australia,3630,59667,n,89,11
+Chevrolet Express,34085,2025,AUD,australia,4670,73533,y,55,13
+Volkswagen California,56421,2017,AUD,australia,2600,91145,y,267,8
+Dodge Ram Promaster,57332,2023,AUD,australia,4217,56363,y,204,3
+Volkswagen California,42991,2019,AUD,australia,2300,61549,n,275,7
+Toyota Hiace,10371,2020,AUD,australia,2650,60231,n,273,7
+Ford Transit,52859,2018,AUD,australia,5000,84456,y,314,1
+Hymer Aktiv,54736,2024,AUD,australia,3500,96394,y,23,6
+Chevrolet Express,55506,2016,AUD,australia,4551,59210,n,300,7
+Chevrolet Express,59811,2022,AUD,australia,4217,82412,n,147,11
+Volkswagen Westfalia,57983,2016,AUD,australia,3500,79861,n,325,3
+Ford Transit,25756,2021,AUD,australia,6230,60104,n,100,5
+Nissan NV200,28842,2015,AUD,australia,2000,58816,n,255,6
+Nissan NV200,40539,2023,AUD,australia,2600,72588,y,313,1
+Dodge Ram Promaster,27254,2022,AUD,australia,4700,93294,n,108,4
+Fiat Ducato,38221,2024,AUD,australia,4350,77843,y,161,1
+Mercedes-Benz Sprinter,37090,2020,AUD,australia,3000,67681,n,39,3
+Volkswagen Westfalia,54763,2024,AUD,australia,4810,55401,n,34,7
+Volkswagen California,50973,2023,AUD,australia,2300,52469,n,290,6
+Volkswagen Westfalia,19430,2019,AUD,australia,2650,54569,y,243,1
+Dodge Ram Promaster,12321,2018,AUD,australia,6230,64247,y,339,6
+Volkswagen California,50745,2020,AUD,australia,2500,79399,y,178,9
+Chevrolet Express,18036,2024,AUD,australia,4700,93444,n,14,11
+Mercedes-Benz Sprinter,20138,2017,AUD,australia,4000,71637,y,234,11
+Hymer Aktiv,42316,2018,AUD,australia,3550,73065,y,105,6
+Fiat Ducato,17020,2020,AUD,australia,6000,84414,n,47,4
+Nissan NV200,19531,2018,AUD,australia,5000,76184,y,83,6
+Chevrolet Express,57662,2024,AUD,australia,2830,61979,y,364,4
+Dodge Ram Promaster,12136,2024,AUD,australia,4350,68601,y,254,10
+Mercedes-Benz Sprinter,42093,2021,AUD,australia,4350,62557,n,241,3
+Nissan NV200,59605,2018,AUD,australia,4655,68091,n,73,11
+Volkswagen Westfalia,54967,2018,AUD,australia,2830,89755,n,82,11
+Hymer Aktiv,16392,2021,AUD,australia,5000,85797,n,156,6
+Volkswagen California,35351,2025,AUD,australia,3220,80550,y,285,8
+Volkswagen California,45673,2023,AUD,australia,7250,79605,n,177,1
+Fiat Ducato,44278,2018,AUD,australia,4670,90670,n,247,11
+Chevrolet Express,40212,2019,AUD,australia,6230,57971,n,149,8
+Volkswagen California,10134,2024,AUD,australia,2640,66016,n,62,7
+Volkswagen California,55732,2015,AUD,australia,4740,65227,n,316,5
+Volkswagen California,55775,2024,AUD,australia,6000,61165,y,240,3
+Ford Transit,24374,2022,AUD,australia,3000,63208,n,38,7
+Hymer Aktiv,27876,2023,AUD,australia,4810,64930,y,197,2
+Fiat Ducato,35533,2016,AUD,australia,3500,68134,n,212,4
+Fiat Ducato,20834,2017,AUD,australia,2650,98548,n,191,5
+Volkswagen Westfalia,47524,2017,AUD,australia,3550,91512,n,319,7
+Nissan NV200,52975,2020,AUD,australia,4551,97543,n,322,11
+Dodge Ram Promaster,37242,2015,AUD,australia,2450,55585,n,226,11
+Dodge Ram Promaster,25220,2018,AUD,australia,6000,99350,n,173,12
+Nissan NV200,20006,2018,AUD,australia,2300,60003,y,235,2
+Hymer Aktiv,43154,2019,AUD,australia,4700,91361,n,313,5
+Hymer Aktiv,15437,2020,AUD,australia,4700,68083,y,299,5
+Toyota Hiace,58844,2023,AUD,australia,4870,84366,n,145,12
+Nissan NV200,13174,2021,AUD,australia,7250,73632,n,198,10
+Chevrolet Express,24087,2015,AUD,australia,3550,71792,n,264,4
+Volkswagen California,35167,2024,AUD,australia,4350,65123,y,245,8
+Volkswagen California,41809,2018,AUD,australia,3630,73978,n,351,9
+Dodge Ram Promaster,52657,2015,AUD,australia,5000,76206,y,338,12
+Volkswagen Westfalia,22780,2025,AUD,australia,6000,86727,n,334,6
+Dodge Ram Promaster,38669,2019,AUD,australia,2830,85385,y,287,8
+Dodge Ram Promaster,39438,2015,AUD,australia,2830,52648,n,39,13
+Fiat Ducato,57999,2025,AUD,australia,2830,72351,y,185,4
+Fiat Ducato,22437,2020,AUD,australia,3000,78348,n,231,13
+Dodge Ram Promaster,18095,2019,AUD,australia,3550,78611,n,256,5
+Volkswagen Westfalia,45999,2019,AUD,australia,2650,61995,y,154,7
+Dodge Ram Promaster,41886,2020,AUD,australia,3630,86932,y,197,2
+Mercedes-Benz Sprinter,28371,2021,AUD,australia,2500,67916,y,333,11
+Toyota Hiace,23893,2015,AUD,australia,4000,87296,y,223,1
+Mercedes-Benz Sprinter,52995,2023,AUD,australia,4000,92722,n,118,13
+Chevrolet Express,45881,2016,AUD,australia,4000,93867,y,325,4
+Ford Transit,28387,2021,AUD,australia,4551,54709,n,220,5
+Nissan NV200,38554,2018,AUD,australia,4000,67931,n,172,3
+Toyota Hiace,36700,2017,AUD,australia,2450,69352,n,39,1
+Ford Transit,25895,2016,AUD,australia,4810,77970,y,31,6
+Dodge Ram Promaster,39866,2019,AUD,australia,5000,57881,y,236,5
+Volkswagen California,36012,2025,AUD,australia,7250,58308,y,212,13
+Fiat Ducato,34582,2016,AUD,australia,4350,67738,n,253,2
+Volkswagen Westfalia,51891,2017,AUD,australia,4700,96831,y,28,8
+Volkswagen Westfalia,29771,2015,AUD,australia,3220,87683,y,193,10
+Fiat Ducato,44566,2018,AUD,australia,3500,93965,n,329,6
+Mercedes-Benz Sprinter,50597,2022,AUD,australia,2500,98866,n,184,3
+Toyota Hiace,33210,2021,AUD,australia,2640,68017,n,293,12
+Toyota Hiace,20143,2024,AUD,australia,3630,50070,n,239,7
+Nissan NV200,39390,2019,AUD,australia,6230,95951,n,360,10
+Hymer Aktiv,42168,2015,AUD,australia,6000,73562,n,75,12
+Mercedes-Benz Sprinter,24275,2017,AUD,australia,4700,79107,y,183,3
+Fiat Ducato,49481,2024,AUD,australia,2450,98508,n,54,7
+Volkswagen California,34451,2025,AUD,australia,2640,92923,y,230,6
+Ford Transit,14117,2015,AUD,australia,4000,86132,y,39,1
+Hymer Aktiv,27711,2021,AUD,australia,3500,50373,n,119,9
+Mercedes-Benz Sprinter,35584,2021,AUD,australia,4551,68898,n,193,6
+Toyota Hiace,42346,2016,AUD,australia,3000,51478,n,247,11
+Hymer Aktiv,29575,2022,AUD,australia,3000,75740,n,311,13
+Nissan NV200,34594,2022,AUD,australia,3630,82718,n,146,13
+Chevrolet Express,11708,2015,AUD,australia,2000,93682,n,211,2
+Chevrolet Express,14067,2020,AUD,australia,4350,91444,y,63,3
+Nissan NV200,13205,2018,AUD,australia,4810,81136,n,333,2
+Chevrolet Express,56623,2024,AUD,australia,4551,73155,n,337,1
+Volkswagen Westfalia,58885,2020,AUD,australia,6230,92867,y,87,5
+Toyota Hiace,18634,2025,AUD,australia,2600,97378,n,145,2
+Toyota Hiace,46507,2024,AUD,australia,6000,99403,n,252,9
+Volkswagen Westfalia,44880,2017,AUD,australia,6000,58696,n,159,8
+Hymer Aktiv,20817,2024,AUD,australia,2300,94414,y,327,8
+Volkswagen Westfalia,12367,2021,AUD,australia,6000,77248,y,6,4
+Chevrolet Express,31489,2015,AUD,australia,4700,61831,n,202,3
+Ford Transit,13146,2019,AUD,australia,4870,83271,n,314,3
+Chevrolet Express,50483,2015,AUD,australia,3550,62294,n,353,7
+Nissan NV200,54605,2022,AUD,australia,4670,85302,y,156,3
+Volkswagen Westfalia,20797,2017,AUD,australia,4217,78875,n,224,7
+Mercedes-Benz Sprinter,40222,2024,AUD,australia,2450,69167,y,227,5
+Mercedes-Benz Sprinter,34902,2019,AUD,australia,6000,81449,y,307,8
+Chevrolet Express,31495,2016,AUD,australia,3220,80530,y,330,9
+Nissan NV200,37295,2025,AUD,australia,3500,86558,n,84,8
+Mercedes-Benz Sprinter,58097,2023,AUD,australia,3630,58281,y,258,5
+Volkswagen Westfalia,49687,2025,AUD,australia,2650,72822,n,276,9
+Nissan NV200,51832,2019,AUD,australia,4655,97450,y,359,12
+Ford Transit,22113,2023,AUD,australia,7250,53338,n,330,3
+Dodge Ram Promaster,21744,2023,AUD,australia,4810,62983,y,74,10
+Fiat Ducato,45756,2019,AUD,australia,3000,91043,y,239,12
+Dodge Ram Promaster,29036,2019,AUD,australia,4700,86124,y,175,2
+Hymer Aktiv,36450,2020,AUD,australia,2000,57564,n,127,9
+Volkswagen Westfalia,35552,2017,AUD,australia,3220,85702,n,217,2
+Volkswagen California,58129,2017,AUD,australia,2830,80659,y,30,3
+Ford Transit,13959,2015,AUD,australia,3220,68288,n,63,4
+Mercedes-Benz Sprinter,27643,2021,AUD,australia,2640,93510,n,41,10
+Chevrolet Express,53663,2017,AUD,australia,4000,68055,y,240,2
+Dodge Ram Promaster,13041,2021,AUD,australia,4870,83881,y,117,3
+Ford Transit,23821,2019,AUD,australia,4551,99521,y,58,3
+Nissan NV200,29108,2022,AUD,australia,2650,90164,y,129,9
+Toyota Hiace,20857,2021,AUD,australia,3000,70564,y,126,4
+Nissan NV200,16796,2015,AUD,australia,4217,71792,y,220,6
+Toyota Hiace,35166,2024,AUD,australia,2650,77830,n,8,2
+Fiat Ducato,13890,2020,AUD,australia,3630,77760,n,269,4
+Chevrolet Express,43957,2017,AUD,australia,4670,91958,n,123,3
+Nissan NV200,13001,2025,AUD,australia,2450,63657,n,79,11
+Fiat Ducato,40482,2018,AUD,australia,2300,76218,n,212,9
+Mercedes-Benz Sprinter,12205,2016,AUD,australia,2600,85333,y,327,3
+Mercedes-Benz Sprinter,21340,2022,AUD,australia,3550,73059,n,20,8
+Hymer Aktiv,17587,2023,AUD,australia,4551,91297,y,31,8
+Volkswagen California,44587,2017,AUD,australia,2500,96306,y,343,1
+Volkswagen California,19010,2020,AUD,australia,4551,84808,y,215,10
+Volkswagen California,59223,2019,AUD,australia,3350,76582,n,183,1
+Chevrolet Express,54030,2022,AUD,australia,2500,78519,y,350,6
+Toyota Hiace,12305,2023,AUD,australia,4217,58497,y,280,8
+Hymer Aktiv,10719,2017,AUD,australia,6230,66480,n,3,13
+Volkswagen Westfalia,53966,2022,AUD,australia,3500,53835,y,262,13
+Fiat Ducato,42032,2020,AUD,australia,4670,50065,n,126,1
+Chevrolet Express,27534,2023,AUD,australia,7000,71030,y,325,6
+Fiat Ducato,13633,2015,AUD,australia,3550,79325,y,108,11
+Chevrolet Express,58435,2022,AUD,australia,6000,77197,n,269,2
+Ford Transit,21636,2020,AUD,australia,4655,79901,y,86,7
+Hymer Aktiv,21740,2021,AUD,australia,3000,85631,n,334,2
+Ford Transit,36445,2024,AUD,australia,2640,64036,y,285,3
+Chevrolet Express,38335,2021,AUD,australia,4870,99022,n,139,4
+Ford Transit,35150,2016,AUD,australia,3550,73940,n,171,2
+Toyota Hiace,16759,2025,AUD,australia,2000,71078,n,157,13
+Mercedes-Benz Sprinter,40608,2020,AUD,australia,4551,83860,y,56,12
+Chevrolet Express,50040,2023,AUD,australia,4740,95707,n,256,9
+Hymer Aktiv,10889,2015,AUD,australia,2450,77939,n,16,4
+Dodge Ram Promaster,23534,2017,AUD,australia,3630,88591,y,326,3
+Dodge Ram Promaster,26374,2022,AUD,australia,3500,65875,n,189,4
+Ford Transit,41892,2019,AUD,australia,3630,94570,y,140,7
+Volkswagen Westfalia,32404,2023,AUD,australia,2300,80433,n,142,5
+Volkswagen California,39945,2024,AUD,australia,4217,83971,n,171,11
+Nissan NV200,50062,2018,AUD,australia,4670,85177,y,260,9
+Mercedes-Benz Sprinter,17991,2023,AUD,australia,7000,59121,n,330,8
+Chevrolet Express,35946,2021,AUD,australia,7250,98988,y,335,11
+Dodge Ram Promaster,58533,2024,AUD,australia,2830,73042,y,226,8
+Fiat Ducato,51429,2023,AUD,australia,4870,67619,n,279,6
+Toyota Hiace,13719,2020,AUD,australia,4655,81774,n,221,12
+Hymer Aktiv,37959,2025,AUD,australia,2640,76816,n,78,7
+Volkswagen Westfalia,45770,2016,AUD,australia,3500,98223,y,202,11
+Volkswagen California,25251,2017,AUD,australia,2000,68692,n,34,5
+Chevrolet Express,53531,2016,AUD,australia,3220,88796,n,275,8
+Toyota Hiace,27827,2021,AUD,australia,2450,62403,n,155,1
+Dodge Ram Promaster,58447,2017,AUD,australia,4740,79314,y,102,13
+Nissan NV200,24926,2023,AUD,australia,5000,77813,n,93,10
+Dodge Ram Promaster,11939,2023,AUD,australia,2830,83498,y,149,1
+Hymer Aktiv,36697,2018,AUD,australia,6230,80508,y,193,4
+Volkswagen California,52860,2015,AUD,australia,4655,92559,y,282,9
+Dodge Ram Promaster,32827,2025,AUD,australia,2640,84507,y,213,10
+Ford Transit,19921,2020,AUD,australia,3350,50092,n,305,1
+Volkswagen Westfalia,20937,2024,AUD,australia,2600,90950,y,26,2
+Mercedes-Benz Sprinter,58687,2021,AUD,australia,3500,59999,y,282,7
+Ford Transit,56552,2021,AUD,australia,4000,54613,n,149,13
+Volkswagen Westfalia,36838,2018,AUD,australia,3220,80428,y,232,10
+Volkswagen California,32616,2015,AUD,australia,4655,78592,n,308,5
+Volkswagen California,59393,2019,AUD,australia,2600,64856,y,334,4
+Ford Transit,28880,2018,AUD,australia,6230,71673,y,8,10
+Fiat Ducato,15773,2021,AUD,australia,2300,72840,n,321,12
+Toyota Hiace,34856,2017,AUD,australia,4700,91171,n,103,6
+Hymer Aktiv,58837,2021,AUD,australia,2830,56340,y,299,4
+Fiat Ducato,11568,2015,AUD,australia,7000,59086,y,88,2
+Chevrolet Express,53687,2019,AUD,australia,4870,67832,y,40,13
+Mercedes-Benz Sprinter,49009,2023,AUD,australia,4350,68188,y,266,10
+Mercedes-Benz Sprinter,26375,2015,AUD,australia,2000,71728,y,256,2
+Chevrolet Express,54756,2021,AUD,australia,2300,95546,y,148,2
+Volkswagen California,14532,2017,AUD,australia,4551,60047,n,4,5
+Hymer Aktiv,22758,2021,AUD,australia,4551,95099,n,5,8
+Toyota Hiace,42972,2020,AUD,australia,4655,72248,n,73,6
+Mercedes-Benz Sprinter,12393,2016,AUD,australia,2640,72747,y,283,7
+Hymer Aktiv,36280,2018,AUD,australia,3500,64673,y,63,7
+Volkswagen California,38732,2016,AUD,australia,6000,68389,y,344,13
+Chevrolet Express,24413,2018,AUD,australia,2450,74978,y,170,13
+Volkswagen California,52725,2016,AUD,australia,4000,65674,y,270,9
+Chevrolet Express,35478,2025,AUD,australia,5000,95372,n,130,7
+Volkswagen California,47918,2016,AUD,australia,2640,90870,y,195,2
+Toyota Hiace,10649,2024,AUD,australia,4000,57329,n,253,8
+Volkswagen Westfalia,58019,2016,AUD,australia,4000,70377,y,170,4
+Dodge Ram Promaster,41840,2015,AUD,australia,3000,88035,n,252,10
+Hymer Aktiv,46976,2017,AUD,australia,2600,59122,n,350,5
+Dodge Ram Promaster,21567,2023,AUD,australia,4000,81863,n,238,11
+Dodge Ram Promaster,56769,2016,AUD,australia,2830,85752,n,284,7
+Hymer Aktiv,40993,2015,AUD,australia,4350,66734,n,175,8
+Chevrolet Express,34797,2025,AUD,australia,7000,83290,y,275,12
+Ford Transit,43028,2016,AUD,australia,4551,54131,n,311,10
+Chevrolet Express,33704,2016,AUD,australia,2000,66472,n,189,11
+Dodge Ram Promaster,26027,2025,AUD,australia,3630,77360,n,112,7
+Ford Transit,28156,2023,AUD,australia,4217,85845,n,142,9
+Toyota Hiace,51921,2017,AUD,australia,3350,57945,y,211,10
+Chevrolet Express,59322,2025,AUD,australia,4670,83764,n,1,13
+Nissan NV200,50693,2017,AUD,australia,3220,57396,y,135,5
+Chevrolet Express,47625,2018,AUD,australia,3550,69997,n,245,1
+Volkswagen Westfalia,16730,2020,AUD,australia,2830,71964,y,271,3
+Chevrolet Express,50498,2024,AUD,australia,7250,99542,y,154,1
+Fiat Ducato,11466,2019,AUD,australia,2450,97794,n,317,2
+Volkswagen Westfalia,46926,2024,AUD,australia,3550,60850,y,144,2
+Nissan NV200,46463,2022,AUD,australia,3630,66565,n,327,5
+Toyota Hiace,31203,2021,AUD,australia,2500,63346,n,159,5
+Hymer Aktiv,41878,2025,AUD,australia,7250,62492,n,9,3
+Volkswagen California,46213,2017,AUD,australia,4350,89981,n,142,12
+Mercedes-Benz Sprinter,16704,2021,AUD,australia,2300,70256,y,51,1
+Fiat Ducato,37892,2015,AUD,australia,4551,55929,n,282,5
+Volkswagen Westfalia,38008,2021,AUD,australia,3220,97178,y,283,6
+Volkswagen Westfalia,53575,2021,AUD,australia,4000,95260,n,27,11
+Hymer Aktiv,30487,2019,AUD,australia,3220,58313,y,2,5
+Fiat Ducato,17643,2015,AUD,australia,4655,56167,n,104,4
+Mercedes-Benz Sprinter,17234,2025,AUD,australia,4740,72500,y,38,7
+Ford Transit,16250,2022,AUD,australia,4740,69261,n,250,11
+Volkswagen California,29497,2024,AUD,australia,2450,80786,y,249,8
+Ford Transit,54970,2015,AUD,australia,4700,93669,n,238,4
+Chevrolet Express,43455,2018,AUD,australia,2600,98529,y,85,4
+Dodge Ram Promaster,47342,2022,AUD,australia,6000,60025,n,348,5
+Hymer Aktiv,59299,2024,AUD,australia,2000,70274,y,351,3
+Nissan NV200,47198,2022,AUD,australia,4551,84293,y,185,6
+Fiat Ducato,40890,2017,AUD,australia,7250,61135,n,18,1
+Volkswagen Westfalia,38464,2015,AUD,australia,4810,84605,n,137,11
+Fiat Ducato,21538,2016,AUD,australia,2640,71826,y,146,4
+Nissan NV200,55837,2020,AUD,australia,2000,95123,y,201,8
+Hymer Aktiv,42178,2023,AUD,australia,3000,91765,y,249,9
+Nissan NV200,57665,2019,AUD,australia,3220,88524,n,186,8
+Nissan NV200,59065,2025,AUD,australia,4217,66848,n,196,4
+Mercedes-Benz Sprinter,47880,2023,AUD,australia,7000,65775,n,169,11
+Toyota Hiace,49069,2023,AUD,australia,3220,99975,y,296,5
+Dodge Ram Promaster,37951,2021,AUD,australia,3350,85385,n,3,1
+Fiat Ducato,25423,2024,AUD,australia,4670,86244,n,58,2
+Toyota Hiace,35764,2022,AUD,australia,2000,83960,n,182,4
+Volkswagen Westfalia,28577,2019,AUD,australia,2000,93898,y,202,7
+Volkswagen Westfalia,33155,2018,AUD,australia,5000,50236,n,208,11
+Volkswagen Westfalia,22063,2016,AUD,australia,4870,53824,n,165,6
+Ford Transit,54290,2020,AUD,australia,5000,94232,y,92,2
+Nissan NV200,58457,2020,AUD,australia,3500,55307,y,244,13
+Ford Transit,18616,2017,AUD,australia,3500,93195,y,133,9
+Nissan NV200,32774,2025,AUD,australia,2640,81031,y,206,13
+Fiat Ducato,11490,2025,AUD,australia,3500,50569,n,146,1
+Dodge Ram Promaster,53942,2024,AUD,australia,4350,98109,y,126,1
+Hymer Aktiv,52146,2016,AUD,australia,2830,70472,n,212,6
+Hymer Aktiv,29554,2016,AUD,australia,3630,52712,n,358,12
+Chevrolet Express,21685,2015,AUD,australia,7250,81113,n,347,7
+Dodge Ram Promaster,35504,2021,AUD,australia,3000,97795,y,187,12
+Chevrolet Express,18872,2024,AUD,australia,6000,92564,y,224,12
+Chevrolet Express,48219,2019,AUD,australia,4000,77143,y,120,2
+Fiat Ducato,59490,2018,AUD,australia,3350,54493,n,362,4
+Volkswagen California,33153,2018,AUD,australia,3350,80991,n,303,4
+Toyota Hiace,25320,2025,AUD,australia,4350,52524,n,37,13
+Toyota Hiace,30674,2019,AUD,australia,2500,93363,n,120,2
+Dodge Ram Promaster,59460,2022,AUD,australia,3500,66433,n,272,1
+Chevrolet Express,29474,2017,AUD,australia,6230,69334,y,190,1
+Toyota Hiace,17206,2021,AUD,australia,7250,50130,y,132,5
+Mercedes-Benz Sprinter,44840,2016,AUD,australia,4810,93539,y,320,3
+Volkswagen Westfalia,23338,2016,AUD,australia,4655,81455,y,197,2
+Volkswagen Westfalia,25997,2018,AUD,australia,4670,61441,n,4,9
+Nissan NV200,23127,2019,AUD,australia,4670,93536,y,157,1
+Ford Transit,49934,2018,AUD,australia,3350,57779,n,12,2
+Volkswagen Westfalia,25610,2024,AUD,australia,4810,50751,n,221,2
+Dodge Ram Promaster,48731,2024,AUD,australia,2650,55902,y,202,13
+Ford Transit,52183,2018,AUD,australia,4551,51760,n,16,10
+Dodge Ram Promaster,51534,2020,AUD,australia,4551,92929,y,107,3
+Volkswagen California,26925,2019,AUD,australia,7250,87847,n,79,13
+Volkswagen Westfalia,29678,2018,AUD,australia,7250,65189,n,82,1
+Nissan NV200,48758,2015,AUD,australia,4810,95653,y,173,4
+Hymer Aktiv,29182,2015,AUD,australia,7000,78944,y,158,10
+Chevrolet Express,33625,2019,AUD,australia,3350,80625,n,85,13
+Fiat Ducato,48816,2023,AUD,australia,4551,93780,y,206,13
+Ford Transit,17398,2017,AUD,australia,4700,65879,n,339,5
+Hymer Aktiv,24689,2015,AUD,australia,6000,64742,n,181,10
+Ford Transit,59575,2018,AUD,australia,7250,53100,n,247,9
+Fiat Ducato,36860,2015,AUD,australia,3500,57390,n,175,3
+Dodge Ram Promaster,32752,2023,AUD,australia,4350,72080,y,275,2
+Nissan NV200,24765,2018,AUD,australia,4810,79682,y,268,10
+Chevrolet Express,46568,2017,AUD,australia,7000,89711,n,187,4
+Fiat Ducato,58071,2021,AUD,australia,2500,61451,n,119,4
+Volkswagen California,20495,2020,AUD,australia,3550,85793,y,210,3
+Nissan NV200,38835,2016,AUD,australia,4350,72979,n,110,11
+Dodge Ram Promaster,24864,2020,AUD,australia,2450,96810,y,185,3
+Volkswagen California,57506,2015,AUD,australia,4810,86424,n,358,5
+Nissan NV200,25885,2016,AUD,australia,3630,65531,n,183,11
+Fiat Ducato,13957,2019,AUD,australia,6000,67526,n,13,12
+Ford Transit,21459,2025,AUD,australia,6000,67909,n,137,4
+Toyota Hiace,48521,2021,AUD,australia,4350,67778,y,270,8
+Nissan NV200,38510,2021,AUD,australia,3550,71350,y,285,4
+Mercedes-Benz Sprinter,48569,2025,AUD,australia,2650,54662,n,36,6
+Volkswagen California,22109,2025,AUD,australia,4810,87202,n,333,8
+Volkswagen Westfalia,32101,2025,AUD,australia,2600,96233,n,82,2
+Dodge Ram Promaster,21803,2017,AUD,australia,3350,95740,n,212,3
+Nissan NV200,31764,2019,AUD,australia,3220,89948,y,47,2
+Fiat Ducato,21708,2017,AUD,australia,2450,66305,n,161,8
+Volkswagen Westfalia,53080,2021,AUD,australia,6230,56598,n,6,8
+Ford Transit,30930,2023,AUD,australia,3220,54374,y,305,3
+Volkswagen Westfalia,41962,2019,AUD,australia,4655,52000,n,197,9
+Ford Transit,50942,2019,AUD,australia,4870,78339,n,180,4
+Volkswagen Westfalia,22670,2022,AUD,australia,4740,52324,n,234,12
+Toyota Hiace,10903,2024,AUD,australia,4000,68554,y,16,13
+Volkswagen California,28488,2015,AUD,australia,4740,57053,n,44,7
+Mercedes-Benz Sprinter,17813,2023,AUD,australia,4810,80005,n,151,6
+Dodge Ram Promaster,58050,2024,AUD,australia,4700,68373,n,156,5
+Nissan NV200,19365,2023,AUD,australia,3630,57687,y,20,12
+Volkswagen California,30473,2016,AUD,australia,3630,69178,n,147,4
+Dodge Ram Promaster,48210,2021,AUD,australia,4000,87679,n,300,10
+Dodge Ram Promaster,36581,2017,AUD,australia,3350,95082,y,181,11
+Fiat Ducato,41847,2015,AUD,australia,4810,94475,y,216,1
+Volkswagen California,19844,2021,AUD,australia,3550,77986,n,21,10
+Mercedes-Benz Sprinter,57623,2021,AUD,australia,3500,58074,n,275,3
+Volkswagen California,38828,2016,AUD,australia,4551,63742,n,250,10
+Mercedes-Benz Sprinter,27795,2023,AUD,australia,4810,80377,y,326,10
+Nissan NV200,47826,2016,AUD,australia,4810,59216,n,281,1
+Nissan NV200,37013,2016,AUD,australia,3350,85756,y,63,9
+Fiat Ducato,23181,2022,AUD,australia,3550,67002,y,170,7
+Volkswagen California,18491,2017,AUD,australia,6000,63753,y,286,3
+Hymer Aktiv,50573,2022,AUD,australia,4700,56264,y,48,1
+Mercedes-Benz Sprinter,54504,2016,AUD,australia,2450,58604,y,133,7
+Chevrolet Express,14190,2021,AUD,australia,2640,59757,n,151,8
+Volkswagen California,51686,2016,AUD,australia,4810,55511,n,145,4
+Fiat Ducato,43634,2022,AUD,australia,4810,94376,n,73,2
+Nissan NV200,22492,2023,AUD,australia,6000,92343,y,232,1
+Dodge Ram Promaster,40722,2016,AUD,australia,2450,66755,y,239,8
+Volkswagen Westfalia,25987,2021,AUD,australia,3000,96425,n,203,6
+Mercedes-Benz Sprinter,42897,2025,AUD,australia,2500,77527,y,304,5
+Volkswagen Westfalia,14681,2015,AUD,australia,4670,78690,n,302,1
+Chevrolet Express,56535,2019,AUD,australia,3500,83334,y,192,8
+Mercedes-Benz Sprinter,27813,2024,AUD,australia,4350,84606,n,293,4
+Chevrolet Express,13985,2016,AUD,australia,3350,82127,n,296,11
+Volkswagen California,47538,2018,AUD,australia,2600,85430,n,105,6
+Volkswagen California,54974,2015,AUD,australia,3630,73040,n,300,6
+Ford Transit,20454,2019,AUD,australia,3500,80471,y,62,10
+Chevrolet Express,18034,2025,AUD,australia,3000,82993,y,187,8
+Nissan NV200,54238,2018,AUD,australia,4700,81184,y,37,6
+Volkswagen California,41659,2025,AUD,australia,2300,96930,y,310,2
+Volkswagen California,24572,2025,AUD,australia,5000,81710,y,80,11
+Toyota Hiace,50002,2024,AUD,australia,2000,70482,y,98,6
+Mercedes-Benz Sprinter,18973,2016,AUD,australia,2600,96232,n,77,13
+Chevrolet Express,56600,2018,AUD,australia,4670,95404,n,263,3
+Hymer Aktiv,27066,2022,AUD,australia,3630,74728,y,334,7
+Volkswagen California,55643,2016,AUD,australia,4217,85558,y,114,1
+Hymer Aktiv,55617,2025,AUD,australia,4700,64428,y,122,4
+Mercedes-Benz Sprinter,19653,2019,AUD,australia,2300,84138,y,192,11
+Volkswagen Westfalia,44146,2015,AUD,australia,3500,77940,y,34,6
+Toyota Hiace,12590,2015,AUD,australia,2500,62886,y,342,3
+Fiat Ducato,49747,2020,AUD,australia,7000,82732,y,180,12
+Dodge Ram Promaster,33258,2022,AUD,australia,2500,78068,n,247,11
+Volkswagen California,29586,2025,AUD,australia,3350,86515,n,166,2
+Chevrolet Express,34826,2019,AUD,australia,4810,65540,y,77,1
+Chevrolet Express,46698,2023,AUD,australia,4655,51050,y,47,10
+Volkswagen California,38782,2018,AUD,australia,5000,95620,n,198,12
+Hymer Aktiv,17205,2020,AUD,australia,4870,59007,y,152,7
+Nissan NV200,25789,2022,AUD,australia,4000,82794,y,347,3
+Chevrolet Express,56131,2023,AUD,australia,2640,92339,y,191,6
+Toyota Hiace,34961,2015,AUD,australia,4000,56836,n,254,3
+Dodge Ram Promaster,57799,2017,AUD,australia,3350,97334,y,95,12
+Ford Transit,50882,2015,AUD,australia,2830,76875,n,336,7
+Volkswagen California,52481,2017,AUD,australia,4655,61268,y,326,13
+Nissan NV200,52163,2024,AUD,australia,4700,90888,n,79,6
+Mercedes-Benz Sprinter,31420,2018,AUD,australia,2000,59496,n,95,12
+Ford Transit,23365,2022,AUD,australia,6230,87624,y,179,2
+Volkswagen California,48436,2015,AUD,australia,4870,59046,n,289,2
+Mercedes-Benz Sprinter,56070,2017,AUD,australia,7250,91616,n,263,10
+Hymer Aktiv,38015,2022,AUD,australia,3000,94383,n,23,3
+Mercedes-Benz Sprinter,25365,2017,AUD,australia,3500,58754,n,320,7
+Chevrolet Express,44428,2016,AUD,australia,7250,84179,n,291,9
+Dodge Ram Promaster,30763,2016,AUD,australia,3000,78174,y,349,7
+Toyota Hiace,59003,2021,AUD,australia,4000,57227,y,328,2
+Volkswagen California,42447,2016,AUD,australia,3000,90004,n,258,2
+Hymer Aktiv,36263,2023,AUD,australia,4000,94211,y,135,11
+Chevrolet Express,21541,2021,AUD,australia,2500,91093,n,308,3
+Volkswagen Westfalia,40718,2024,AUD,australia,2600,50416,n,116,4
+Fiat Ducato,19012,2021,AUD,australia,4670,69703,n,251,8
+Toyota Hiace,17074,2018,AUD,australia,3000,72600,y,141,7
+Nissan NV200,48208,2025,AUD,australia,2000,60006,y,328,6
+Volkswagen Westfalia,19871,2017,AUD,australia,2000,64766,n,265,4
+Toyota Hiace,45367,2019,AUD,australia,3550,55088,n,200,1
+Mercedes-Benz Sprinter,25980,2023,AUD,australia,6000,80138,y,66,3
+Nissan NV200,37569,2015,AUD,australia,7000,71989,n,340,4
+Toyota Hiace,12229,2018,AUD,australia,6230,79623,n,100,11
+Hymer Aktiv,43481,2017,AUD,australia,2500,98097,n,352,2
+Mercedes-Benz Sprinter,27619,2016,AUD,australia,2830,69836,n,142,12
+Fiat Ducato,22750,2016,AUD,australia,4655,93770,y,186,13
+Hymer Aktiv,18439,2015,AUD,australia,4350,90751,n,195,11
+Volkswagen Westfalia,45464,2019,AUD,australia,2640,83172,y,72,10
+Volkswagen Westfalia,26460,2025,AUD,australia,4670,61860,y,195,6
+Nissan NV200,45169,2017,AUD,australia,7000,99574,n,77,7
+Volkswagen Westfalia,21091,2017,AUD,australia,3220,84071,y,6,4
+Hymer Aktiv,38566,2019,AUD,australia,3220,98558,y,85,2
+Fiat Ducato,24420,2022,AUD,australia,5000,66350,y,343,3
+Nissan NV200,41309,2025,AUD,australia,5000,54957,y,258,1
+Volkswagen Westfalia,58816,2023,AUD,australia,2600,92219,y,155,11
+Hymer Aktiv,59582,2025,AUD,australia,6000,54557,y,138,4
+Fiat Ducato,51797,2017,AUD,australia,4217,75504,y,111,2
+Toyota Hiace,56839,2021,AUD,australia,2600,94440,n,106,10
+Hymer Aktiv,56203,2015,AUD,australia,4217,67231,y,63,11
+Volkswagen Westfalia,32046,2019,AUD,australia,3220,95743,y,4,12
+Toyota Hiace,37795,2024,AUD,australia,4670,50299,y,277,12
+Fiat Ducato,21291,2021,AUD,australia,4740,86112,y,176,13
+Dodge Ram Promaster,38120,2018,AUD,australia,2000,96299,n,208,2
+Chevrolet Express,28432,2023,AUD,australia,2640,61086,n,93,10
+Fiat Ducato,24261,2016,AUD,australia,6000,59056,y,16,2
+Volkswagen California,10330,2022,AUD,australia,4810,59851,y,5,4
+Hymer Aktiv,36216,2023,AUD,australia,4870,63902,n,54,11
+Fiat Ducato,26345,2017,AUD,australia,4655,59519,n,272,8
+Chevrolet Express,58762,2017,AUD,australia,4551,57195,n,283,6
+Toyota Hiace,55674,2016,AUD,australia,2500,73239,y,324,5
+Fiat Ducato,59163,2019,AUD,australia,4700,91016,n,284,7
+Volkswagen Westfalia,26059,2015,AUD,australia,2500,63886,n,301,7
+Ford Transit,11516,2017,AUD,australia,3350,51619,y,110,12
+Volkswagen Westfalia,56371,2019,AUD,australia,4000,92922,n,150,5
+Volkswagen California,41702,2015,AUD,australia,4700,98973,n,195,3
+Nissan NV200,46959,2024,AUD,australia,3000,79907,y,24,5
+Chevrolet Express,23201,2015,AUD,australia,7000,52741,y,73,13
+Volkswagen Westfalia,41278,2016,AUD,australia,7000,92405,y,170,2
+Hymer Aktiv,20876,2015,AUD,australia,2300,85808,y,233,7
+Fiat Ducato,40555,2021,AUD,australia,2000,55780,n,136,8
+Chevrolet Express,25640,2018,AUD,australia,6230,87484,y,240,6
+Dodge Ram Promaster,27882,2022,AUD,australia,3550,55620,y,110,9
+Ford Transit,44547,2024,AUD,australia,6000,96439,n,152,4
+Nissan NV200,17555,2015,AUD,australia,5000,51286,y,159,5
+Dodge Ram Promaster,53194,2017,AUD,australia,7250,81740,n,75,13
+Ford Transit,20612,2022,AUD,australia,4655,92903,n,115,13
+Dodge Ram Promaster,10509,2024,AUD,australia,2650,72672,n,120,8
+Chevrolet Express,29949,2022,AUD,australia,4870,78822,y,183,13
+Nissan NV200,42706,2015,AUD,australia,3630,94497,n,240,13
+Mercedes-Benz Sprinter,22178,2021,AUD,australia,4700,77996,y,172,5
+Toyota Hiace,36576,2025,AUD,australia,2640,78104,y,53,4
+Toyota Hiace,37176,2015,AUD,australia,3630,79131,n,159,10
+Hymer Aktiv,16830,2022,AUD,australia,2640,88297,y,198,12
+Nissan NV200,46804,2025,AUD,australia,5000,53643,y,189,6
+Mercedes-Benz Sprinter,21025,2021,AUD,australia,6000,77115,n,305,12
+Hymer Aktiv,48676,2015,AUD,australia,2640,99272,y,18,3
+Mercedes-Benz Sprinter,19207,2018,AUD,australia,4810,81653,n,179,8
+Volkswagen Westfalia,55113,2024,AUD,australia,2600,76681,y,167,7
+Nissan NV200,46937,2023,AUD,australia,4000,89878,n,299,10
+Nissan NV200,36129,2015,AUD,australia,2300,77059,y,77,5
+Hymer Aktiv,36370,2021,AUD,australia,4740,63286,n,155,1
+Volkswagen California,17906,2019,AUD,australia,4740,58742,y,305,11
+Toyota Hiace,28888,2021,AUD,australia,2500,76782,y,351,9
+Ford Transit,11218,2021,AUD,australia,2600,76748,n,242,12
+Hymer Aktiv,45650,2019,AUD,australia,7000,89281,n,213,6
+Hymer Aktiv,15011,2022,AUD,australia,4810,67737,y,67,2
+Fiat Ducato,22635,2015,AUD,australia,4000,73012,y,306,7
+Dodge Ram Promaster,12324,2016,AUD,australia,7000,61724,n,194,1
+Toyota Hiace,29203,2019,AUD,australia,2640,76397,y,69,10
+Chevrolet Express,40101,2015,AUD,australia,7250,62928,y,170,2
+Volkswagen Westfalia,20976,2016,AUD,australia,2450,78281,n,10,4
+Ford Transit,54262,2015,AUD,australia,2500,97760,n,311,12
+Hymer Aktiv,11970,2018,AUD,australia,3630,58755,y,328,8
+Ford Transit,11201,2025,AUD,australia,2830,60454,n,332,13
+Volkswagen Westfalia,42412,2025,AUD,australia,4700,81366,y,73,4
+Mercedes-Benz Sprinter,41751,2017,AUD,australia,4740,55573,n,353,7
+Nissan NV200,36423,2017,AUD,australia,4551,79649,y,165,5
+Volkswagen California,45681,2025,AUD,australia,6230,82716,y,95,10
+Ford Transit,50074,2022,AUD,australia,4217,92596,n,23,3
+Mercedes-Benz Sprinter,21250,2020,AUD,australia,2450,60054,y,214,8
+Toyota Hiace,12371,2022,AUD,australia,2600,68132,y,158,11
+Volkswagen Westfalia,56263,2025,AUD,australia,6000,60067,y,144,2
+Nissan NV200,34598,2017,AUD,australia,2450,95978,y,360,6
+Mercedes-Benz Sprinter,14675,2015,AUD,australia,2450,84712,y,115,7
+Toyota Hiace,51520,2022,AUD,australia,3350,53529,y,58,8
+Toyota Hiace,20452,2021,AUD,australia,4217,70189,y,177,12
+Fiat Ducato,31400,2020,AUD,australia,7000,90364,y,249,4
+Ford Transit,28065,2015,AUD,australia,3220,91092,n,326,13
+Fiat Ducato,36254,2023,AUD,australia,2300,64424,y,354,12
+Mercedes-Benz Sprinter,16212,2022,AUD,australia,6000,56628,n,343,1
+Nissan NV200,19658,2017,AUD,australia,4000,52957,y,298,4
+Fiat Ducato,13573,2022,AUD,australia,3000,89336,n,199,7
+Nissan NV200,23215,2024,AUD,australia,4655,78095,n,169,9
+Dodge Ram Promaster,46000,2025,AUD,australia,4670,80023,n,319,5
+Ford Transit,59758,2017,AUD,australia,4740,63970,n,362,3
+Chevrolet Express,53720,2015,AUD,australia,3630,54434,n,114,3
+Fiat Ducato,32317,2021,AUD,australia,4670,50368,y,149,8
+Chevrolet Express,57923,2025,AUD,australia,3220,61882,y,63,8
+Volkswagen Westfalia,10294,2021,AUD,australia,4350,58962,n,284,4
+Mercedes-Benz Sprinter,16626,2017,AUD,australia,2000,90592,y,162,12
+Toyota Hiace,24372,2018,AUD,australia,4217,61079,n,65,10
+Fiat Ducato,53274,2017,AUD,australia,2640,60835,n,326,6
+Mercedes-Benz Sprinter,52145,2017,AUD,australia,2450,80513,y,290,10
+Volkswagen California,15140,2018,AUD,australia,4350,97914,y,328,3
+Fiat Ducato,46565,2023,AUD,australia,3500,98050,y,40,5
+Volkswagen Westfalia,32666,2025,AUD,australia,2650,81377,y,85,10
+Dodge Ram Promaster,18842,2021,AUD,australia,2650,99150,n,34,11
+Ford Transit,42331,2017,AUD,australia,3000,85116,n,168,2
+Toyota Hiace,42007,2017,AUD,australia,4670,68973,y,18,8
+Toyota Hiace,56015,2023,AUD,australia,6230,95325,y,38,12
+Toyota Hiace,32734,2022,AUD,australia,4670,69298,y,118,7
+Hymer Aktiv,21532,2024,AUD,australia,4700,56315,y,194,8
+Volkswagen California,53716,2015,AUD,australia,4655,84896,y,101,6
+Nissan NV200,42175,2016,AUD,australia,2640,69364,n,361,4
+Toyota Hiace,21001,2018,AUD,australia,4350,86526,n,153,4
+Mercedes-Benz Sprinter,10607,2017,AUD,australia,4870,85271,n,104,11
+Toyota Hiace,27471,2024,AUD,australia,6000,58449,n,233,11
+Hymer Aktiv,31322,2020,AUD,australia,3350,83142,n,243,6
+Ford Transit,32819,2021,AUD,australia,4740,93040,n,48,4
+Toyota Hiace,10814,2024,AUD,australia,2450,76143,n,208,6
+Dodge Ram Promaster,46314,2015,AUD,australia,4700,55962,n,152,4
+Hymer Aktiv,15361,2018,AUD,australia,2650,80660,n,207,5
+Hymer Aktiv,17781,2019,AUD,australia,4870,51055,n,318,13
+Chevrolet Express,17293,2020,AUD,australia,2830,99565,n,347,9
+Toyota Hiace,57898,2018,AUD,australia,2830,72375,y,194,4
+Mercedes-Benz Sprinter,10671,2021,AUD,australia,3350,74986,n,9,10
+Chevrolet Express,53605,2016,AUD,australia,3550,90028,n,70,5
+Mercedes-Benz Sprinter,39603,2016,AUD,australia,7000,54638,n,338,11
+Chevrolet Express,25037,2019,AUD,australia,2000,86727,n,81,9
+Toyota Hiace,26527,2021,AUD,australia,7000,80472,n,235,3
+Hymer Aktiv,42841,2015,AUD,australia,6000,97579,y,282,10
+Mercedes-Benz Sprinter,47766,2017,AUD,australia,2650,64589,y,184,5
+Chevrolet Express,25178,2018,AUD,australia,4655,69750,n,328,3
+Chevrolet Express,31158,2023,AUD,australia,2000,82775,y,175,6
+Nissan NV200,16641,2015,AUD,australia,2450,68428,y,118,4
+Mercedes-Benz Sprinter,20520,2019,AUD,australia,2640,71596,n,183,1
+Volkswagen Westfalia,18885,2020,AUD,australia,2650,73024,n,144,8
+Nissan NV200,28395,2023,AUD,australia,2650,92365,y,83,10
+Volkswagen California,38178,2015,AUD,australia,6230,75188,y,365,12
+Chevrolet Express,58342,2020,AUD,australia,2640,92160,y,28,9
+Ford Transit,17470,2023,AUD,australia,4217,93381,y,132,12
+Dodge Ram Promaster,48996,2020,AUD,australia,2830,75614,n,266,1
+Nissan NV200,27598,2017,AUD,australia,4350,91733,y,262,13
+Volkswagen Westfalia,53024,2022,AUD,australia,3630,87764,n,229,2
+Mercedes-Benz Sprinter,25343,2020,AUD,australia,6000,56681,y,77,7
+Nissan NV200,57558,2021,AUD,australia,2450,85357,y,297,10
+Chevrolet Express,19657,2020,AUD,australia,4810,97075,n,269,3
+Fiat Ducato,33823,2023,AUD,australia,4870,87367,n,27,3
+Volkswagen Westfalia,56210,2018,AUD,australia,3550,58505,y,341,2
+Nissan NV200,11204,2020,AUD,australia,4655,51018,n,190,13
+Toyota Hiace,31206,2023,AUD,australia,4551,96559,y,136,3
+Dodge Ram Promaster,40433,2018,AUD,australia,2450,56356,y,146,5
+Volkswagen Westfalia,30581,2021,AUD,australia,2450,98209,n,16,3
+Chevrolet Express,19428,2015,AUD,australia,4655,60445,y,120,2
+Volkswagen Westfalia,47002,2020,AUD,australia,5000,51120,n,99,12
+Mercedes-Benz Sprinter,15025,2024,AUD,australia,3350,59965,n,115,6
+Mercedes-Benz Sprinter,30955,2023,AUD,australia,3500,87081,n,199,5
+Dodge Ram Promaster,32763,2018,AUD,australia,4551,54168,n,111,3
+Volkswagen Westfalia,42800,2015,AUD,australia,3630,50542,y,275,5
+Ford Transit,50528,2016,AUD,australia,5000,97992,y,201,10
+Ford Transit,36714,2022,AUD,australia,4000,77307,n,188,7
+Toyota Hiace,55315,2025,AUD,australia,2000,85218,y,197,4
+Dodge Ram Promaster,50978,2016,AUD,australia,4217,57670,n,217,11
+Ford Transit,28764,2024,AUD,australia,2830,98274,y,38,2
+Fiat Ducato,47606,2020,AUD,australia,3630,81950,y,271,4
+Volkswagen Westfalia,34382,2020,AUD,australia,2640,82081,n,344,3
+Hymer Aktiv,36924,2022,AUD,australia,3550,94647,y,357,3
+Volkswagen Westfalia,23601,2022,AUD,australia,3220,51289,y,285,3
+Ford Transit,49144,2025,AUD,australia,4350,78790,n,120,8
+Ford Transit,51500,2020,AUD,australia,4810,98846,n,194,10
+Volkswagen California,46474,2025,AUD,australia,3550,79616,n,171,7
+Volkswagen Westfalia,57855,2016,AUD,australia,7000,72393,y,153,3
+Dodge Ram Promaster,27300,2020,AUD,australia,7250,70081,y,273,10
+Fiat Ducato,26104,2015,AUD,australia,4810,77349,n,339,2
+Volkswagen California,48505,2020,AUD,australia,3350,66844,n,83,12
+Volkswagen California,45860,2024,AUD,australia,3220,58949,y,220,11
+Fiat Ducato,54612,2021,AUD,australia,4700,83870,y,321,4
+Nissan NV200,12842,2024,AUD,australia,4870,74098,n,211,6
+Dodge Ram Promaster,25855,2016,AUD,australia,4350,94214,y,157,5
+Fiat Ducato,25919,2024,AUD,australia,3550,51998,n,19,11
+Ford Transit,42427,2016,AUD,australia,2600,95211,y,295,6
+Dodge Ram Promaster,36928,2015,AUD,australia,6230,77064,y,290,4
+Fiat Ducato,37785,2018,AUD,australia,4670,54664,n,46,2
+Dodge Ram Promaster,29763,2018,AUD,australia,6230,94221,n,4,11
+Hymer Aktiv,33246,2017,AUD,australia,3630,97700,y,255,3
+Volkswagen California,58991,2023,AUD,australia,4217,83534,n,312,9
+Fiat Ducato,18958,2025,AUD,australia,2600,60967,n,349,6
+Volkswagen California,11564,2021,AUD,australia,4655,55706,n,60,7
+Dodge Ram Promaster,42968,2022,AUD,australia,3000,99995,y,311,13
+Toyota Hiace,58323,2018,AUD,australia,4810,53727,n,223,11
+Nissan NV200,30608,2025,AUD,australia,2640,62137,y,170,3
+Chevrolet Express,20514,2018,AUD,australia,7000,86695,y,45,3
+Chevrolet Express,35083,2020,AUD,australia,3630,62545,y,177,13
+Volkswagen Westfalia,52216,2018,AUD,australia,4350,88581,y,65,12
+Fiat Ducato,20518,2019,AUD,australia,2450,56349,n,172,7
+Chevrolet Express,32804,2022,AUD,australia,4655,90108,n,193,11
+Hymer Aktiv,26646,2022,AUD,australia,4000,99691,n,167,1
+Ford Transit,51773,2015,AUD,australia,3550,60436,n,192,6
+Fiat Ducato,39374,2022,AUD,australia,4551,67408,n,313,6
+Mercedes-Benz Sprinter,10891,2023,AUD,australia,4551,57732,n,328,6
+Dodge Ram Promaster,10046,2020,AUD,australia,2830,93122,y,241,9
+Nissan NV200,50268,2019,AUD,australia,2500,58396,y,322,2
+Fiat Ducato,40354,2019,AUD,australia,3500,77112,n,267,2
+Nissan NV200,44860,2017,AUD,australia,2600,71112,n,261,12
+Dodge Ram Promaster,42163,2019,AUD,australia,4655,53848,y,71,9
+Toyota Hiace,14013,2019,AUD,australia,4350,69412,y,56,9
+Toyota Hiace,20847,2024,AUD,australia,3350,92258,y,30,7
+Toyota Hiace,10765,2019,AUD,australia,4670,94417,n,177,7
+Volkswagen Westfalia,27712,2015,AUD,australia,3350,84350,n,339,9
+Ford Transit,33716,2022,AUD,australia,4217,87561,n,176,8
+Ford Transit,13080,2017,AUD,australia,3000,98255,n,101,4
+Nissan NV200,20189,2021,AUD,australia,2450,99610,n,305,12
+Hymer Aktiv,46727,2025,AUD,australia,3000,74246,y,88,10
+Fiat Ducato,58161,2024,AUD,australia,4217,57005,y,106,6
+Volkswagen Westfalia,57678,2020,AUD,australia,3500,73675,n,53,1
+Volkswagen Westfalia,28954,2023,AUD,australia,4000,54804,n,125,6
+Chevrolet Express,25842,2020,AUD,australia,3500,84667,n,359,12
+Mercedes-Benz Sprinter,42080,2023,AUD,australia,6000,88278,n,134,2
+Dodge Ram Promaster,22528,2015,AUD,australia,2830,93194,y,257,10
+Volkswagen Westfalia,22609,2023,AUD,australia,4870,90954,n,69,5
+Toyota Hiace,23951,2016,AUD,australia,7000,98820,n,292,5
+Ford Transit,49332,2024,AUD,australia,4810,74541,y,74,11
+Fiat Ducato,35061,2025,AUD,australia,4000,82711,y,249,13
+Toyota Hiace,22303,2025,AUD,australia,4870,84496,y,327,4
+Volkswagen California,49070,2020,AUD,australia,3000,69785,y,278,8
+Chevrolet Express,41253,2020,AUD,australia,3000,90427,y,2,6
+Chevrolet Express,39242,2023,AUD,australia,2600,91070,n,140,11
+Chevrolet Express,57440,2020,AUD,australia,4740,78285,n,93,3
+Volkswagen California,16108,2019,AUD,australia,3350,98471,y,281,13
+Volkswagen California,10648,2025,AUD,australia,6000,74516,y,342,4
+Toyota Hiace,24780,2023,AUD,australia,4655,57965,n,112,10
+Fiat Ducato,28612,2021,AUD,australia,4870,70655,n,44,4
+Toyota Hiace,12844,2016,AUD,australia,4810,63416,y,249,2
+Dodge Ram Promaster,17479,2015,AUD,australia,2600,53962,n,354,1
+Nissan NV200,37527,2015,AUD,australia,2650,95463,y,138,7
+Fiat Ducato,51663,2017,AUD,australia,4217,81892,n,149,9
+Ford Transit,48083,2017,AUD,australia,3000,64005,y,235,12
+Toyota Hiace,56751,2017,AUD,australia,2450,91644,n,167,5
+Ford Transit,58790,2018,AUD,australia,4700,86045,y,129,4
+Chevrolet Express,53497,2021,AUD,australia,4350,96696,y,90,10
+Hymer Aktiv,53251,2022,AUD,australia,2650,93902,n,196,2
+Ford Transit,50623,2025,AUD,australia,2450,50107,n,257,3
+Chevrolet Express,36237,2020,AUD,australia,4217,86569,y,240,12
+Volkswagen Westfalia,33658,2023,AUD,australia,3000,76041,n,213,4
+Fiat Ducato,30496,2018,AUD,australia,6000,61021,y,173,2
+Hymer Aktiv,31532,2017,AUD,australia,5000,62991,n,348,4
+Toyota Hiace,12208,2024,AUD,australia,4740,59065,y,58,10
+Toyota Hiace,16607,2024,AUD,australia,3220,93167,n,41,12
+Mercedes-Benz Sprinter,27482,2022,AUD,australia,4655,90818,n,93,13
+Hymer Aktiv,18932,2015,AUD,australia,4810,72686,y,253,3
+Chevrolet Express,11255,2018,AUD,australia,4350,62972,n,320,12
+Ford Transit,11089,2023,AUD,australia,3000,80249,n,294,10
+Fiat Ducato,56637,2023,AUD,australia,3550,60240,y,229,10
+Volkswagen California,18010,2023,AUD,australia,3630,66915,y,195,5
+Nissan NV200,25511,2025,AUD,australia,2450,69496,n,67,13
+Chevrolet Express,36019,2024,AUD,australia,2500,87307,n,127,9
+Volkswagen California,28005,2019,AUD,australia,2830,99834,y,357,6
+Toyota Hiace,11296,2024,AUD,australia,2450,59125,n,234,10
+Mercedes-Benz Sprinter,57987,2021,AUD,australia,6000,93338,n,261,3
+Volkswagen California,10086,2020,AUD,australia,2000,67514,y,102,9
+Nissan NV200,43653,2015,AUD,australia,3630,94945,y,365,13
+Volkswagen California,34972,2025,AUD,australia,4000,81483,n,270,3
+Volkswagen California,50797,2020,AUD,australia,4810,97009,n,90,2
+Volkswagen California,36785,2023,AUD,australia,4670,70256,y,86,13
+Volkswagen Westfalia,22895,2021,AUD,australia,3630,87328,y,31,10
+Volkswagen Westfalia,41718,2018,AUD,australia,4350,50232,n,304,12
+Toyota Hiace,34782,2017,AUD,australia,3000,57469,n,82,3
+Dodge Ram Promaster,36943,2019,AUD,australia,4700,80614,n,54,6
+Ford Transit,58191,2022,AUD,australia,2450,81102,y,238,6
+Hymer Aktiv,45734,2018,AUD,australia,4000,72159,y,355,13
+Ford Transit,39070,2019,AUD,australia,4655,95189,y,67,7
+Hymer Aktiv,31246,2016,AUD,australia,4670,81782,n,349,12
+Hymer Aktiv,48596,2020,AUD,australia,3630,69811,y,360,6
+Fiat Ducato,28923,2021,AUD,australia,2300,91905,y,245,11
+Volkswagen Westfalia,29966,2024,AUD,australia,6230,74760,y,211,5
