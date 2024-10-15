@@ -12,46 +12,39 @@ from xgboost import XGBClassifier
 
 from aux_functions import log
 
-def remove_outliers_isolation_forest(X_train, X_test, y_train, y_test, contamination=0.000001):
+def remove_outliers_isolation_forest(X_train, y_train, data_map, contamination=0.000001):
     # Create a copy of the original DataFrames to avoid modifying it
-    cleaned_X_train, cleaned_X_test = X_train.copy(), X_test.copy()
+    cleaned_X_train = X_train.copy()
     
     # Initialize a list to store removed records
-    train_removed_records, test_removed_records = [], []
+    train_removed_records = []
 
     # Loop through all numeric columns
-    for col in cleaned_X_train.select_dtypes(include=['number']).columns:
+    for col in data_map['num_cols_raw']:
         # Fit Isolation Forest on the X_train column and apply fitted model to X_test too
         iso_forest = IsolationForest(contamination=contamination, random_state=42)
         train_outliers = iso_forest.fit_predict(cleaned_X_train[[col]])  # Fit and predict on the specified column
-        test_outliers = iso_forest.predict(cleaned_X_test[[col]])
 
         # Identify outlier rows
         train_outlier_mask = train_outliers == -1
-        test_outlier_mask = test_outliers == -1
 
         # Store removed records in the list
         train_removed_records.append(cleaned_X_train[train_outlier_mask])
-        test_removed_records.append(cleaned_X_test[test_outlier_mask])
 
         # Filter out the outliers
         cleaned_X_train = cleaned_X_train[~train_outlier_mask]  # Keep only non-outliers
-        cleaned_X_test = cleaned_X_test[~test_outlier_mask]  # Keep only non-outliers
 
     # Concatenate all removed records into a single DataFrame
     train_removed_df = concat(train_removed_records, ignore_index=True)
-    test_removed_df = concat(test_removed_records, ignore_index=True)
 
     # Print the removed records if any
-    for df in [train_removed_df, test_removed_df]:
-        if not df.empty:
-            log("Removed records:")
-            log(df)
+    if not train_removed_df.empty:
+        log("Removed records:")
+        log(train_removed_df)
 
     cleaned_y_train = y_train[cleaned_X_train.index]
-    cleaned_y_test = y_test[cleaned_X_test.index]
 
-    return cleaned_X_train, cleaned_X_test, cleaned_y_train, cleaned_y_test
+    return cleaned_X_train, cleaned_y_train
 
 def cat_to_ordered_numeric(dfs, mapping, existing_col, replace_existing=False):  
     for i, df in enumerate(dfs):
@@ -182,7 +175,7 @@ def scale_selected_features(dfs, cols_to_scale):
         # Update the DataFrame in the list
         dfs[i] = df
 
-    return dfs
+    return dfs[0], dfs[1], dfs[2]
 
 def create_group_scaled(dfs, num_col, cat_col):
     # This function groups by the cat_col and scales the num_col within each group
@@ -202,8 +195,11 @@ def drop_uninteresting(dfs, cols):
 
     return dfs[0], dfs[1], dfs[2]
 
-def compare_models_with_without_engineered_features(model_map, X_train, y_train, X_train_no_engineered, kfold, scoring='roc_auc'):
+def compare_models_with_without_engineered_features(data_map, model_map, runtime_map):
     print("Comparing model performance with and without engineered features..")
+    # Set vars
+    X_train, X_train_no_engineered, y_train, scoring, kfold = data_map['X_train'], data_map['X_train_no_engineered'], data_map['y_train'], runtime_map['scoring'], runtime_map['kfold']
+
     for name in model_map:
         if name == 'XGBClassifier':
             model = XGBClassifier(enable_categorical = True)
@@ -237,48 +233,35 @@ def compare_models_with_without_engineered_features(model_map, X_train, y_train,
             # Log the performance comparison
             log(f"Model performance with engineered features: {score_with_engineered}")
             log(f"Model performance without engineered features: {score_without_engineered}")
+    
+    del data_map['X_train_no_engineered']   # Cleanup for memory
+    return data_map
 
-def onehotencode(X_train, X_test, X_pred):
-    # Combine the DataFrames while keeping original indices
-    combined = concat([X_train, X_test, X_pred], ignore_index=False)
-
-    # Initialize the OneHotEncoder
+def onehotencode(data_map):
     encoder = OneHotEncoder(drop=None, sparse_output=False, handle_unknown='ignore')
+    # Fit and transform the training data
+    data_map['X_train_encoded'] = DataFrame(encoder.fit_transform(data_map['X_train']))
+    data_map['X_test_encoded'] = DataFrame(encoder.transform(data_map['X_test']))
+    data_map['X_pred_encoded'] = DataFrame(encoder.transform(data_map['X_pred']))
 
-    # Select only the categorical columns for one-hot encoding
-    categorical_cols = combined.select_dtypes(include=['object']).columns
-    numeric_cols = combined.select_dtypes(exclude=['object']).columns
-    
-    # Fit and transform the combined data for categorical columns
-    combined_encoded = DataFrame(
-        encoder.fit_transform(combined[categorical_cols]),
-        columns=encoder.get_feature_names_out(categorical_cols),
-        index=combined.index  # Keep the original index
-    )
+    data_map['cat_cols_encoded'] = data_map['X_train_encoded'].select_dtypes(include=['category']).columns.tolist()
+    data_map['num_cols_encoded']= data_map['X_train_encoded'].select_dtypes(include=[np.number]).columns.tolist()
 
-    # Merge the encoded categorical columns back with the original numeric columns
-    combined_encoded = concat([combined[numeric_cols], combined_encoded], axis=1)
+    return data_map
 
-    # Split the DataFrames back using the original lengths
-    X_train_encoded = combined_encoded.iloc[:len(X_train)]
-    X_test_encoded = combined_encoded.iloc[len(X_train):len(X_train) + len(X_test)]
-    X_pred_encoded = combined_encoded.iloc[len(X_train) + len(X_test):]
+def feature_engineering(data_map):
+    X_train, X_test, X_pred = data_map['X_train'], data_map['X_test'], data_map['X_pred'] 
 
-    return X_train_encoded, X_test_encoded, X_pred_encoded
-
-def feature_engineering(X_train, X_test, y_train, y_test, X_pred, data_map, runtime_map):
-    # Remove outliers
-    #X_train, X_test, y_train, y_test = remove_outliers_isolation_forest(X_train, X_test, y_train, y_test)
-    
+    # Remove outliers from training set (not from test or pred)
+    #X_train, y_train = remove_outliers_isolation_forest(X_train, y_train, data_map)
 
     # These seem good? 
-    X_train, X_test, X_pred = add_interaction_feature_raw([X_train, X_test, X_pred], 'loan_int_rate', 'loan_grade', '*')
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_raw([X_train, X_test, X_pred], 'loan_int_rate', 'loan_grade', '*')
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([X_train, X_test, X_pred], 'loan_amnt', 'person_income', '/')
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([X_train, X_test, X_pred], 'loan_amnt_person_income_division', 'loan_percent_income', '-',  True, False)
 
+    # Update maps to include engineered columns and data
+    data_map['cat_cols_engineered'] = X_train.select_dtypes(include=['category']).columns.tolist()
+    data_map['num_cols_engineered'] = X_train.select_dtypes(include=[np.number]).columns.tolist()
 
-    # Experiment
-
-    # Update maps
-    data_map['cat_cols_engineered'] = X_train.select_dtypes(include=['object', 'category']).columns.tolist()
-    data_map['num_cols_engineered']= X_train.select_dtypes(include=[np.number]).columns.tolist()
-
-    return X_train, X_test, y_train, y_test, X_pred, data_map
+    return data_map

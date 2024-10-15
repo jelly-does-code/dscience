@@ -49,17 +49,15 @@ def custom_filter(df, filter_col, filter_type, filter_amt):
     if filter_type not in ['gt', 'st']:
         raise ValueError("custom_filters function expected gt or st as condition_type, got {}".format(filter_type))
     
-    print(f'train data shape before custom_filter: {df.shape}')
-    
     if filter_type == 'gt':
         output = df[(df[filter_col] > filter_amt) | (df[filter_col].isna())]
-        print(f'train data shape after custom_filter: {output.shape}')
-        return output
     
     if filter_type == 'st':
         output = df[(df[filter_col] < filter_amt) | (df[filter_col].isna())]
-        print(f'train data shape after custom_filter: {output.shape}')
-        return output
+
+    print(f'train data shape change after custom_filter: {df.shape}, {output.shape}')
+    return output
+
 
 def load_data(data_map, runtime_map):
     print('Loading data..')
@@ -79,19 +77,25 @@ def load_data(data_map, runtime_map):
         X_pred[col] = X_pred[col].astype('category')
 
     train_data = custom_filter(train_data, 'person_age', 'st', 110)
-    #train_data = custom_filter(train_data, 'person_emp_length', 'st', 100) # Don't filter! It seems to degrade performance.
     train_data = custom_filter(train_data, 'loan_percent_income', 'st', 0.8)
-    #train_data = custom_filter(train_data, 'person_income', 'st', 1200001)
+
+    train_data = custom_filter(train_data, 'person_income', 'st', 1200001)
+    train_data = custom_filter(train_data, 'person_emp_length', 'st', 100)
 
 
     train_data.drop_duplicates(inplace=True)                          # Drop fully duplicated records ..
     train_data.dropna(subset=[target_col], inplace=True)              # Drop training records which don't have a target variable ..
     train_data.drop(drop_cols, axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
+    X_pred.drop(drop_cols, axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
     X_train_data = train_data.drop(columns=[target_col])
     y_train_data = train_data[target_col]
 
-    X_train, X_test, y_train, y_test = split(X_train_data, y_train_data)                                                            # train test split
+    data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(X_train_data, y_train_data)   # Train test split
+    data_map['X_train_no_engineered'] = data_map['X_train']                                                                # Save this for comparing model with/without feature engineering 
+    data_map['X_pred'] = X_pred                                                                                                             
+    
+    del train_data, X_train_data, y_train_data, X_pred
     #X_train, X_test, X_pred = fill_missing_values(X_train), fill_missing_values(X_test), fill_missing_values(pred_data)             # This will be used for training (no data leakage)
 
-    return X_train, X_test, y_train, y_test, X_pred, data_map, runtime_map
+    return data_map, runtime_map

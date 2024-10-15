@@ -12,21 +12,20 @@ from sklearn.feature_selection import mutual_info_classif
 from aux_functions import log
 
 # Model property insights
-def plot_permutation_importances(model_map, feature_names, X_train, y_train):
+def plot_permutation_importances(data_map, model_map, runtime_map):
     # Investigate permutation importances of trained models
     print('EDA: Investigating permutation importances..')
     
-    # Clean the directory where plots will be saved
-    [remove(join('../eda/model/', f)) for f in listdir('../eda/model/') if isfile(join('../eda/model/', f))]
-    
     for name in model_map:
         if model_map[name]['refit'] == 1 and name != 'RidgeClassifier':
-            print(f'Calculating permutation importance for {name}...')
-            model = model_map[name]['model']
-            
-            # Calculate permutation importance
-            perm_importance = permutation_importance(model, X_train, y_train, scoring='roc_auc')
+            if model_map[name]['handles_cat']:
+                perm_importance = permutation_importance(model_map[name]['model'], data_map['X_train'], data_map['y_train'], scoring=runtime_map['scoring'])
+                feature_names = data_map['X_pred'].columns
+            else:
+                perm_importance = permutation_importance(model_map[name]['model'], data_map['X_train_encoded'], data_map['y_train'], scoring=runtime_map['scoring'])
+                feature_names = data_map['X_pred_encoded'].columns
 
+            print(f'Calculating permutation importance for {name}...')            
             # Sort and select the top features (default: top 30 or fewer)
             num_features_to_plot = len(feature_names) if len(feature_names) < 30 else 30
             perm_sorted_idx = perm_importance.importances_mean.argsort()[-num_features_to_plot:]
@@ -45,11 +44,16 @@ def plot_permutation_importances(model_map, feature_names, X_train, y_train):
             plt.savefig(f'../eda/model/{name}_permutation_importance.png')
             plt.close()
 
-def plot_feature_importances(model_map, feature_names):
+def plot_feature_importances(data_map, model_map):
     # Investigate feature importances of trained models
     print('EDA: Investigating feature importances..')
     for name in model_map:
-        if model_map[name]['refit'] == 1 and name != 'RidgeClassifier':
+        if model_map[name]['refit'] == 1 and name not in ('RidgeClassifier', 'HistBoostingClassifier'):
+            if model_map[name]['handles_cat']:
+                feature_names = data_map['X_pred'].columns
+            else:
+                feature_names = data_map['X_pred_encoded'].columns
+            
             # Future inclusion of Ridge Coefficients
             '''
             # Access the coefficients
@@ -106,7 +110,6 @@ def plot_features_vs_target(data, num_cols, cat_cols, target_col, eda):
             plt.tight_layout()
             plt.savefig(f'../eda/{eda}/{plot_type}_features_vs_target_{file_idx + i + 1}.png')
             plt.close()
-
     # Function to plot boxplots for numerical columns
     def plot_boxplot(ax, col):
         sns.boxplot(x=target_col, y=col, data=data, showmeans=True, showcaps=True, ax=ax)
@@ -124,14 +127,14 @@ def plot_features_vs_target(data, num_cols, cat_cols, target_col, eda):
     # Plot categorical features with countplots
     save_plots(cat_cols, plot_countplot, 'categorical', 0)
 
-def plot_numerical_features(train_data, target_col, num_cols, eda, max_plots=20):    
+def plot_numerical_features(train_data, target_col, num_cols, eda, max_plots_per_file=20):    
     # Determine how many plots to create based on max_plots
-    num_plots = int(np.ceil(len(num_cols) / max_plots))
+    num_plots = int(np.ceil(len(num_cols) / max_plots_per_file))
 
     for i in range(num_plots):
         # Determine which columns to include in this plot
-        start_idx = i * max_plots
-        end_idx = min(start_idx + max_plots, len(num_cols))
+        start_idx = i * max_plots_per_file
+        end_idx = min(start_idx + max_plots_per_file, len(num_cols))
         subset_cols = num_cols[start_idx:end_idx]
 
         # Create the pairplot for the subset of columns
@@ -143,7 +146,7 @@ def plot_numerical_features(train_data, target_col, num_cols, eda, max_plots=20)
             ax.set_xlabel(ax.get_xlabel(), fontsize=10)  # Set x-labels with specified font size
         
         # Save the plot
-        plt.savefig(f'../eda/{eda}/numerical_pairplot_{i + 1}.png')
+        plt.savefig(f'../eda/{eda}/numerical_features_pairplot_{i + 1}.png')
         plt.close()
 
 def plot_categorical_features(train_data, target_col, cat_cols, eda, max_plots_per_file=20):
@@ -218,15 +221,15 @@ def plot_skewness(X_train_data, eda):
             plt.savefig(f'../eda/{eda}/col_dist/skew={skewness}_col={col}.png')
             plt.close()
 
-def plot_mi(X_train_data, y_train_data, eda):
+def plot_mi(X_train, y_train, eda):
     print(f'EDA: Plotting MI scores ({eda})..')
         
     # Ensure categorical variables are encoded
-    X_train_encoded = get_dummies(X_train_data, drop_first=True)  # Assuming X_train_data includes categorical vars
+    #X_train_encoded = get_dummies(X_train_data, drop_first=True)  # Assuming X_train_data includes categorical vars
     
     # Calculate mutual information scores
-    mi_scores = mutual_info_classif(X_train_encoded, y_train_data, discrete_features='auto')
-    mi_scores = Series(mi_scores, name="MI Scores", index=X_train_encoded.columns)
+    mi_scores = mutual_info_classif(X_train, y_train, discrete_features='auto')
+    mi_scores = Series(mi_scores, name="MI Scores", index=X_train.columns)
     
     for t in ['min', 'max']:
         if t == 'max':
@@ -252,43 +255,45 @@ def plot_corr(X_train_data, eda):
     plt.savefig(f'../eda/{eda}/correlation_matrix.png')
     plt.close()
 
-def eda(X_train, y_train, data_map, runtime_map):
+# Main EDA function
+def eda(data_map, runtime_map):
     # Set variables based on maps
+    X_train, y_train = data_map['X_train'], data_map['y_train']
     eda = 'processed' if data_map['num_cols_engineered'] else 'unprocessed'
     [num_plot, cat_plot, mixed_plot, single_plot, skew, mi, corr, imp] = runtime_map['plots']
-    
     target_col = data_map['target_col']
+    eda_when = runtime_map['eda_when'] 
+
     if eda == 'unprocessed':
         num_cols, cat_cols = data_map['num_cols_raw'], data_map['cat_cols_raw']
     else:
         num_cols, cat_cols = data_map['num_cols_engineered'], data_map['cat_cols_engineered']
     
-    if runtime_map['eda_when'] == 'both' or (runtime_map['eda_when'] == 'after' and eda == 'processed') or (runtime_map['eda_when'] == 'before' and eda == 'unprocessed'):
-        if num_plot + cat_plot + mixed_plot + single_plot + skew + mi + corr > 0:
-            print(f'Running EDA for {eda}..')
+    if eda_when == 'both' or (eda_when == 'after' and eda == 'processed') or (eda_when == 'before' and eda == 'unprocessed'):
+        print(f'Running EDA for {eda}..')
 
-            train_data = concat([X_train, y_train], axis=1)
-            
-            plot_features_vs_target(train_data, num_cols, cat_cols, target_col, eda)
-            if num_plot:
-                plot_numerical_features(train_data, target_col, num_cols, eda)
+        train_data = concat([X_train, y_train], axis=1)
+        
+        plot_features_vs_target(train_data, num_cols, cat_cols, target_col, eda)
+        if num_plot:
+            plot_numerical_features(train_data, target_col, num_cols, eda)
 
-            if cat_plot:
-                plot_categorical_features(train_data, target_col, cat_cols, eda)
+        if cat_plot:
+            plot_categorical_features(train_data, target_col, cat_cols, eda)
 
-            if mixed_plot:
-                plot_categorical_numerical_interactions(train_data, target_col, cat_cols, num_cols, eda)
-            
-            if skew: # Calculate skewness for all columns and visualize the column distributions
-                plot_skewness(X_train, eda)
-            
-            if mi:  # Calculate mutual information scores
-                plot_mi(X_train, y_train, eda) 
+        if mixed_plot:
+            plot_categorical_numerical_interactions(train_data, target_col, cat_cols, num_cols, eda)
+        
+        if skew: # Calculate skewness for all columns and visualize the column distributions
+            plot_skewness(X_train, eda)
+        
+        if mi:  # Calculate mutual information scores
+            plot_mi(X_train, y_train, eda) 
 
-            if corr: # Investigate_correlations
-                plot_corr(X_train, eda)
+        if corr: # Investigate_correlations
+            plot_corr(X_train, eda)
 
-            print(f'EDA: eda for {eda} done.\n')
+        print(f'EDA: eda for {eda} done.\n')
 
     else:
         print(f'Skipping EDA for {eda}..')

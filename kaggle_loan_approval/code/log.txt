@@ -1,20 +1,17 @@
-Number of samples in the dataset: 58643
+Number of samples in the dataset: 58638
 
 Using 80/20 split for large dataset.
 
-Model performance with engineered features: 0.9518904599266488
+Model performance with engineered features: 0.9526869667123059
 
-Model performance without engineered features: 0.9518904599266488
+Model performance without engineered features: 0.9526869667123059
 
-The top features for XGBClassifier are: ['cb_person_cred_hist_length', 'person_age', 'loan_int_rate', 'cb_person_default_on_file', 'person_income', 'loan_amnt', 'person_emp_length', 'loan_intent', 'person_home_ownership', 'loan_percent_income', 'loan_grade_loan_int_rate_grouped', 'loan_grade']
+The top permutation features for HistBoostingClassifier are: ['loan_grade_loan_int_rate_grouped', 'cb_person_default_on_file', 'cb_person_cred_hist_length', 'loan_amnt', 'person_age', 'person_emp_length', 'loan_amnt_person_income_division_loan_percent_income_diff', 'loan_int_rate', 'loan_grade', 'loan_intent', 'person_income', 'person_home_ownership', 'loan_percent_income']
 
-The top feature importances for XGBClassifier are: [0.00889891 0.01160983 0.01694163 0.01773475 0.02290688 0.02301356
- 0.02772236 0.0345232  0.0955312  0.1561277  0.2805103  0.30447972]
-
-The top permutation features for XGBClassifier are: ['cb_person_default_on_file', 'loan_grade_loan_int_rate_grouped', 'cb_person_cred_hist_length', 'person_age', 'person_emp_length', 'loan_amnt', 'loan_int_rate', 'loan_grade', 'loan_intent', 'person_home_ownership', 'loan_percent_income', 'person_income']
-
-The top permutation importances for XGBClassifier are: [0.00019294 0.00114536 0.00147923 0.00508554 0.00729282 0.00779133
- 0.01335334 0.0197264  0.03354511 0.04468252 0.04683484 0.05918669]
+The top permutation importances for HistBoostingClassifier are: [6.32386599e-05 7.58336770e-05 1.74198687e-03 3.91535316e-03
+ 4.80877242e-03 7.07449589e-03 1.19916096e-02 1.83667632e-02
+ 3.00428923e-02 3.08480999e-02 4.87143732e-02 5.59449821e-02
+ 8.89887297e-02]
 
 
 Submission file(s) created successfully.

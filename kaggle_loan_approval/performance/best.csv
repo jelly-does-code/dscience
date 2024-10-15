@@ -1,5 +1,6 @@
 name,perf,kfold_perf,params,timestamp
 RandomForestClassifier,0.9419254676760418,93.68% (0.19%),"{'n_estimators': 366, 'max_depth': 13, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt'}",2024-10-09 09:03:18
-XGBClassifier,0.9613895215848248,,"{'max_depth': 7, 'learning_rate': 0.07584488322715083, 'n_estimators': 385, 'subsample': 0.9427493287948174, 'colsample_bytree': 0.5268593511913986, 'gamma': 1.06711561648368, 'min_child_weight': 6}",2024-10-12 15:19:46
+XGBClassifier,0.9645692752163442,,"{'max_depth': 15, 'max_bin': 4846, 'learning_rate': 0.09805283633814915, 'n_estimators': 370, 'subsample': 0.6968829922083046, 'colsample_bytree': 0.5536702861248235, 'gamma': 2.733574577574053, 'min_child_weight': 2}",2024-10-14 21:59:47
 CatBoostClassifier,0.960615927321286,,"{'iterations': 490, 'depth': 4, 'learning_rate': 0.1854584393185115, 'l2_leaf_reg': 6.987636476631746, 'bagging_temperature': 0.7955909296092272}",2024-10-09 11:51:29
+HistBoostingClassifier,0.9609389134972948,,"{'learning_rate': 0.046163749933424376, 'max_iter': 380, 'max_depth': 7, 'min_samples_leaf': 93, 'l2_regularization': 6.799878634060196e-05, 'max_bins': 242, 'early_stopping': False}",2024-10-15 11:39:57
 RidgeClassifier,0.8996746519073283,,{'alpha': 0.12887995999843233},2024-10-09 11:48:04
