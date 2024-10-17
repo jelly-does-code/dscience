@@ -18,7 +18,7 @@ from sklearn.linear_model import RidgeClassifier
 
 from sklearn.model_selection import cross_val_score
 
-
+#-------------------------------------------------------------------------------------
 # Objective function for RandomForestClassifier
 def obj_rf(trial, data_map, runtime_map):
     param = {
@@ -90,24 +90,7 @@ def obj_histboost(trial, data_map, runtime_map):
     cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
     return cv_scores.mean()
 
-# Objective function for RidgeClassifier
-def obj_ridge(trial, data_map, runtime_map):
-    alpha = trial.suggest_float("alpha", 1e-5, 1e2, log=True)
-    model = RidgeClassifier(alpha=alpha)
-    cv_scores = cross_val_score(
-                                model, 
-                                convert_sparse_to_df(data_map, 'X_train_encoded'), 
-                                data_map['y_train'], 
-                                cv=5, 
-                                scoring=runtime_map['scoring'])
-    return cv_scores.mean()
-
-
-
-
-
-
-
+#-------------------------------------------------------------------------------------
 def convert_sparse_to_df(data_map, sparse_matrix_key):
     
     if 'test' in sparse_matrix_key:

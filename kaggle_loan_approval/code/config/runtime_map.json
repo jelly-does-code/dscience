@@ -1,5 +1,5 @@
 {
-    "eda_when": "both",
+    "eda_when": "none",
     "task_type": "classification",
     "scoring": "roc_auc",
     "perf_metric_direction": "maximize",                                                               

@@ -58,14 +58,15 @@ def custom_filter(df, filter_col, filter_type, filter_amt):
 
 def load_data(data_map, runtime_map):
     print('\nLoading data..')
-    target_col = data_map['target_col']
+    target_col = data_map['target_col']                                      # For readability
     
-    train_data = read_csv('../input_data/train.csv', index_col=data_map['index_col'])
+    # Load csv files into dataframes
+    train_data = read_csv(data_map['train_file'], index_col=data_map['index_col'])
     train_data2 = read_csv('../input_data/credit_risk_dataset.csv', index_col=data_map['index_col'])
     train_data = concat([train_data, train_data2])
-    X_pred = read_csv('../input_data/test.csv', index_col=data_map['index_col'])
+    X_pred = read_csv(data_map['pred_file'], index_col=data_map['index_col'])
 
-    # Set some mapping variables
+    # Note different columns, determine kfold type
     data_map['cat_cols_raw'] =  [col for col in train_data.select_dtypes(include=['object', 'category']).columns.tolist() if col != target_col]
     data_map['num_cols_raw'] = [col for col in train_data.select_dtypes(include=[np.number]).columns.tolist() if col != target_col]
     runtime_map['kfold'] = StratifiedKFold(n_splits=5, shuffle=True, random_state=7) if runtime_map['task_type'] == 'classification' else KFold(n_splits=5, shuffle=True, random_state=7)
@@ -75,22 +76,30 @@ def load_data(data_map, runtime_map):
         train_data[col] = train_data[col].astype('category')
         X_pred[col] = X_pred[col].astype('category')
 
-    train_data = custom_filter(train_data, 'person_age', 'st', 110)
-    train_data = custom_filter(train_data, 'loan_percent_income', 'st', 0.8)
-    train_data = custom_filter(train_data, 'person_income', 'st', 1200001)
-    train_data = custom_filter(train_data, 'person_emp_length', 'st', 100)
+    # Apply filters to training data
+    filter_conditions = {
+        'person_age': (110, 'st'),
+        'loan_percent_income': (0.8, 'st'),
+        'person_income': (1200001, 'st'),
+        'person_emp_length': (100, 'st')
+    }
+    for col, (value, method) in filter_conditions.items():
+        data_map['train_data'] = custom_filter(data_map['train_data'], col, method, value)
 
     train_data.drop_duplicates(inplace=True)                                      # Drop fully duplicated records ..
     train_data.dropna(subset=target_col, inplace=True)                            # Drop training records which don't have a target variable ..
     train_data.drop(data_map['drop_cols'], axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
     X_pred.drop(data_map['drop_cols'], axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
+    # Create X, y for training data
     y_train_data = train_data.pop(target_col)
     X_train_data = train_data
 
+    # Train/test split
     data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(X_train_data, y_train_data)   # Train test split
     data_map['X_train_no_engineered'] = data_map['X_train']                                                                # Save this for comparing model with/without feature engineering 
     
+    # Note index values. This is needed for converting sparse back to dense later on
     data_map['X_train_index_values'] = data_map['X_train'].index.tolist()
     data_map['X_test_index_values'] = data_map['X_test'].index.tolist()
     data_map['X_pred_index_values'] = X_pred.index.tolist()
