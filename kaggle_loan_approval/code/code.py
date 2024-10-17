@@ -3,8 +3,7 @@ from os.path import isfile
 from time import gmtime, localtime, time, strftime
 from shutil import copy2
 
-import numpy as np
-from pandas import DataFrame, NA, Series, concat, read_csv
+from pandas import DataFrame, NA, concat, read_csv
 
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import cross_val_score

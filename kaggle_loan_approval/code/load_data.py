@@ -1,7 +1,5 @@
-from pandas import concat, read_csv, DataFrame
-import matplotlib.pyplot as plt
+from pandas import concat, read_csv
 import numpy as np
-import seaborn as sns
 from sklearn.model_selection import train_test_split, KFold, StratifiedKFold
 
 from functions import log

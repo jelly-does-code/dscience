@@ -1,4 +1,4 @@
-from pandas import DataFrame, concat, cut
+from pandas import concat, cut
 import matplotlib.pyplot as plt
 import numpy as np
 
