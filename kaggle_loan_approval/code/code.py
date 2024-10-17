@@ -26,18 +26,9 @@ def get_params(name, data_map, model_map, runtime_map):
         print(f'Training: Hyperparameter tuning {name}..')
         start_time = time()
         study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
-        
-        if name == 'CatBoostClassifier': # CatBoost need extra option cat_cols
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], data_map['cat_cols_engineered'], runtime_map), n_trials=runtime_map['n_trials'])
-        
-        elif model_map[name]['handles_cat']:
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], runtime_map), n_trials=runtime_map['n_trials'])
-        
-        else:
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, convert_sparse_to_df(data_map, 'X_train_encoded'), data_map['y_train'], runtime_map), n_trials=runtime_map['n_trials'])
-
+        study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map, runtime_map), n_trials=runtime_map['n_trials'])
         model_params = study.best_params
-        print(f"{name} done. It took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
+        print(f"{name} done. Took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
     else:
         model_params = literal_eval(param_df.loc[name, 'params'])
     
@@ -68,6 +59,7 @@ def fit_models(name, data_map, model_map):
     else:
         # In the other case, load the previously found best model as current model (no refit)
         model_map[name]['model'] = load(f'../models/{name}_best.joblib')
+    
     return model_map
 
 def write_current(model_map, runtime_map):

@@ -490,3 +490,78 @@ Model performance without engineered features: 0.9556338796661936
 
 Submission file(s) created successfully.
 
+train data shape change after custom_filter: (91226, 12), (91220, 12)
+
+train data shape change after custom_filter: (91220, 12), (91218, 12)
+
+train data shape change after custom_filter: (91218, 12), (91210, 12)
+
+train data shape change after custom_filter: (91210, 12), (91206, 12)
+
+Number of samples in the dataset: 91041
+
+Using 80/20 split for large dataset.
+
+person_emp_length: Filled missing values for person_emp_length with mode 4.0
+
+loan_int_rate: Filled missing values with mean 10.79307294478702
+
+person_emp_length: Filled missing values for person_emp_length with mode 4.0
+
+loan_int_rate: Filled missing values with mean 10.78185756575202
+
+X_train shape:        person_age  person_income person_home_ownership  person_emp_length        loan_intent loan_grade  loan_amnt  loan_int_rate  loan_percent_income cb_person_default_on_file  cb_person_cred_hist_length
+id                                                                                                                                                                                                          
+18344          23          48000                  RENT                4.0          EDUCATION          B      19000           9.63                 0.39                         N                           4
+44214          25          37000                  RENT                4.0            VENTURE          A       5000           9.63                 0.14                         N                           3
+28083          33          60000                  RENT                2.0    HOMEIMPROVEMENT          C       6500          14.17                 0.11                         N                           6
+10409          53         120000              MORTGAGE               11.0  DEBTCONSOLIDATION          B      12000           9.91                 0.10                         N                          28
+80126          33          38400                   OWN                0.0            VENTURE          B      16450          10.65                 0.43                         N                           8
+...           ...            ...                   ...                ...                ...        ...        ...            ...                  ...                       ...                         ...
+6265           31          68324              MORTGAGE                2.0            MEDICAL          A      24000           7.90                 0.37                         N                          10
+54893          30         110000              MORTGAGE                5.0            VENTURE          C       8000          13.43                 0.07                         Y                          10
+78311          29          93000                  RENT               13.0          EDUCATION          B      21000          12.42                 0.23                         N                          10
+860            32          90000              MORTGAGE                0.0           PERSONAL          A       3350           5.42                 0.03                         N                           6
+15796          43          38004                  RENT                2.0           PERSONAL          B       3500          11.36                 0.09                         N                          11
+
+[72832 rows x 11 columns]
+
+X_test shape:        person_age  person_income person_home_ownership  person_emp_length        loan_intent loan_grade  loan_amnt  loan_int_rate  loan_percent_income cb_person_default_on_file  cb_person_cred_hist_length
+id                                                                                                                                                                                                          
+23437          29          85000              MORTGAGE                4.0           PERSONAL          D      24000          14.96                 0.28                         N                           6
+29524          28          70000              MORTGAGE                2.0           PERSONAL          A      10000           8.59                 0.14                         N                           8
+72865          23          36000                  RENT                0.0          EDUCATION          C       3000          12.29                 0.08                         N                           2
+1477           29         120000                  RENT                3.0  DEBTCONSOLIDATION          A      10000           6.03                 0.08                         N                           9
+80645          29          28000                  RENT                2.0            MEDICAL          D       5000          16.07                 0.18                         N                           8
+...           ...            ...                   ...                ...                ...        ...        ...            ...                  ...                       ...                         ...
+87138          31         125000                   OWN                5.0            MEDICAL          A      30000           7.51                 0.24                         N                           9
+75223          23         113000              MORTGAGE                0.0            VENTURE          G      19750          21.21                 0.17                         N                           4
+36019          26          72000                  RENT                3.0           PERSONAL          B      15000          10.99                 0.21                         N                           2
+14001          28          50000                  RENT                4.0  DEBTCONSOLIDATION          B      10000          10.75                 0.20                         N                           7
+33835          26          96000                  RENT                3.0    HOMEIMPROVEMENT          E      24000          17.14                 0.25                         N                           3
+
+[18209 rows x 11 columns]
+
+X_pred shape:        person_age  person_income person_home_ownership  person_emp_length        loan_intent loan_grade  loan_amnt  loan_int_rate  loan_percent_income cb_person_default_on_file  cb_person_cred_hist_length
+id                                                                                                                                                                                                          
+58645          23          69000                  RENT                3.0    HOMEIMPROVEMENT          F      25000          15.76                 0.36                         N                           2
+58646          26          96000              MORTGAGE                6.0           PERSONAL          C      10000          12.68                 0.10                         Y                           4
+58647          26          30000                  RENT                5.0            VENTURE          E       4000          17.19                 0.13                         Y                           2
+58648          33          50000                  RENT                4.0  DEBTCONSOLIDATION          A       7000           8.90                 0.14                         N                           7
+58649          26         102000              MORTGAGE                8.0    HOMEIMPROVEMENT          D      15000          16.32                 0.15                         Y                           4
+...           ...            ...                   ...                ...                ...        ...        ...            ...                  ...                       ...                         ...
+97738          22          31200              MORTGAGE                2.0  DEBTCONSOLIDATION          B       3000          10.37                 0.10                         N                           4
+97739          22          48000              MORTGAGE                6.0          EDUCATION          A       7000           6.03                 0.15                         N                           3
+97740          51          60000              MORTGAGE                0.0           PERSONAL          A      15000           7.51                 0.25                         N                          25
+97741          22          36000              MORTGAGE                4.0           PERSONAL          D      14000          15.62                 0.39                         Y                           4
+97742          31          45000                  RENT                6.0  DEBTCONSOLIDATION          B      19450           9.91                 0.44                         N                           9
+
+[39098 rows x 11 columns]
+
+Model performance with engineered features: 0.9556338796661936
+
+Model performance without engineered features: 0.9556338796661936
+
+
+Submission file(s) created successfully.
+
