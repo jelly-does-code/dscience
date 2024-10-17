@@ -4,7 +4,7 @@ import numpy as np
 import seaborn as sns
 from sklearn.model_selection import train_test_split, KFold, StratifiedKFold
 
-from aux_functions import log
+from functions import log
 
 def fill_missing_values(df):
     for col in df.columns:
@@ -72,7 +72,7 @@ def load_data(data_map, runtime_map):
     data_map['num_cols_raw'] = [col for col in train_data.select_dtypes(include=[np.number]).columns.tolist() if col != target_col]
     runtime_map['kfold'] = StratifiedKFold(n_splits=5, shuffle=True, random_state=7) if runtime_map['task_type'] == 'classification' else KFold(n_splits=5, shuffle=True, random_state=7)
 
-    # Cast all object columns to category data type (XGBoost, CatBoost, ...)
+    # Cast all object columns to category data type
     for col in data_map['cat_cols_raw']:
         train_data[col] = train_data[col].astype('category')
         X_pred[col] = X_pred[col].astype('category')
@@ -82,8 +82,8 @@ def load_data(data_map, runtime_map):
     train_data = custom_filter(train_data, 'person_income', 'st', 1200001)
     train_data = custom_filter(train_data, 'person_emp_length', 'st', 100)
 
-    train_data.drop_duplicates(inplace=True)                          # Drop fully duplicated records ..
-    train_data.dropna(subset=target_col, inplace=True)              # Drop training records which don't have a target variable ..
+    train_data.drop_duplicates(inplace=True)                                      # Drop fully duplicated records ..
+    train_data.dropna(subset=target_col, inplace=True)                            # Drop training records which don't have a target variable ..
     train_data.drop(data_map['drop_cols'], axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
     X_pred.drop(data_map['drop_cols'], axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
@@ -93,6 +93,10 @@ def load_data(data_map, runtime_map):
     data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(X_train_data, y_train_data)   # Train test split
     data_map['X_train_no_engineered'] = data_map['X_train']                                                                # Save this for comparing model with/without feature engineering 
     
+    data_map['X_train_index_values'] = data_map['X_train'].index.tolist()
+    data_map['X_test_index_values'] = data_map['X_test'].index.tolist()
+    data_map['X_pred_index_values'] = X_pred.index.tolist()
+
     data_map['X_train'], data_map['X_test'], data_map['X_pred'] = fill_missing_values(data_map['X_train']), fill_missing_values(data_map['X_test']), fill_missing_values(X_pred)             # This will be used for training (no data leakage)
     
     del train_data, train_data2, X_train_data, y_train_data, X_pred

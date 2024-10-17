@@ -9,7 +9,7 @@ from os.path import isfile, join
 from sklearn.inspection import permutation_importance
 from sklearn.feature_selection import mutual_info_classif
 
-from aux_functions import log
+from functions import log
 
 # Model property insights
 def plot_permutation_importances(data_map, model_map, runtime_map):

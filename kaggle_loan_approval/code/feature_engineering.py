@@ -10,7 +10,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
 
-from aux_functions import log
+from functions import log
 
 def remove_outliers_isolation_forest(X_train, y_train, data_map, contamination=0.000001):
     # Create a copy of the original DataFrames to avoid modifying it

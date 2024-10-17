@@ -15,7 +15,7 @@ from joblib import dump, load
 from load_data import load_data
 from eda import eda, plot_feature_importances, plot_permutation_importances
 from feature_engineering import compare_models_with_without_engineered_features, feature_engineering, onehotencode
-from aux_functions import convert_sparse_to_df, update_maps_from_config, log, make_predictions
+from functions import convert_sparse_to_df, update_maps_from_config, log, make_predictions
 
 
 def get_params(name, data_map, model_map, runtime_map):
@@ -33,6 +33,7 @@ def get_params(name, data_map, model_map, runtime_map):
         model_params = literal_eval(param_df.loc[name, 'params'])
     
     model_map[name]['params'] = model_params
+    
     return model_map
 
 def fit_models(name, data_map, model_map):
@@ -41,19 +42,13 @@ def fit_models(name, data_map, model_map):
     # If there is no best version of the model, or if a refit is requested, update model_map[name]['model'] with newly fitted model.
     if model_map[name]['refit'] == 1 or not isfile(f'../models/{name}_best.joblib'):
         print(f'Training: fitting for {name}..')
-        if name == 'CatBoostClassifier':
-            print(data_map['cat_cols_engineered'])
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], verbose=0, cat_features=data_map['cat_cols_engineered']).fit(data_map['X_train'], data_map['y_train'])
-        
-        elif name == 'XGBClassifier':
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], enable_categorical=True).fit(data_map['X_train'], data_map['y_train'])       
-        
-        elif name == 'HistBoostingClassifier':
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], categorical_features='from_dtype').fit(data_map['X_train'], data_map['y_train'])
-               
-        elif model_map[name]['handles_cat']:
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'])
-        
+        if model_map[name]['handles_cat']:
+            if 'CatBoost' in name:
+                print(model_map[name]['params'])
+                model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'], data_map['cat_cols_engineered'])
+            else:
+                model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'])
+
         else:
             model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(convert_sparse_to_df(data_map, 'X_train_encoded'), data_map['y_train'])
     else:
@@ -102,28 +97,45 @@ def write_better(model_map, perf_metric_direction):
     else:
         copy2('../performance/current.csv', '../performance/best.csv')
 
+def predict(name, data_map, model_map, predict_data):
+    model = model_map[name]['model']
+    proba_func = model_map[name]['proba_func']
+    handles_cat = model_map[name]['handles_cat']
+    handles_sparse = model_map[name]['handles_sparse']
+    
+    # Choose the right dataframe for the right model (categorical, encoded, sparse, ...)
+    if handles_cat:
+        X_to_predict = data_map[predict_data]
+    else:
+        if handles_sparse:
+            X_to_predict = data_map[predict_data + '_encoded']
+        else:
+            X_to_predict = convert_sparse_to_df(data_map, predict_data + '_encoded')
+
+    if proba_func == 'decision_function':
+        model_map[name]['pred_proba'] = model.decision_function(X_to_predict)
+    elif proba_func == 'predict_proba':
+        model_map[name]['pred_proba'] = model.predict_proba(X_to_predict)[:, 1]
+    
+    return model_map
+
 def tune_train(data_map, model_map, runtime_map):
+    # to rewrite .. 
     for name in model_map:
         model_map = get_params(name, data_map, model_map, runtime_map)
         model_map = fit_models(name, data_map, model_map)
-      
-    print('Training: predicting on test set..')
-    for name in model_map:
-        if model_map[name]['refit'] == 1 or model_map[name]['retune'] == 1:
-            # Predict using the correct function (model dependent)
-            if model_map[name]['proba_func'] == 'decision_function':
-                model_map[name]['pred_proba'] = model_map[name]['model'].decision_function(data_map['X_test'])
-            elif model_map[name]['proba_func'] == 'predict_proba':
-                model_map[name]['pred_proba'] = model_map[name]['model'].predict_proba(data_map['X_test'])[:, 1]
+        model_map = predict(name, data_map, model_map, 'X_test')
 
+    if runtime_map['calculate_kfold']:
+        print(f'Training: checking kfold performance for {name}..')
+        model_map[name]['cross_val_score'] = cross_val_score(model_map[name]['model'], data_map['X_train'], data_map['y_train'], cv=runtime_map['kfold'], scoring=runtime_map['scoring'])
+        model_map[name]['kfold_perf'] = "%.2f%% (%.2f%%)" % (model_map[name]['cross_val_score'].mean()*100, model_map[name]['cross_val_score'].std()*100)
+    
+    print(name)
+    print(f'Training: checking performance with chosen performance metric for {name} .. (roc-auc)')
+    model_map[name]['perf'] = roc_auc_score(data_map['y_test'], model_map[name]['pred_proba'])
 
-            if runtime_map['calculate_kfold']:
-                print(f'Training: checking kfold performance for {name}..')
-                model_map[name]['cross_val_score'] = cross_val_score(model_map[name]['model'], data_map['X_train'], data_map['y_train'], cv=runtime_map['kfold'], scoring='roc_auc')
-                model_map[name]['kfold_perf'] = "%.2f%% (%.2f%%)" % (model_map[name]['cross_val_score'].mean()*100, model_map[name]['cross_val_score'].std()*100)
-
-            print(f'Training: checking performance with chosen performance metric for {name} .. (roc-auc)')
-            model_map[name]['perf'] = roc_auc_score(data_map['y_test'], model_map[name]['pred_proba'])
+            
             
     write_current(model_map, runtime_map)
     write_better(model_map, runtime_map['perf_metric_direction'])
@@ -133,7 +145,6 @@ def tune_train(data_map, model_map, runtime_map):
 def main():
     
     data_map, model_map, runtime_map = update_maps_from_config('config/data_map.json', 'config/model_map.json', 'config/runtime_map.json')
-    print(data_map)
 
     # Load raw data and perform EDA on it
     data_map, runtime_map = load_data(data_map, runtime_map)                                                            # Load data, split the datasets and fillna's without data leakage
