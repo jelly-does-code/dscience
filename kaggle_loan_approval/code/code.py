@@ -1,55 +1,43 @@
 from ast import literal_eval
-from os.path import isfile, join
-from os import listdir, remove
+from os.path import isfile
 from time import gmtime, localtime, time, strftime
 from shutil import copy2
 
 import numpy as np
-from pandas import DataFrame, NA, Series, concat, read_csv, set_option
+from pandas import DataFrame, NA, Series, concat, read_csv
 
-from sklearn.feature_selection import mutual_info_regression
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import train_test_split
-
-from sklearn.linear_model import RidgeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
-from catboost import CatBoostClassifier
-from xgboost import XGBClassifier
 
 import optuna
 from joblib import dump, load
 
-from objective_functions import obj_rf, obj_xgb, obj_cat, obj_histboost, obj_ridge
 from load_data import load_data
 from eda import eda, plot_feature_importances, plot_permutation_importances
 from feature_engineering import compare_models_with_without_engineered_features, feature_engineering, onehotencode
-from aux_functions import log
+from aux_functions import convert_sparse_to_df, update_maps_from_config, log, make_predictions
 
-runtime = strftime("%Y-%m-%d %H:%M:%S", localtime())
-set_option('display.max_columns', None)
 
 def get_params(name, data_map, model_map, runtime_map):
     param_df = read_csv('../performance/best.csv', index_col='name')
     
     # Retune if 1. A retune is requested, 2. It has never been tuned before
     if model_map[name]['retune'] == 1 or (name not in param_df.index):
-        print(f'Hyperparametertuning for {name}..')
+        print(f'Training: Hyperparameter tuning {name}..')
         start_time = time()
         study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
         
         if name == 'CatBoostClassifier': # CatBoost need extra option cat_cols
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], data_map['X_test'], data_map['y_test'], data_map['cat_cols_engineered']), n_trials=runtime_map['n_trials'])
+            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], data_map['cat_cols_engineered'], runtime_map), n_trials=runtime_map['n_trials'])
         
         elif model_map[name]['handles_cat']:
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], data_map['X_test'], data_map['y_test']), n_trials=runtime_map['n_trials'])
+            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train'], data_map['y_train'], runtime_map), n_trials=runtime_map['n_trials'])
         
         else:
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map['X_train_encoded'], data_map['y_train'], data_map['X_test_encoded'], data_map['y_test']), n_trials=runtime_map['n_trials'])
+            study.optimize(lambda trial: model_map[name]['obj_func'](trial, convert_sparse_to_df(data_map, 'X_train_encoded'), data_map['y_train'], runtime_map), n_trials=runtime_map['n_trials'])
 
         model_params = study.best_params
-        print(f"Hyperparameter tuning done for {name}. Time elapsed: {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
+        print(f"{name} done. It took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
     else:
         model_params = literal_eval(param_df.loc[name, 'params'])
     
@@ -57,15 +45,17 @@ def get_params(name, data_map, model_map, runtime_map):
     return model_map
 
 def fit_models(name, data_map, model_map):
-    print('\nTraining: retrieving fit models or refitting models..')
+    print('Training: retrieving fit models or refitting models..')
 
+    # If there is no best version of the model, or if a refit is requested, update model_map[name]['model'] with newly fitted model.
     if model_map[name]['refit'] == 1 or not isfile(f'../models/{name}_best.joblib'):
-        print(f'fitting for {name}..')
+        print(f'Training: fitting for {name}..')
         if name == 'CatBoostClassifier':
+            print(data_map['cat_cols_engineered'])
             model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], verbose=0, cat_features=data_map['cat_cols_engineered']).fit(data_map['X_train'], data_map['y_train'])
         
         elif name == 'XGBClassifier':
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], enable_categorical=True).fit(data_map['X_train'], data_map['y_train'])
+            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], enable_categorical=True).fit(data_map['X_train'], data_map['y_train'])       
         
         elif name == 'HistBoostingClassifier':
             model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params'], categorical_features='from_dtype').fit(data_map['X_train'], data_map['y_train'])
@@ -74,12 +64,13 @@ def fit_models(name, data_map, model_map):
             model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'])
         
         else:
-            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train_encoded'], data_map['y_train'])
+            model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(convert_sparse_to_df(data_map, 'X_train_encoded'), data_map['y_train'])
     else:
+        # In the other case, load the previously found best model as current model (no refit)
         model_map[name]['model'] = load(f'../models/{name}_best.joblib')
     return model_map
 
-def write_current(model_map):
+def write_current(model_map, runtime_map):
     curr_perf = DataFrame(columns=['name','perf','kfold_perf','params', 'timestamp'])
 
     for name in model_map:
@@ -89,7 +80,7 @@ def write_current(model_map):
             'perf': model_map[name]['perf'],
             'kfold_perf': model_map[name]['kfold_perf'],
             'params': [model_map[name]['params']],
-            'timestamp': runtime})
+            'timestamp': runtime_map['runtime']})
         if curr_perf.empty:
             curr_perf = new_row
         else:
@@ -124,8 +115,6 @@ def tune_train(data_map, model_map, runtime_map):
         model_map = get_params(name, data_map, model_map, runtime_map)
         model_map = fit_models(name, data_map, model_map)
       
-
-    # Predict probabilities for classification models
     print('Training: predicting on test set..')
     for name in model_map:
         if model_map[name]['refit'] == 1 or model_map[name]['retune'] == 1:
@@ -144,151 +133,51 @@ def tune_train(data_map, model_map, runtime_map):
             print(f'Training: checking performance with chosen performance metric for {name} .. (roc-auc)')
             model_map[name]['perf'] = roc_auc_score(data_map['y_test'], model_map[name]['pred_proba'])
             
-        
-    write_current(model_map)
+    write_current(model_map, runtime_map)
     write_better(model_map, runtime_map['perf_metric_direction'])
-    return model_map
+
+    return data_map, model_map
   
 def main():
-    # Clean up previous logs
-    with open('log.txt', 'w') as f1:
-        pass
     
-    data_map = {'X_train': DataFrame,
-                'X_train_no_engineered': DataFrame,
-                'X_test': DataFrame,
-                'X_pred': DataFrame,
-                'y_train': DataFrame,
-                'y_test': DataFrame,
-                'target_col': 'loan_status',
-                'index_col': 'id',
-                'drop_cols': [],
-                'cat_cols_raw': [],
-                'num_cols_raw': [],
-                'cat_cols_engineered': [],
-                'num_cols_engineered': [],
-                'cat_cols_encoded': [],
-                'num_cols_encoded': []
-                }
-    
-    runtime_map = {'eda_when': 'none',
-                   'task_type': 'classification',
-                   'scoring': 'roc_auc',
-                   'perf_metric_direction': 'maximize', # 'maximize' or 'minimize'. Defined by Optuna function study option
-                   'n_trials': 1,
-                   'calculate_kfold': False,
-                   'plots': [0,        0,        0,          0,           0,    0,  0,    1],
-                            #num_plot, cat_plot, mixed_plot, single_plot, skew, mi, corr, imp
-                   }   
-    
-    model_map = {
-                'XGBClassifier':                            {'model': XGBClassifier,
-                                                             'handles_cat': True,
-                                                             'params': {},
-                                                             'obj_func': obj_xgb,
-                                                             'retune': 0,
-                                                             'refit': 0,
-                                                             'pred_proba': '',
-                                                             'proba_func': 'predict_proba',
-                                                             'perf': '',
-                                                             'kfold_perf': ''},
-                'CatBoostClassifier':                       {'model': CatBoostClassifier,
-                                                             'handles_cat': True,
-                                                             'params': {},
-                                                             'obj_func': obj_cat,
-                                                             'retune': 0,
-                                                             'refit': 0,
-                                                             'pred_proba': '',
-                                                             'proba_func': 'predict_proba',
-                                                             'perf': '',
-                                                             'kfold_perf': ''},    
-                'HistBoostingClassifier':                   {'model': HistGradientBoostingClassifier,
-                                                             'handles_cat': True,
-                                                             'params': {},
-                                                             'obj_func': obj_histboost,
-                                                             'retune': 1,
-                                                             'refit': 1,
-                                                             'pred_proba': '',
-                                                             'proba_func': 'predict_proba',
-                                                             'perf': '',
-                                                             'kfold_perf': ''},                    
-                'RandomForestClassifier':                   {'model': RandomForestClassifier,
-                                                             'handles_cat': False,
-                                                             'params': {},
-                                                             'obj_func': obj_rf,
-                                                             'retune': 0,
-                                                             'refit': 0,
-                                                             'pred_proba': '',
-                                                             'proba_func': 'decision_function',
-                                                             'perf': '',
-                                                             'kfold_perf': ''},                                                                 
-                'RidgeClassifier':                          {'model': RidgeClassifier,
-                                                             'handles_cat': False,
-                                                             'params': {},
-                                                             'obj_func': obj_ridge,
-                                                             'retune': 0,
-                                                             'refit': 0,
-                                                             'pred_proba': '',
-                                                             'proba_func': 'predict_proba',
-                                                             'perf': '',
-                                                             'kfold_perf': ''}                                                          
-                }
-    
-    
+    data_map, model_map, runtime_map = update_maps_from_config('config/data_map.json', 'config/model_map.json', 'config/runtime_map.json')
+    print(data_map)
+
     # Load raw data and perform EDA on it
     data_map, runtime_map = load_data(data_map, runtime_map)                                                            # Load data, split the datasets and fillna's without data leakage
-    
     eda(data_map, runtime_map)                                                                                          # EDA on raw data
     data_map = feature_engineering(data_map)                                                                            # Feature engineering. Write to data_map
     eda(data_map, runtime_map)                                                                                          # EDA on engineered data
 
     data_map = compare_models_with_without_engineered_features(data_map, model_map, runtime_map)
     data_map = onehotencode(data_map)                                                                                   # Add entries in data map for encoded data
-    model_map = tune_train(data_map, model_map, runtime_map)                                                            # Train and evaluate models
+    data_map, model_map = tune_train(data_map, model_map, runtime_map)                                                  # Train and evaluate models
 
-    
-    # By now a best model exists for all models. Could have been a previous best, could be a copy of the current model
-    for name in model_map:
-        model_map[name]['best_model'] = load(f'../models/{name}_best.joblib') 
-    
+    # Load the best models for all entries in model_map
+    model_map = {name: {**model_info, 'best_model': load(f'../models/{name}_best.joblib')} for name, model_info in model_map.items()}
+
     if runtime_map['plots'][-1]:
         plot_feature_importances(data_map, model_map)
         plot_permutation_importances(data_map, model_map, runtime_map)
 
-    # Predict and submit
-    for name in model_map:
-        if model_map[name]['refit'] == 1:
-            # If we're prediction for models that can handle categorical data
-            if model_map[name]['handles_cat']:
-                if model_map[name]['proba_func'] == 'decision_function':
-                    predictions_curr = model_map[name]['model'].decision_function(data_map['X_pred'])
-                    predictions_best = model_map[name]['best_model'].decision_function(data_map['X_pred'])
-                else:
-                    predictions_curr = model_map[name]['model'].predict_proba(data_map['X_pred'])[:, 1]
-                    predictions_best  = model_map[name]['best_model'].predict_proba(data_map['X_pred'])[:, 1]
-            
-                submission_curr = DataFrame({data_map['index_col']: data_map['X_pred'].index, data_map['target_col']: predictions_curr})
-                submission_curr.to_csv(f'../submissions/submission_{name}_curr.csv', index=False)
-                submission_best = DataFrame({data_map['index_col']: data_map['X_pred'].index, data_map['target_col']: predictions_best})
-                submission_best.to_csv(f'../submissions/submission_{name}_best.csv', index=False)
-            
-            # For models that don't handle categorical, we use the encoded data
-            else:
-                if model_map[name]['proba_func'] == 'decision_function':
-                    predictions_curr = model_map[name]['model'].decision_function(data_map['X_pred_encoded'])
-                    predictions_best = model_map[name]['best_model'].decision_function(data_map['X_pred_encoded'])
-                else:
-                    predictions_curr = model_map[name]['model'].predict_proba(data_map['X_pred_encoded'])[:, 1]
-                    predictions_best  = model_map[name]['best_model'].predict_proba(data_map['X_pred_encoded'])[:, 1]
-                
-                submission_curr = DataFrame({data_map['index_col']: data_map['X_pred_encoded'].index, data_map['target_col']: predictions_curr})
-                submission_curr.to_csv(f'../submissions/submission_{name}_curr.csv', index=False)
-                submission_best = DataFrame({data_map['index_col']: data_map['X_pred_encoded'].index, data_map['target_col']: predictions_best})
-                submission_best.to_csv(f'../submissions/submission_{name}_best.csv', index=False)
-            
-            
+    del data_map['X_train'], data_map['X_train_encoded']                                                                # Free up memory. At this point, the training data is no longer needed
 
+    for name, model_info in model_map.items():
+        if model_info['refit'] == 1:
+            # Use appropriate data based on model's categorical handling capability
+            if model_info['handles_cat']:
+                X_pred_data = data_map['X_pred']
+            else:
+                X_pred_data = convert_sparse_to_df(data_map, 'X_pred_encoded')
             
+            predictions_curr = make_predictions(model_info['model'], X_pred_data, model_info['proba_func'])
+            predictions_best = make_predictions(model_info['best_model'], X_pred_data, model_info['proba_func'])
+
+            submission_curr = DataFrame({data_map['index_col']: X_pred_data.index, data_map['target_col']: predictions_curr})
+            submission_best = DataFrame({data_map['index_col']: X_pred_data.index, data_map['target_col']: predictions_best})
+
+            submission_curr.to_csv(f'../submissions/submission_{name}_curr.csv', index=False)
+            submission_best.to_csv(f'../submissions/submission_{name}_best.csv', index=False)
 
     log("\nSubmission file(s) created successfully.")
 

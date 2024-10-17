@@ -198,13 +198,13 @@ def drop_uninteresting(dfs, cols):
 def compare_models_with_without_engineered_features(data_map, model_map, runtime_map):
     print("Comparing model performance with and without engineered features..")
     # Set vars
-    X_train, X_train_no_engineered, y_train, scoring, kfold = data_map['X_train'], data_map['X_train_no_engineered'], data_map['y_train'], runtime_map['scoring'], runtime_map['kfold']
+    scoring, kfold = runtime_map['scoring'], runtime_map['kfold']
 
     for name in model_map:
         if name == 'XGBClassifier':
             model = XGBClassifier(enable_categorical = True)
-            score_with_engineered = np.mean(cross_val_score(model, X_train, y_train, scoring=scoring, cv=kfold))
-            score_without_engineered = np.mean(cross_val_score(model, X_train_no_engineered, y_train, scoring=scoring, cv=kfold))
+            score_with_engineered = np.mean(cross_val_score(model, data_map['X_train'], data_map['y_train'], scoring=scoring, cv=kfold))
+            score_without_engineered = np.mean(cross_val_score(model, data_map['X_train_no_engineered'], data_map['y_train'], scoring=scoring, cv=kfold))
 
             # Store the results in a dictionary
             performance_comparison = {
@@ -238,30 +238,29 @@ def compare_models_with_without_engineered_features(data_map, model_map, runtime
     return data_map
 
 def onehotencode(data_map):
-    encoder = OneHotEncoder(drop=None, sparse_output=False, handle_unknown='ignore')
-    # Fit and transform the training data
-    data_map['X_train_encoded'] = DataFrame(encoder.fit_transform(data_map['X_train']))
-    data_map['X_test_encoded'] = DataFrame(encoder.transform(data_map['X_test']))
-    data_map['X_pred_encoded'] = DataFrame(encoder.transform(data_map['X_pred']))
+    encoder = OneHotEncoder(drop=None, sparse_output=True, handle_unknown='ignore', dtype=np.float32)         # Sparse for memory management .. Use dense_array = sparse_matrix.todense() and pd.DataFrame(dense_array, columns=encoded_col_names) on demand when needed
+    
+    # Fit and transform the training data on categorical columns only
+    data_map['X_train_encoded'] = encoder.fit_transform(data_map['X_train'][data_map['cat_cols_raw']])
+    data_map['X_test_encoded'] = encoder.transform(data_map['X_test'][data_map['cat_cols_raw']])
+    data_map['X_pred_encoded'] = encoder.transform(data_map['X_pred'][data_map['cat_cols_raw']])
 
-    data_map['cat_cols_encoded'] = data_map['X_train_encoded'].select_dtypes(include=['category']).columns.tolist()
-    data_map['num_cols_encoded']= data_map['X_train_encoded'].select_dtypes(include=[np.number]).columns.tolist()
+    data_map['encoder'] = encoder
+    data_map['encoded_columns'] = encoder.get_feature_names_out(data_map['cat_cols_raw']).tolist()
 
     return data_map
 
 def feature_engineering(data_map):
-    X_train, X_test, X_pred = data_map['X_train'], data_map['X_test'], data_map['X_pred'] 
-
     # Remove outliers from training set (not from test or pred)
     #X_train, y_train = remove_outliers_isolation_forest(X_train, y_train, data_map)
 
     # These seem good? 
-    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_raw([X_train, X_test, X_pred], 'loan_int_rate', 'loan_grade', '*')
-    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([X_train, X_test, X_pred], 'loan_amnt', 'person_income', '/')
-    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([X_train, X_test, X_pred], 'loan_amnt_person_income_division', 'loan_percent_income', '-',  True, False)
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_raw([data_map['X_train'], data_map['X_test'], data_map['X_pred']], 'loan_int_rate', 'loan_grade', '*')
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([data_map['X_train'], data_map['X_test'], data_map['X_pred']], 'loan_amnt', 'person_income', '/')
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = add_interaction_feature_number([data_map['X_train'], data_map['X_test'], data_map['X_pred']], 'loan_amnt_person_income_division', 'loan_percent_income', '-',  True, False)
 
     # Update maps to include engineered columns and data
-    data_map['cat_cols_engineered'] = X_train.select_dtypes(include=['category']).columns.tolist()
-    data_map['num_cols_engineered'] = X_train.select_dtypes(include=[np.number]).columns.tolist()
+    data_map['cat_cols_engineered'] = data_map['X_train'].select_dtypes(include=['category']).columns.tolist()
+    data_map['num_cols_engineered'] = data_map['X_train'].select_dtypes(include=[np.number]).columns.tolist()
 
     return data_map

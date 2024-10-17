@@ -16,14 +16,18 @@ def plot_permutation_importances(data_map, model_map, runtime_map):
     # Investigate permutation importances of trained models
     print('EDA: Investigating permutation importances..')
     
-    for name in model_map:
-        if model_map[name]['refit'] == 1 and name != 'RidgeClassifier':
-            if model_map[name]['handles_cat']:
-                perm_importance = permutation_importance(model_map[name]['model'], data_map['X_train'], data_map['y_train'], scoring=runtime_map['scoring'])
+    for name, model_info in model_map.items():
+        if model_info['refit'] == 1 and name != 'RidgeClassifier':
+            # Use the appropriate training data and feature names based on whether the model handles categorical data
+            if model_info['handles_cat']:
+                X_train = data_map['X_train']
                 feature_names = data_map['X_pred'].columns
             else:
-                perm_importance = permutation_importance(model_map[name]['model'], data_map['X_train_encoded'], data_map['y_train'], scoring=runtime_map['scoring'])
+                X_train = data_map['X_train_encoded']
                 feature_names = data_map['X_pred_encoded'].columns
+
+            # Perform permutation importance using the appropriate training data
+            perm_importance = permutation_importance(model_info['model'], X_train, data_map['y_train'], scoring=runtime_map['scoring'])
 
             print(f'Calculating permutation importance for {name}...')            
             # Sort and select the top features (default: top 30 or fewer)
@@ -46,43 +50,29 @@ def plot_permutation_importances(data_map, model_map, runtime_map):
 
 def plot_feature_importances(data_map, model_map):
     # Investigate feature importances of trained models
-    print('EDA: Investigating feature importances..')
-    for name in model_map:
-        if model_map[name]['refit'] == 1 and name not in ('RidgeClassifier', 'HistBoostingClassifier'):
-            if model_map[name]['handles_cat']:
-                feature_names = data_map['X_pred'].columns
-            else:
-                feature_names = data_map['X_pred_encoded'].columns
+    print('\nEDA: Investigating feature importances...')
+    
+    for name, model_info in model_map.items():
+        if model_info['refit'] == 1 and name not in ('RidgeClassifier', 'HistBoostingClassifier'):
+            # Choose the appropriate feature names based on categorical handling
+            feature_names = data_map['X_pred'].columns if model_info['handles_cat'] else data_map['X_pred_encoded'].columns
             
-            # Future inclusion of Ridge Coefficients
-            '''
-            # Access the coefficients
-            coefficients = model.coef_
-
-            # Create a DataFrame for better visualization
-            feature_importance = DataFrame({'Feature': feature_names, 'Coefficient': coefficients})
-
-            # Sort by absolute value of coefficients
-            feature_importance['Importance'] = feature_importance['Coefficient'].abs()
-            feature_importance.sort_values(by='Importance', ascending=False, inplace=True)
-
-            # Get the top N feature names and importances
-            top_features = feature_importance['Feature'].head(top_n).values
-            top_importances = feature_importance['Importance'].head(top_n).values
-            '''
-
-            importances = model_map[name]['model'].feature_importances_ # This usually returns a 1D Array, depending on model used
-            # Get the indices of the top features
-            num_features_to_plot = len(feature_names) if len(feature_names) < 30 else 30                
+            # Extract model feature importances
+            importances = model_info['model'].feature_importances_
             
+            # Determine the number of features to plot (max 30)
+            num_features_to_plot = min(len(feature_names), 30)
             top_indices = np.argsort(importances)[-num_features_to_plot:]
-
+            
+            # Get the top features and their importances
             top_features = [feature_names[i] for i in top_indices]
             top_importances = importances[top_indices]
-
-            log(f"The top features for {name} are: {top_features}")
-            log(f"The top feature importances for {name} are: {top_importances}")
-
+            
+            # Logging the top features
+            log(f"Top features for {name}: {top_features}")
+            log(f"Top feature importances for {name}: {top_importances}")
+            
+            # Plotting feature importance
             plt.figure(figsize=(30, 10))
             plt.barh(top_features, top_importances)
             plt.title(f'Feature Importance - {name}')

@@ -1,15 +1,13 @@
-
-from sklearn.datasets import make_classification
-from sklearn.linear_model import RidgeClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
-from catboost import CatBoostClassifier
 from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.linear_model import RidgeClassifier
 
-from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import cross_val_score
 
 # Objective function for RandomForestClassifier
-def obj_rf(trial, X_train, y_train, X_test, y_test):
+def obj_rf(trial, X_train, y_train, runtime_map):
     param = {
         'n_estimators': trial.suggest_int('n_estimators', 50, 500),
         'max_depth': trial.suggest_int('max_depth', 5, 13),  
@@ -19,35 +17,36 @@ def obj_rf(trial, X_train, y_train, X_test, y_test):
         'random_state': 42}
     
     model = RandomForestClassifier(**param)
-    model.fit(X_train, y_train)
-    preds = model.predict_proba(X_test)[:, 1]
-    return roc_auc_score(y_test, preds)
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring=runtime_map['scoring'])
+    return cv_scores.mean()
 
 # Objective function for XBGBoostClassifier
-def obj_xgb(trial, X_train, y_train, X_test, y_test):
+def obj_xgb(trial, X_train, y_train, runtime_map):
     param = {
         'objective': 'binary:logistic',
         'max_depth': trial.suggest_int('max_depth', 7, 16),
-        'max_bin': trial.suggest_int('max_bin', 256, 5000), 
+        'max_bin': trial.suggest_int('max_bin', 256, 2000), 
         'tree_method': 'auto', 
-        'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.3),  
-        'n_estimators': trial.suggest_int('n_estimators', 50, 700),  
+        'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.5),  
+        'n_estimators': trial.suggest_int('n_estimators', 50, 1000),  
         'subsample': trial.suggest_float('subsample', 0.5, 1.0),
         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
         'gamma': trial.suggest_float('gamma', 0, 5),  
         'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
+        'lambda': trial.suggest_float('lambda', 0, 5),
+        'alpha': trial.suggest_float('alpha', 0, 5),
         'enable_categorical': True}
+    
     model = XGBClassifier(**param)
-    model.fit(X_train, y_train)
-    preds = model.predict_proba(X_test)[:, 1]
-    return roc_auc_score(y_test, preds)
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring=runtime_map['scoring'])
+    return cv_scores.mean()
 
 # Objective function for CatBoostClassifier
-def obj_cat(trial, X_train, y_train, X_test, y_test, cat_cols):
+def obj_cat(trial, X_train, y_train, cat_cols, runtime_map):
     param = {
-        'early_stopping_rounds': 100,
+        'early_stopping_rounds': 50,                                # Future note: implement logic to determine this based on number of dataset records
         'iterations': trial.suggest_int('iterations', 400, 600),  
-        'depth': trial.suggest_int('depth', 3, 9),  
+        'depth': trial.suggest_int('depth', 3, 7),  
         'learning_rate': trial.suggest_float('learning_rate', 1e-4, 0.2),  
         'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 1e-2, 9.0),
         'random_seed': 42,
@@ -56,12 +55,11 @@ def obj_cat(trial, X_train, y_train, X_test, y_test, cat_cols):
         'cat_features': cat_cols
     }
     model = CatBoostClassifier(**param)
-    model.fit(X_train, y_train)
-    preds = model.predict_proba(X_test)[:, 1]
-    return roc_auc_score(y_test, preds)
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring=runtime_map['scoring'])
+    return cv_scores.mean()
 
 # Objective Function for HistBoostRegressor
-def obj_histboost(trial, X_train, y_train, X_test, y_test):
+def obj_histboost(trial, X_train, y_train, runtime_map):
     params = {
         'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.3, log=True),
         'max_iter': trial.suggest_int('max_iter', 50, 500),
@@ -73,14 +71,12 @@ def obj_histboost(trial, X_train, y_train, X_test, y_test):
         'categorical_features': 'from_dtype'
     }
     model = HistGradientBoostingClassifier(**params)
-    model.fit(X_train, y_train)
-    preds = model.predict_proba(X_test)[:, 1]
-    return roc_auc_score(y_test, preds)
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring=runtime_map['scoring'])
+    return cv_scores.mean()
 
 # Objective function for RidgeClassifier
-def obj_ridge(trial, X_train, y_train, X_test, y_test):
+def obj_ridge(trial, X_train, y_train, runtime_map):
     alpha = trial.suggest_float("alpha", 1e-5, 1e2, log=True)
     model = RidgeClassifier(alpha=alpha)
-    model.fit(X_train, y_train)
-    preds = model.decision_function(X_test)
-    return roc_auc_score(y_test, preds)
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring=runtime_map['scoring'])
+    return cv_scores.mean()

@@ -1,4 +1,4 @@
-from pandas import read_csv, DataFrame
+from pandas import concat, read_csv, DataFrame
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -10,8 +10,8 @@ def fill_missing_values(df):
     for col in df.columns:
         if df[col].isna().sum() == 0:
             pass
-        elif df[col].dtype in ['object', 'bool']:  # Categorical
-            df.fillna({col: df[col].mode()}, inplace=True)
+        elif df[col].dtype in ['object', 'bool', 'category']:  # Categorical
+            df[col].fillna('na', inplace=True)
         else:   
             # Numerical
             skewness = round(df[col].skew(), 1)  # Decide whether to use mean or mode
@@ -55,15 +55,16 @@ def custom_filter(df, filter_col, filter_type, filter_amt):
     if filter_type == 'st':
         output = df[(df[filter_col] < filter_amt) | (df[filter_col].isna())]
 
-    print(f'train data shape change after custom_filter: {df.shape}, {output.shape}')
+    log(f'train data shape change after custom_filter: {df.shape}, {output.shape}')
     return output
 
-
 def load_data(data_map, runtime_map):
-    print('Loading data..')
-    target_col, drop_cols = data_map['target_col'], data_map['drop_cols']
+    print('\nLoading data..')
+    target_col = data_map['target_col']
     
     train_data = read_csv('../input_data/train.csv', index_col=data_map['index_col'])
+    train_data2 = read_csv('../input_data/credit_risk_dataset.csv', index_col=data_map['index_col'])
+    train_data = concat([train_data, train_data2])
     X_pred = read_csv('../input_data/test.csv', index_col=data_map['index_col'])
 
     # Set some mapping variables
@@ -78,24 +79,27 @@ def load_data(data_map, runtime_map):
 
     train_data = custom_filter(train_data, 'person_age', 'st', 110)
     train_data = custom_filter(train_data, 'loan_percent_income', 'st', 0.8)
-
     train_data = custom_filter(train_data, 'person_income', 'st', 1200001)
     train_data = custom_filter(train_data, 'person_emp_length', 'st', 100)
 
-
     train_data.drop_duplicates(inplace=True)                          # Drop fully duplicated records ..
-    train_data.dropna(subset=[target_col], inplace=True)              # Drop training records which don't have a target variable ..
-    train_data.drop(drop_cols, axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
-    X_pred.drop(drop_cols, axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
+    train_data.dropna(subset=target_col, inplace=True)              # Drop training records which don't have a target variable ..
+    train_data.drop(data_map['drop_cols'], axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
+    X_pred.drop(data_map['drop_cols'], axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
-    X_train_data = train_data.drop(columns=[target_col])
-    y_train_data = train_data[target_col]
+    y_train_data = train_data.pop(target_col)
+    X_train_data = train_data
 
     data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(X_train_data, y_train_data)   # Train test split
     data_map['X_train_no_engineered'] = data_map['X_train']                                                                # Save this for comparing model with/without feature engineering 
-    data_map['X_pred'] = X_pred                                                                                                             
     
-    del train_data, X_train_data, y_train_data, X_pred
-    #X_train, X_test, X_pred = fill_missing_values(X_train), fill_missing_values(X_test), fill_missing_values(pred_data)             # This will be used for training (no data leakage)
+    data_map['X_train'], data_map['X_test'], data_map['X_pred'] = fill_missing_values(data_map['X_train']), fill_missing_values(data_map['X_test']), fill_missing_values(X_pred)             # This will be used for training (no data leakage)
+    
+    del train_data, train_data2, X_train_data, y_train_data, X_pred
+
+    log(f"X_train shape: {data_map['X_train']}")
+    log(f"X_test shape: {data_map['X_test']}")
+    log(f"X_pred shape: {data_map['X_pred']}")
+
 
     return data_map, runtime_map
