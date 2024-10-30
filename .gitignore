@@ -6,7 +6,7 @@
 kaggle_house_prices/graphs/
 kaggle_house_prices/log.txt
 
-
+**/*sqlite*
 kaggle_loan_approval/graphs/
 kaggle_loan_approval/models/
 kaggle_load_approval/submissions
