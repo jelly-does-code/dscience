@@ -1,6 +1,7 @@
 **/venv
 **/__pycache__
 **/input_data/
+**/*-*-*-*-*
 
 **/catboost_info/
 kaggle_house_prices/graphs/
