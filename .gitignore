@@ -1,16 +1,13 @@
-**/venv
+venv
 **/__pycache__
-**/input_data/
-**/*-*-*-*-*
 
 **/catboost_info/
-kaggle_house_prices/graphs/
-kaggle_house_prices/log.txt
+**/input_data/
+**/models/
+**/submissions
 
-**/*sqlite*
-kaggle_loan_approval/graphs/
-kaggle_loan_approval/models/
-kaggle_load_approval/submissions
-kaggle_load_approval/log.txt
-
+**/log.txt
 **/.ipynb_checkpoints
+**/*-*-*-*-*
+**/*sqlite*
+
