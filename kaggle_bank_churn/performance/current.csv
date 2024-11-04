@@ -1,0 +1,4 @@
+name,perf,kfold_perf,params,timestamp
+XGBClassifier,,,"{'max_depth': 10, 'max_bin': 1031, 'learning_rate': 0.27560506356017705, 'n_estimators': 370, 'subsample': 0.5855069815600575, 'colsample_bytree': 0.7124002295531635, 'gamma': 0.7356345272240061, 'min_child_weight': 7, 'lambda': 0.988577499626766, 'alpha': 3.2293384820683926, 'enable_categorical': True}",2024-11-03 21:36:48
+CatBoostClassifier,,,"{'iterations': 490, 'depth': 4, 'learning_rate': 0.1854584393185115, 'l2_leaf_reg': 6.987636476631746, 'bagging_temperature': 0.7955909296092272}",2024-11-03 21:36:48
+RandomForestClassifier,0.6855574368047624,,"{'n_estimators': 366, 'max_depth': 13, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt'}",2024-11-03 21:36:48

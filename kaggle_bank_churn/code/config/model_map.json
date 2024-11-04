@@ -1,0 +1,41 @@
+{
+    "XGBClassifier": {
+        "model": "XGBClassifier",
+        "handles_cat": true,
+        "handles_sparse": true,
+        "params": {},
+        "obj_func": "obj_xgb",
+        "retune": 1,
+        "refit": 1,
+        "pred_proba": "",
+        "proba_func": "predict_proba",
+        "perf": "",
+        "kfold_perf": ""
+    },
+    "CatBoostClassifier": {
+        "model": "CatBoostClassifier",
+        "handles_cat": true,
+        "handles_sparse": true,
+        "params": {},
+        "obj_func": "obj_cat",
+        "retune": 0,
+        "refit": 0,
+        "pred_proba": "",
+        "proba_func": "predict_proba",
+        "perf": "",
+        "kfold_perf": ""
+    },
+    "RandomForestClassifier": {
+        "model": "RandomForestClassifier",
+        "handles_cat": false,
+        "handles_sparse": false,
+        "params": {},
+        "obj_func": "obj_rf",
+        "retune": 0,
+        "refit": 0,
+        "pred_proba": "",
+        "proba_func": "predict_proba",
+        "perf": "",
+        "kfold_perf": ""
+    }
+}
