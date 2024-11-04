@@ -14,20 +14,35 @@ from joblib import dump, load
 from load_data import load_data
 from eda import eda, plot_feature_importances, plot_permutation_importances
 from feature_engineering import compare_models_with_without_engineered_features, feature_engineering, onehotencode
-from functions import convert_sparse_to_df, update_maps_from_config, log, make_predictions
+from functions import convert_sparse_to_df, update_maps_from_config, log, make_predictions, get_or_create_experiment
 
+import mlflow
 
 def get_params(name, data_map, model_map, runtime_map):
     param_df = read_csv('../performance/best.csv', index_col='name')
-    
+    experiment_id = get_or_create_experiment(runtime_map["experiment_name"])
+
     # Retune if 1. A retune is requested, 2. It has never been tuned before
     if model_map[name]['retune'] == 1 or (name not in param_df.index):
         print(f'Training: Hyperparameter tuning {name}..')
         start_time = time()
-        study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
-        study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map, runtime_map), n_trials=runtime_map['n_trials'])
-        model_params = study.best_params
-        print(f"{name} done. Took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
+        with mlflow.start_run(experiment_id=experiment_id, nested=True):
+            study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
+            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map, runtime_map), n_trials=runtime_map['n_trials'])
+            model_params = study.best_params
+            
+            # Log the trial parameters and metrics to MLflow
+            mlflow.log_params(model_params)
+            mlflow.log_metric("best_roc_auc", study.best_value) 
+            mlflow.set_tags(
+            tags={
+                "project": "kaggle_bank_churn",
+                "optimizer_engine": "optuna",
+                "model_family": "xgboost",
+                "feature_set_version": 1,
+                }
+            )
+            print(f"{name} done. Took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
     else:
         model_params = literal_eval(param_df.loc[name, 'params'])
     
@@ -43,7 +58,6 @@ def fit_models(name, data_map, model_map):
         print(f'Training: fitting for {name}..')
         if model_map[name]['handles_cat']:
             if 'CatBoost' in name:
-                print(model_map[name]['params'])
                 model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'], data_map['cat_cols_engineered'])
             else:
                 model_map[name]['model'] = model_map[name]['model'](**model_map[name]['params']).fit(data_map['X_train'], data_map['y_train'])
@@ -119,6 +133,8 @@ def predict(name, data_map, model_map, predict_data):
     return model_map
 
 def tune_train(data_map, model_map, runtime_map):
+    mlflow.set_tracking_uri("http://localhost:5000")
+    
     # to rewrite .. 
     for name in model_map:
         model_map = get_params(name, data_map, model_map, runtime_map)
@@ -130,21 +146,18 @@ def tune_train(data_map, model_map, runtime_map):
         model_map[name]['cross_val_score'] = cross_val_score(model_map[name]['model'], data_map['X_train'], data_map['y_train'], cv=runtime_map['kfold'], scoring=runtime_map['scoring'])
         model_map[name]['kfold_perf'] = "%.2f%% (%.2f%%)" % (model_map[name]['cross_val_score'].mean()*100, model_map[name]['cross_val_score'].std()*100)
     
-    print(name)
-    print(f'Training: checking performance with chosen performance metric for {name} .. (roc-auc)')
-    model_map[name]['perf'] = roc_auc_score(data_map['y_test'], model_map[name]['pred_proba'])
+    for name in model_map:
+        print(f'Training: checking performance with chosen performance metric for {name} .. (roc-auc)')
+        model_map[name]['perf'] = roc_auc_score(data_map['y_test'], model_map[name]['pred_proba'])
 
-            
-            
     write_current(model_map, runtime_map)
     write_better(model_map, runtime_map['perf_metric_direction'])
 
     return data_map, model_map
   
 def main():
-    
     data_map, model_map, runtime_map = update_maps_from_config('config/data_map.json', 'config/model_map.json', 'config/runtime_map.json')
-
+    
     # Load raw data and perform EDA on it
     data_map, runtime_map = load_data(data_map, runtime_map)                                                            # Load data, split the datasets and fillna's without data leakage
     eda(data_map, runtime_map)                                                                                          # EDA on raw data

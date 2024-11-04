@@ -7,10 +7,12 @@ from time import localtime, strftime
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from catboost import CatBoostClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.linear_model import RidgeClassifier
 
+
+from sklearn.linear_model import RidgeClassifier
 from sklearn.model_selection import cross_val_score
+
+import mlflow
 
 #-------------------------------------------------------------------------------------
 # Objective function for RandomForestClassifier
@@ -34,22 +36,24 @@ def obj_rf(trial, data_map, runtime_map):
 
 # Objective function for XBGBoostClassifier
 def obj_xgb(trial, data_map, runtime_map):
-    param = {
-        'objective': 'binary:logistic',
-        'max_depth': trial.suggest_int('max_depth', 7, 16),
-        'max_bin': trial.suggest_int('max_bin', 256, 2000), 
-        'tree_method': 'auto', 
-        'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.5),  
-        'n_estimators': trial.suggest_int('n_estimators', 50, 1000),  
-        'subsample': trial.suggest_float('subsample', 0.5, 1.0),
-        'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
-        'gamma': trial.suggest_float('gamma', 0, 5),  
-        'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
-        'lambda': trial.suggest_float('lambda', 0, 5),
-        'alpha': trial.suggest_float('alpha', 0, 5),
-        'enable_categorical': trial.suggest_categorical('enable_categorical', [True])} 
-    model = XGBClassifier(**param)
-    cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
+    with mlflow.start_run(nested=True):
+        param = {
+            'objective': 'binary:logistic',
+            'max_depth': trial.suggest_int('max_depth', 7, 16),
+            'max_bin': trial.suggest_int('max_bin', 256, 2000), 
+            'tree_method': 'auto', 
+            'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.5),  
+            'n_estimators': trial.suggest_int('n_estimators', 50, 1000),  
+            'subsample': trial.suggest_float('subsample', 0.5, 1.0),
+            'colsample_bytree': trial.suggest_float('colsample_bytree', 0.5, 1.0),
+            'gamma': trial.suggest_float('gamma', 0, 5),  
+            'min_child_weight': trial.suggest_int('min_child_weight', 1, 10),
+            'lambda': trial.suggest_float('lambda', 0, 5),
+            'alpha': trial.suggest_float('alpha', 0, 5),
+            'enable_categorical': trial.suggest_categorical('enable_categorical', [True])} 
+        model = XGBClassifier(**param)
+        cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
+        
     return cv_scores.mean()
 
 # Objective function for CatBoostClassifier
@@ -97,7 +101,7 @@ def initialize():
         pass
 
 # Logging function
-def log(msg, fname='log.txt'):
+def log(msg, fname='../log.txt'):
     if isinstance(msg, str):
         with open(fname, 'a') as file:
             file.write(msg + '\n')
@@ -145,3 +149,24 @@ def update_maps_from_config(data_map_file, model_map_file, runtime_map_file):
         }
 
     return data_map_config, model_map, runtime_map_config
+
+
+def get_or_create_experiment(experiment_name):
+    """
+    Retrieve the ID of an existing MLflow experiment or create a new one if it doesn't exist.
+
+    This function checks if an experiment with the given name exists within MLflow.
+    If it does, the function returns its ID. If not, it creates a new experiment
+    with the provided name and returns its ID.
+
+    Parameters:
+    - experiment_name (str): Name of the MLflow experiment.
+
+    Returns:
+    - str: ID of the existing or newly created MLflow experiment.
+    """
+
+    if experiment := mlflow.get_experiment_by_name(experiment_name):
+        return experiment.experiment_id
+    else:
+        return mlflow.create_experiment(experiment_name)

@@ -5,6 +5,7 @@ venv
 **/input_data/
 **/models/
 **/submissions
+**/mlruns
 
 **/log.txt
 **/.ipynb_checkpoints
