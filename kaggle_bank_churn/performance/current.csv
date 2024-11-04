@@ -1,4 +1,4 @@
 name,perf,kfold_perf,params,timestamp
-XGBClassifier,0.8958018873495612,,"{'max_depth': 11, 'max_bin': 1651, 'learning_rate': 0.31864686097892386, 'n_estimators': 277, 'subsample': 0.8120824505264677, 'colsample_bytree': 0.6166620411376655, 'gamma': 4.525163641851041, 'min_child_weight': 9, 'lambda': 0.8404014074289967, 'alpha': 4.295992568924057, 'enable_categorical': True}",2024-11-04 12:06:14
-CatBoostClassifier,0.8975799769150522,,"{'iterations': 490, 'depth': 4, 'learning_rate': 0.1854584393185115, 'l2_leaf_reg': 6.987636476631746, 'bagging_temperature': 0.7955909296092272}",2024-11-04 12:06:14
-RandomForestClassifier,0.6855574368047624,,"{'n_estimators': 366, 'max_depth': 13, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt'}",2024-11-04 12:06:14
+XGBClassifier,0.8957188012958212,,"{'max_depth': 16, 'max_bin': 266, 'learning_rate': 0.24373548930240482, 'n_estimators': 906, 'subsample': 0.8900755744676758, 'colsample_bytree': 0.7100300869477522, 'gamma': 4.696106720523124, 'min_child_weight': 8, 'lambda': 3.703429201564382, 'alpha': 3.834771812336939, 'enable_categorical': True}",2024-11-04 12:15:02
+CatBoostClassifier,0.8975799769150522,,"{'iterations': 490, 'depth': 4, 'learning_rate': 0.1854584393185115, 'l2_leaf_reg': 6.987636476631746, 'bagging_temperature': 0.7955909296092272}",2024-11-04 12:15:02
+RandomForestClassifier,0.6855574368047624,,"{'n_estimators': 366, 'max_depth': 13, 'min_samples_split': 10, 'min_samples_leaf': 4, 'max_features': 'sqrt'}",2024-11-04 12:15:02

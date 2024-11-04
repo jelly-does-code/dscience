@@ -20,29 +20,27 @@ import mlflow
 
 def get_params(name, data_map, model_map, runtime_map):
     param_df = read_csv('../performance/best.csv', index_col='name')
-    experiment_id = get_or_create_experiment(runtime_map["experiment_name"])
-
+    
     # Retune if 1. A retune is requested, 2. It has never been tuned before
     if model_map[name]['retune'] == 1 or (name not in param_df.index):
         print(f'Training: Hyperparameter tuning {name}..')
         start_time = time()
-        with mlflow.start_run(experiment_id=experiment_id, nested=True):
-            study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
-            study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map, runtime_map), n_trials=runtime_map['n_trials'])
-            model_params = study.best_params
-            
-            # Log the trial parameters and metrics to MLflow
-            mlflow.log_params(model_params)
-            mlflow.log_metric("best_roc_auc", study.best_value) 
-            mlflow.set_tags(
-            tags={
-                "project": "kaggle_bank_churn",
-                "optimizer_engine": "optuna",
-                "model_family": "xgboost",
-                "feature_set_version": 1,
-                }
-            )
-            print(f"{name} done. Took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
+        study = optuna.create_study(direction=runtime_map['perf_metric_direction'] )
+        study.optimize(lambda trial: model_map[name]['obj_func'](trial, data_map, runtime_map), n_trials=runtime_map['n_trials'])
+        model_params = study.best_params
+        
+        # Log the trial parameters and metrics to MLflow
+        mlflow.log_params(model_params)
+        mlflow.log_metric("best_roc_auc", study.best_value) 
+        mlflow.set_tags(
+        tags={
+            "project": "kaggle_bank_churn",
+            "optimizer_engine": "optuna",
+            "model": name,
+            "feature_set_version": 1,
+            }
+        )
+        print(f"{name} done. Took {strftime('%H:%M:%S', gmtime(time() - start_time))} for {runtime_map['n_trials']}.")
     else:
         model_params = literal_eval(param_df.loc[name, 'params'])
     
@@ -133,13 +131,14 @@ def predict(name, data_map, model_map, predict_data):
     return model_map
 
 def tune_train(data_map, model_map, runtime_map):
-    mlflow.set_tracking_uri("http://localhost:5000")
-    
     # to rewrite .. 
     for name in model_map:
-        model_map = get_params(name, data_map, model_map, runtime_map)
-        model_map = fit_models(name, data_map, model_map)
-        model_map = predict(name, data_map, model_map, 'X_test')
+        experiment_id = get_or_create_experiment(runtime_map["experiment_name"])
+        with mlflow.start_run(experiment_id=experiment_id, nested=True):
+
+            model_map = get_params(name, data_map, model_map, runtime_map)
+            model_map = fit_models(name, data_map, model_map)
+            model_map = predict(name, data_map, model_map, 'X_test')
 
     if runtime_map['calculate_kfold']:
         print(f'Training: checking kfold performance for {name}..')
@@ -156,6 +155,8 @@ def tune_train(data_map, model_map, runtime_map):
     return data_map, model_map
   
 def main():
+    mlflow.set_tracking_uri("http://localhost:5000")
+    
     data_map, model_map, runtime_map = update_maps_from_config('config/data_map.json', 'config/model_map.json', 'config/runtime_map.json')
     
     # Load raw data and perform EDA on it
