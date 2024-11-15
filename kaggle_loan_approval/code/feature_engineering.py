@@ -1,4 +1,6 @@
-from pandas import concat, cut
+#from pandas import concat, cut
+from modin.pandas import concat, cut
+
 import matplotlib.pyplot as plt
 import numpy as np
 

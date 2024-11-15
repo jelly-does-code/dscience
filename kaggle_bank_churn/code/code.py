@@ -135,7 +135,6 @@ def tune_train(data_map, model_map, runtime_map):
     for name in model_map:
         experiment_id = get_or_create_experiment(runtime_map["experiment_name"])
         with mlflow.start_run(experiment_id=experiment_id, nested=True):
-
             model_map = get_params(name, data_map, model_map, runtime_map)
             model_map = fit_models(name, data_map, model_map)
             model_map = predict(name, data_map, model_map, 'X_test')

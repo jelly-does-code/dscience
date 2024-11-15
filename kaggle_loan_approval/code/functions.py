@@ -1,4 +1,6 @@
-from pandas import DataFrame, set_option
+#from pandas import DataFrame, set_option
+from modin.pandas import DataFrame, set_option
+
 import json
 
 from time import localtime, strftime
@@ -11,7 +13,7 @@ from xgboost import XGBClassifier
 
 
 from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
+from xgboost import XGBClassifier, DMatrix
 from catboost import CatBoostClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.linear_model import RidgeClassifier
@@ -40,7 +42,7 @@ def obj_rf(trial, data_map, runtime_map):
 
 # Objective function for XBGBoostClassifier
 def obj_xgb(trial, data_map, runtime_map):
-    param = {
+    param = {"device": "cuda",
         'objective': 'binary:logistic',
         'max_depth': trial.suggest_int('max_depth', 7, 16),
         'max_bin': trial.suggest_int('max_bin', 256, 2000), 
@@ -54,6 +56,7 @@ def obj_xgb(trial, data_map, runtime_map):
         'lambda': trial.suggest_float('lambda', 0, 5),
         'alpha': trial.suggest_float('alpha', 0, 5),
         'enable_categorical': trial.suggest_categorical('enable_categorical', [True])} 
+    
     model = XGBClassifier(**param)
     cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
     return cv_scores.mean()

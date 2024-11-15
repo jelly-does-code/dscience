@@ -1,6 +1,8 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
-from pandas import Series, concat, get_dummies
+#from pandas import Series, concat, get_dummies
+from modin.pandas import Series, concat, get_dummies
+
 import numpy as np
 
 from os import listdir, remove
@@ -144,6 +146,7 @@ def plot_categorical_features(train_data, target_col, cat_cols, eda, max_plots_p
     print(f'EDA: Plotting categorical features ({eda}) for columns: {cat_cols}..')
 
     # Determine the number of features to plot
+    print(cat_cols)
     num_features = len(cat_cols)
     file_count = 1
     
@@ -215,11 +218,11 @@ def plot_mi(X_train, y_train, eda):
     print(f'EDA: Plotting MI scores ({eda})..')
         
     # Ensure categorical variables are encoded
-    #X_train_encoded = get_dummies(X_train_data, drop_first=True)  # Assuming X_train_data includes categorical vars
-    
+    X_train_encoded = get_dummies(X_train, drop_first=True)._to_pandas()  # Assuming X_train_data includes categorical vars
+    y_train = y_train._to_pandas() 
     # Calculate mutual information scores
-    mi_scores = mutual_info_classif(X_train, y_train, discrete_features='auto')
-    mi_scores = Series(mi_scores, name="MI Scores", index=X_train.columns)
+    mi_scores = mutual_info_classif(X_train_encoded, y_train, discrete_features='auto')
+    mi_scores = Series(mi_scores, name="MI Scores", index=X_train_encoded.columns)
     
     for t in ['min', 'max']:
         if t == 'max':
@@ -233,10 +236,11 @@ def plot_mi(X_train, y_train, eda):
         plt.title(f"Mutual Information Scores ({t})")
         plt.savefig(f'../eda/{eda}/mutual_information_{t}.png')
         plt.close()
+    del X_train_encoded
 
 def plot_corr(X_train_data, eda):
     print(f'EDA: Plotting correlations ({eda})..')
-    X_train_encoded = get_dummies(X_train_data, drop_first=True)
+    X_train_encoded = get_dummies(X_train_data, drop_first=True)._to_pandas()
     corr_matrix = X_train_encoded.corr()
     corr_matrix = corr_matrix.where(np.triu(np.abs(corr_matrix) > 0.5, k=1))
     plt.figure(figsize=(40, 20))
@@ -251,7 +255,7 @@ def eda(data_map, runtime_map):
     X_train, y_train = data_map['X_train'], data_map['y_train']
     eda = 'processed' if data_map['num_cols_engineered'] else 'unprocessed'
     [num_plot, cat_plot, mixed_plot, single_plot, skew, mi, corr, imp] = runtime_map['plots']
-    target_col = data_map['target_col']
+    target_col = data_map['target_cols'][0]                                      # For readability
     eda_when = runtime_map['eda_when'] 
 
     if eda == 'unprocessed':
@@ -262,9 +266,10 @@ def eda(data_map, runtime_map):
     if eda_when == 'both' or (eda_when == 'after' and eda == 'processed') or (eda_when == 'before' and eda == 'unprocessed'):
         print(f'Running EDA for {eda}..')
 
-        train_data = concat([X_train, y_train], axis=1)
-        
+        train_data = concat([X_train, y_train], axis=1)._to_pandas()
+
         plot_features_vs_target(train_data, num_cols, cat_cols, target_col, eda)
+        
         if num_plot:
             plot_numerical_features(train_data, target_col, num_cols, eda)
 
@@ -282,10 +287,13 @@ def eda(data_map, runtime_map):
 
         if corr: # Investigate_correlations
             plot_corr(X_train, eda)
+        
+        del train_data
 
         print(f'EDA: eda for {eda} done.\n')
 
     else:
         print(f'Skipping EDA for {eda}..')
+    
     
 

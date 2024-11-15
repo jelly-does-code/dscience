@@ -1,11 +1,11 @@
 {
-    "eda_when": "none",
+    "eda_when": "both",
     "task_type": "classification",
     "scoring": "roc_auc",
-    "perf_metric_direction": "maximize",                                                               
+    "perf_metric_direction": "maximize",
     "n_trials": 1,
     "calculate_kfold": 0,
-    "plots": [0,        0,        0,          0,           0,    0,  0,    0],
+    "plots": [0,        0,        0,          0,            0,    0,  0,    0],
     "dummy": "#num_plot, cat_plot, mixed_plot, single_plot, skew, mi, corr, imp",
     "runtime": "get_current_time"
 }   

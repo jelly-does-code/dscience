@@ -1,0 +1,23 @@
+{
+    "X_train": null,
+    "X_test": null,
+    "X_pred": null,
+    "y_train": null,
+    "y_test": null,
+    "target_col": "sales",
+    "index_col": "id",
+    "drop_cols": [],
+    "cat_cols_raw": [],
+    "num_cols_raw": [],
+    "date_cols_raw": [],
+    "cat_cols_engineered": [],
+    "num_cols_engineered": [],
+    "cat_cols_encoded": [],
+    "num_cols_encoded": [],
+    "train_file": "../input_data/train.csv",
+    "pred_file":"../input_data/test.csv",
+    "oil_file": "../input_data/oil.csv",
+    "stores_file": "../input_data/stores.csv",
+    "holidays_events_file": "../input_data/holidays_events.csv",
+    "transactions_file": "../input_data/transactions.csv"
+}

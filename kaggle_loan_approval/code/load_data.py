@@ -1,4 +1,5 @@
-from pandas import concat, read_csv
+#from pandas import concat, DataFrame, read_csv
+from modin.pandas import concat, DataFrame, read_csv
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold, StratifiedKFold
 
@@ -56,16 +57,25 @@ def custom_filter(df, filter_col, filter_type, filter_amt):
     log(f'train data shape change after custom_filter: {df.shape}, {output.shape}')
     return output
 
-def load_data(data_map, runtime_map):
+def load_df_to_device(data_map, cudf_available):
+    df_train = DataFrame()
+    for path, index in zip(data_map['train_files'], data_map['index_cols']):
+        df_tmp = cudf.read_csv(path, index_col=index) if cudf_available else read_csv(path, index_col=index)
+        df_train = concat([df_train, df_tmp])
+
+    df_pred = cudf.read_csv(data_map['pred_file'], index_col=index) if cudf_available else read_csv(data_map['pred_file'], index_col=index)
+
+    del df_tmp
+
+    return df_train, df_pred 
+
+def load_data(data_map, runtime_map, cudf_available):
     print('\nLoading data..')
-    target_col = data_map['target_col']                                      # For readability
+    target_col = data_map['target_cols'][0]                                      # For readability
     
     # Load csv files into dataframes
-    train_data = read_csv(data_map['train_file'], index_col=data_map['index_col'])
-    train_data2 = read_csv('../input_data/credit_risk_dataset.csv', index_col=data_map['index_col'])
-    train_data = concat([train_data, train_data2])
-    X_pred = read_csv(data_map['pred_file'], index_col=data_map['index_col'])
-
+    train_data, X_pred = load_df_to_device(data_map, cudf_available)
+    
     # Note different columns, determine kfold type
     data_map['cat_cols_raw'] =  [col for col in train_data.select_dtypes(include=['object', 'category']).columns.tolist() if col != target_col]
     data_map['num_cols_raw'] = [col for col in train_data.select_dtypes(include=[np.number]).columns.tolist() if col != target_col]
@@ -84,10 +94,10 @@ def load_data(data_map, runtime_map):
         'person_emp_length': (100, 'st')
     }
     for col, (value, method) in filter_conditions.items():
-        data_map['train_data'] = custom_filter(data_map['train_data'], col, method, value)
+        train_data = custom_filter(train_data, col, method, value)
 
     train_data.drop_duplicates(inplace=True)                                      # Drop fully duplicated records ..
-    train_data.dropna(subset=target_col, inplace=True)                            # Drop training records which don't have a target variable ..
+    train_data.dropna(subset=[target_col], inplace=True)                          # Drop training records which don't have a target variable ..
     train_data.drop(data_map['drop_cols'], axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
     X_pred.drop(data_map['drop_cols'], axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
@@ -106,7 +116,7 @@ def load_data(data_map, runtime_map):
 
     data_map['X_train'], data_map['X_test'], data_map['X_pred'] = fill_missing_values(data_map['X_train']), fill_missing_values(data_map['X_test']), fill_missing_values(X_pred)             # This will be used for training (no data leakage)
     
-    del train_data, train_data2, X_train_data, y_train_data, X_pred
+    del train_data, X_train_data, y_train_data, X_pred
 
     log(f"X_train shape: {data_map['X_train']}")
     log(f"X_test shape: {data_map['X_test']}")

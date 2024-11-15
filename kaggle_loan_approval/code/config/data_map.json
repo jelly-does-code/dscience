@@ -4,8 +4,8 @@
     "X_pred": null,
     "y_train": null,
     "y_test": null,
-    "target_col": "loan_status",
-    "index_col": "id",
+    "target_cols": ["loan_status", "loan_status"],
+    "index_cols": ["id", "id"],
     "drop_cols": [],
     "cat_cols_raw": [],
     "num_cols_raw": [],
@@ -13,6 +13,6 @@
     "num_cols_engineered": [],
     "cat_cols_encoded": [],
     "num_cols_encoded": [],
-    "train_file": "../input_data/train.csv",
+    "train_files": ["../input_data/train.csv", "../input_data/credit_risk_dataset.csv"],
     "pred_file":"../input_data/test.csv"
 }
