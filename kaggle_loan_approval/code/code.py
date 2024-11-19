@@ -47,7 +47,7 @@ def fit_models(name, data_map, model_map):
     print('Training: retrieving fit models or refitting models..')
 
     # If there is no best version of the model, or if a refit is requested, update model_map[name]['model'] with newly fitted model.
-    if model_map[name]['refit'] == 1 or not isfile(f'../models/{name}_best.joblib'):
+    if model_map[name]['refit'] == 1 or not isfile(f'../models/{name}_best.json'):
         print(f'Training: fitting for {name}..')
         if model_map[name]['handles_cat']:
             if 'CatBoost' in name:
@@ -79,7 +79,7 @@ def write_current(model_map, runtime_map):
             curr_perf = new_row
         else:
             curr_perf = concat([curr_perf, new_row], ignore_index=True)
-        dump(model_map[name]['model'], f'../models/{name}_current.joblib')
+        dump(model_map[name]['model'], f'../models/{name}_current.json')
     curr_perf.to_csv('../performance/current.csv', index=False)
 
 def write_better(model_map, perf_metric_direction):
@@ -89,16 +89,16 @@ def write_better(model_map, perf_metric_direction):
     if isfile('../performance/best.csv'):
         best_perf = read_csv('../performance/best.csv', index_col='name')
         for name in model_map:
-            if isfile(f'../models/{name}_best.joblib'):
+            if isfile(f'../models/{name}_best.json'):
                 # Fetch current and best performance from the dataframe
                 best_perf_value, curr_perf_value = best_perf.loc[name, 'perf'], curr_perf.loc[name, 'perf']
                 # Compare based on the direction
                 if (perf_metric_direction == 'maximize' and curr_perf_value > best_perf_value) or (perf_metric_direction == 'minimize' and curr_perf_value < best_perf_value):
                     best_perf.loc[name] = curr_perf.loc[name]
-                    copy2(f'../models/{name}_current.joblib', f'../models/{name}_best.joblib')
+                    copy2(f'../models/{name}_current.json', f'../models/{name}_best.json')
                     print(f'Yeeehaaa! We\'ve got ourselves a new best candidate for model {name}!')
             else:
-                copy2(f'../models/{name}_current.joblib', f'../models/{name}_best.joblib')
+                copy2(f'../models/{name}_current.json', f'../models/{name}_best.json')
 
         best_perf.to_csv('../performance/best.csv')
     else:
@@ -171,7 +171,7 @@ def main():
     data_map, model_map = tune_train(data_map, model_map, runtime_map)                                                  # Train and evaluate models
 
     # Load the best models for all entries in model_map
-    model_map = {name: {**model_info, 'best_model': load(f'../models/{name}_best.joblib')} for name, model_info in model_map.items()}
+    model_map = {name: {**model_info, 'best_model': load(f'../models/{name}_best.json')} for name, model_info in model_map.items()}
 
     if runtime_map['plots'][-1]:
         plot_feature_importances(data_map, model_map)

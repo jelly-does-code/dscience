@@ -1,7 +1,19 @@
 https://www.kaggle.com/competitions/playground-series-s4e10/overview
 
-This challenge is a ROC-AUC evaluated synthetically generated dataset in the Playground Kaggle Series. 
+This challenge is a ROC-AUC evaluated synthetically generated dataset in the Playground Kaggle Series. The target is to predict probability of customer getting a loan. (output: [0, 1]). It uses Classifier models - mainly XGBClassifier, CatboostClassifier, RandomForestClassifier.
 
-The target is to predict probability of customer getting a loan. (output: [0, 1])
+The model of choice can be deployed as API (with or without Docker) using FastAPI. The API has data quality checks it performs on the input data.
 
-It uses Classifiers, no regressors.
+-> For the FASTAPI app without docker, testing predictions locally can be done by running deployment/test_api_local.sh. It contains the first train set example.
+
+To build the Docker image with the FastAPI:
+
+1. Choose your favorite model in the models/ folder
+2. Update the Dockerfile in the root of the project to make sure it copies your favorite model into the Docker container upon build. For XGB the copy statement looks like this: COPY models/XGBClassifier_best.json ./XGBClassifier_best.json
+3. Update the deployment/main.py script to load your favorite model
+4. Run
+
+    sudo docker build -t fastapi-ml-api .
+    sudo docker run -p 8000:8000 fastapi-ml-api
+
+-> With Docker running, the application is accessible in a browser on http://127.0.0.1:8000/docs with the Swagger UI

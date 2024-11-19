@@ -25,19 +25,6 @@
         "perf": "",
         "kfold_perf": ""
     },
-    "HistBoostingClassifier": {
-        "model": "HistGradientBoostingClassifier",
-        "handles_cat": true,
-        "handles_sparse": true,
-        "params": {},
-        "obj_func": "obj_histboost",
-        "retune": 0,
-        "refit": 0,
-        "pred_proba": "",
-        "proba_func": "predict_proba",
-        "perf": "",
-        "kfold_perf": ""
-    },
     "RandomForestClassifier": {
         "model": "RandomForestClassifier",
         "handles_cat": false,

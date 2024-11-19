@@ -5,9 +5,7 @@ import json
 
 from time import localtime, strftime
 
-from sklearn.linear_model import RidgeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
 from catboost import CatBoostClassifier
 from xgboost import XGBClassifier
 
@@ -15,8 +13,6 @@ from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier, DMatrix
 from catboost import CatBoostClassifier
-from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.linear_model import RidgeClassifier
 
 from sklearn.model_selection import cross_val_score
 
@@ -74,22 +70,6 @@ def obj_cat(trial, data_map, runtime_map):
         'verbose': trial.suggest_categorical('verbose', [False]),
     }
     model = CatBoostClassifier(cat_features=data_map['cat_cols_engineered'], **param)
-    cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
-    return cv_scores.mean()
-
-# Objective Function for HistBoostRegressor
-def obj_histboost(trial, data_map, runtime_map):
-    params = {
-        'learning_rate': trial.suggest_float('learning_rate', 1e-3, 0.3, log=True),
-        'max_iter': trial.suggest_int('max_iter', 50, 500),
-        'max_depth': trial.suggest_int('max_depth', 3, 15),
-        'min_samples_leaf': trial.suggest_int('min_samples_leaf', 10, 200),
-        'l2_regularization': trial.suggest_float('l2_regularization', 1e-10, 1.0, log=True),
-        'max_bins': trial.suggest_int('max_bins', 100, 255),
-        'early_stopping': trial.suggest_categorical('early_stopping', [True, False]),
-        'categorical_features': trial.suggest_categorical('categorical_features', ['from_dtype'])
-    }
-    model = HistGradientBoostingClassifier(**params)
     cv_scores = cross_val_score(model, data_map['X_train'], data_map['y_train'], cv=5, scoring=runtime_map['scoring'])
     return cv_scores.mean()
 
