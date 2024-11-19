@@ -1,6 +1,6 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
-from pandas import Series, concat, get_dummies
+from pandas import cut, Series, concat, get_dummies
 import numpy as np
 
 from os import listdir, remove
@@ -80,42 +80,59 @@ def plot_feature_importances(data_map, model_map):
             plt.savefig(f'../eda/model/{name}_feature_importance.png')
             plt.close()
 
-# Feature insights
-def plot_features_vs_target(data, num_cols, cat_cols, target_col, eda):
-    # Helper function to create grouped plots and save them
-    def save_plots(cols, plot_func, plot_type, file_idx):
-        num_files = int(np.ceil(len(cols) / 20))
-        for i in range(num_files):
-            start_idx = i * 20
-            end_idx = min(start_idx + 20, len(cols))
-            subset_cols = cols[start_idx:end_idx]
-            
-            # Create the plots in a figure
-            fig, axes = plt.subplots(len(subset_cols), 1, figsize=(10, 6 * len(subset_cols)))
-            axes = axes if len(subset_cols) > 1 else [axes]  # Ensure axes is always iterable
-            for ax, col in zip(axes, subset_cols):
-                plot_func(ax, col)
-            
-            # Save the figure
-            plt.tight_layout()
-            plt.savefig(f'../eda/{eda}/{plot_type}_features_vs_target_{file_idx + i + 1}.png')
-            plt.close()
-    # Function to plot boxplots for numerical columns
-    def plot_boxplot(ax, col):
-        sns.boxplot(x=target_col, y=col, data=data, showmeans=True, showcaps=True, ax=ax)
-        ax.set_title(f'Boxplot of {col} by {target_col}')
-        plt.xticks(rotation=45)  # Rotate tick labels using plt.xticks
-    # Function to plot countplots for categorical columns
-    def plot_countplot(ax, col):
-        sns.countplot(x=col, hue=target_col, data=data, palette="Set2", ax=ax)
-        ax.set_title(f'Countplot of {col} by {target_col}')
-        plt.xticks(rotation=45)  # Rotate tick labels using plt.xticks
-    
-    # Plot numerical features with boxplots
-    save_plots(num_cols, plot_boxplot, 'numerical', 0)
+def plot_features_vs_target(data, num_cols, cat_cols, target_col, eda, bins=10):
+    # Check if target needs grouping
+    group_target = data[target_col].nunique() >= 50
 
-    # Plot categorical features with countplots
-    save_plots(cat_cols, plot_countplot, 'categorical', 0)
+    if group_target:
+        # Group continuous target into bins
+        data = data.copy()
+        grouped_target = cut(data[target_col], bins=bins, labels=[f"Bin {i+1}" for i in range(bins)])
+        grouped_target_col = f"{target_col}_grouped"
+        data[grouped_target_col] = grouped_target
+        target_to_use = grouped_target_col
+        cat_cols = cat_cols + [grouped_target_col]  # Include grouped target as categorical
+    else:
+        target_to_use = target_col
+
+    # Define plotting logic
+    def plot_and_save(feature, plot_func, plot_type):
+        plt.figure(figsize=(10, 5))
+        plot_func()
+        plt.title(f"{feature} vs {target_col}")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(f"../eda/{eda}/{plot_type}_{feature}_vs_{target_col}.png")
+        plt.close()
+
+    # Plot for categorical features
+    for feature in cat_cols:
+        if target_to_use in num_cols:
+            # Boxplot for categorical feature vs numerical target
+            plot_and_save(feature, lambda: sns.boxplot(x=feature, y=target_to_use, data=data), "boxplot")
+        else:
+            # Countplot for categorical feature vs categorical target
+            plot_and_save(feature, lambda: sns.countplot(x=feature, hue=target_to_use, data=data), "countplot")
+
+    # Plot for numerical features
+    for feature in num_cols:
+        if target_to_use in num_cols:
+            # Scatterplot for numerical feature vs numerical target
+            plot_and_save(feature, lambda: sns.scatterplot(x=feature, y=target_to_use, data=data), "scatterplot")
+        else:
+            # Boxplot for numerical feature vs categorical target
+            plot_and_save(feature, lambda: sns.boxplot(x=feature, y=target_to_use, data=data), "boxplot")
+
+def plot_time_series(data, time_col, target_col, eda):
+    # Plot the target variable over time
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(x=data[time_col], y=data[target_col], label=target_col)
+    plt.title(f"Time Series of {target_col}")
+    plt.xlabel(f"{time_col}")
+    plt.ylabel(target_col)
+    plt.tight_layout()
+    plt.savefig(f"../eda/{eda}/time_series_{target_col}.png")
+    plt.close()
 
 def plot_numerical_features(train_data, target_col, num_cols, eda, max_plots_per_file=20):    
     # Determine how many plots to create based on max_plots
@@ -264,7 +281,8 @@ def eda(data_map, runtime_map):
         train_data = concat([data_map['X_train'], data_map['y_train']], axis=1)
         
         #plot_features_vs_target(train_data, num_cols, cat_cols, target_col, eda)
-        
+        plot_time_series(train_data, 'date', target_col, eda)
+
         if num_plot:
             plot_numerical_features(train_data, target_col, num_cols, eda)
 

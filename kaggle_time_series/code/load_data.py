@@ -48,10 +48,10 @@ def custom_filter(df, filter_col, filter_type, filter_amt):
         raise ValueError("custom_filters function expected gt or st as condition_type, got {}".format(filter_type))
     
     if filter_type == 'gt':
-        output = df[(df[filter_col] > filter_amt) | (df[filter_col].isna())]
+        output = df[(df[filter_col] >= filter_amt) | (df[filter_col].isna())]
     
     if filter_type == 'st':
-        output = df[(df[filter_col] < filter_amt) | (df[filter_col].isna())]
+        output = df[(df[filter_col] <= filter_amt) | (df[filter_col].isna())]
 
     log(f'train data shape change after custom_filter: {df.shape}, {output.shape}')
     return output
@@ -71,25 +71,20 @@ def load_data(data_map, runtime_map):
 
 
     # Combine data into single train/pred dataframes
-  
     train_data = merge(train_data, oil_data, on='date', how='left')             # Add oil price data
     train_data = merge(train_data, stores_data, on='store_nbr', how='left')     # Add store information
     train_data = merge(train_data, holidays_data, on='date', how='left')        # Add holidays
     # Interpret transferred column as boolean
     train_data['transferred'] = train_data['transferred'].replace({'True': True, 'False': False}).astype(bool)
     train_data = train_data[~train_data['transferred']]                         # Transferred data has data point elsewhere, under type: Transferred. So remove
-
-    
     train_data = merge(train_data, transactions_data, on='date', how='left')    # Add transactions_data
     
     X_pred = merge(X_pred, oil_data, on='date', how='left')                     # Add oil price data
     X_pred = merge(X_pred, stores_data, on='store_nbr', how='left')             # Add store information
     X_pred = merge(X_pred, holidays_data, on='date', how='left')                # Add holidays
-    
     # Interpret transferred column as boolean
     X_pred['transferred'] = X_pred['transferred'].replace({'True': True, 'False': False}).astype(bool)
     X_pred = X_pred[~X_pred['transferred']]                                     # Transferred data has data point elsewhere, under type: Transferred. So remove
-    
     X_pred = merge(X_pred, transactions_data, on='date', how='left')            # Add transactions_data
     
 
@@ -108,23 +103,25 @@ def load_data(data_map, runtime_map):
         train_data[col] = train_data[col].astype('category')
         X_pred[col] = X_pred[col].astype('category')
 
-    # Apply filters to training data
-    filter_conditions = {}
-    for col, (value, method) in filter_conditions.items():
-        data_map['train_data'] = custom_filter(data_map['train_data'], col, method, value)
-
     train_data.drop_duplicates(inplace=True)                                      # Drop fully duplicated records ..
     train_data.dropna(subset=target_col, inplace=True)                            # Drop training records which don't have a target variable ..
     train_data.drop(data_map['drop_cols'], axis=1, inplace=True)                  # Drop irrelevant columns as defined in drop_cols ..
     X_pred.drop(data_map['drop_cols'], axis=1, inplace=True)                      # Drop irrelevant columns as defined in drop_cols ..
 
+
+    # Apply filters to training data
+    filter_conditions = {'sales': (0, 'gt'),}
+    for col, (value, method) in filter_conditions.items():
+        train_data = custom_filter(train_data, col, method, value)
+
+
     # Create X, y for training data
     y_train_data = train_data.pop(target_col)
 
     # Train/test split
-    data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(train_data, y_train_data)   # Train test split
+    data_map['X_train'], data_map['X_test'], data_map['y_train'], data_map['y_test'] = split(train_data, y_train_data)     # Train test split
     data_map['X_train_no_engineered'] = data_map['X_train']                                                                # Save this for comparing model with/without feature engineering 
-    
+    data_map['X_pred'] = X_pred
     # Note index values. This is needed for converting sparse back to dense later on
     data_map['X_train_index_values'] = data_map['X_train'].index.tolist()
     data_map['X_test_index_values'] = data_map['X_test'].index.tolist()
@@ -134,9 +131,9 @@ def load_data(data_map, runtime_map):
     
     del train_data, y_train_data, X_pred
 
-    log(f"X_train shape: {data_map['X_train']}")
-    log(f"X_test shape: {data_map['X_test']}")
-    log(f"X_pred shape: {data_map['X_pred']}")
+    log(f"X_train shape: {data_map['X_train'].shape}")
+    log(f"X_test shape: {data_map['X_test'].shape}")
+    log(f"X_pred shape: {data_map['X_pred'].shape}")
 
 
     return data_map, runtime_map
