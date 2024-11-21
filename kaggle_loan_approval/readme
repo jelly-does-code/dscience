@@ -11,11 +11,55 @@ To build the Docker image with the FastAPI:
 1. Choose your favorite model in the models/ folder
 2. Update the Dockerfile in the root of the project to make sure it copies your favorite model into the Docker container upon build. For XGB the copy statement looks like this: COPY ../codebase/models/XGBClassifier_best.json ./XGBClassifier_best.json
 3. Update the deployment/main.py script to load your favorite model
-4. Run  (in the root of the project)
+4. For docker deployment, run
 
-    docker build -f docker/Dockerfile -t jeltopote/kaggle_loan_approval .
-    sudo docker run -p 8000:8000 jeltopote/kaggle_loan_approval
-5. To push a newly built docker image to Docker Hub
-    docker push jeltopote/kaggle_loan_approval:latest	
+    docker build -f docker/Dockerfile -t kaggle-loan-approval .
+    sudo docker run -p 8000:8000 kaggle-loan-approval
+
+5. To push the newly built docker image to Docker Hub
+    docker push kaggle-loan-approval:latest	
 
 -> With Docker running, the application is accessible in a browser on http://127.0.0.1:8000/docs with the Swagger UI
+
+
+For minikube/Kubernetes (k8s) deployment:
+0. Build the docker image with Minikube CLI (image for pod will be unavailable if built with 'normal' docker):
+
+    eval $(minikube docker-env)
+    docker build -f docker/Dockerfile -t kaggle-loan-approval .
+
+1. In the /k8s dir, run:
+    minikube kubectl -- apply -f deployment.yaml
+    minikube kubectl -- apply -f service.yaml
+
+2. If desired, verify the resources:
+    minikube kubectl -- get pods
+    minikube kubectl -- get services
+
+3. Access the application:
+    minikube service list
+    minikube service kaggle-loan-approval-service
+
+The application is now deployed in minikube. It can be tested with following:
+1. Get ip address/port for your service by running minikube kubectl -- get svc
+2. Replace the obtained ip and port in following curl statement:
+
+
+curl -X POST "http://<IP_ADRESS>:<PORT>/predict"      -H "Content-Type: application/json"      -d '{
+           "id": 0,
+           "person_age": 37,
+           "person_income": 35000,
+           "person_home_ownership": "RENT",
+           "person_emp_length": 0.0,
+           "loan_intent": "EDUCATION",
+           "loan_grade": "B",
+           "loan_amnt": 6000,
+           "loan_int_rate": 11.49,
+           "loan_percent_income": 0.17,
+           "cb_person_default_on_file": "N",
+           "cb_person_cred_hist_length": 14
+         }'
+
+
+The response will look like this:
+    {"prediction":0.0}

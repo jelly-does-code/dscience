@@ -1,0 +1,21 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaggle-loan-approval-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kaggle-loan-approval
+  template:
+    metadata:
+      labels:
+        app: kaggle-loan-approval
+    spec:
+      containers:
+      - name: kaggle-loan-approval-container
+        image: kaggle-loan-approval:latest
+        imagePullPolicy: Never  # Ensures Minikube does not attempt to pull the image from a registry
+        ports:
+        - containerPort: 8000
