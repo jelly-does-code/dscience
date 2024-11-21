@@ -9,11 +9,11 @@ The model of choice can be deployed as API (with or without Docker) using FastAP
 To build the Docker image with the FastAPI:
 
 1. Choose your favorite model in the models/ folder
-2. Update the Dockerfile in the root of the project to make sure it copies your favorite model into the Docker container upon build. For XGB the copy statement looks like this: COPY models/XGBClassifier_best.json ./XGBClassifier_best.json
+2. Update the Dockerfile in the root of the project to make sure it copies your favorite model into the Docker container upon build. For XGB the copy statement looks like this: COPY ../codebase/models/XGBClassifier_best.json ./XGBClassifier_best.json
 3. Update the deployment/main.py script to load your favorite model
-4. Run
+4. Run  (in the root of the project)
 
-    sudo docker build -t fastapi-ml-api .
-    sudo docker run -p 8000:8000 fastapi-ml-api
+    docker build -f docker/Dockerfile -t jeltopote/kaggle_loan_approval .
+    sudo docker run -p 8000:8000 jeltopote/kaggle_loan_approval
 
 -> With Docker running, the application is accessible in a browser on http://127.0.0.1:8000/docs with the Swagger UI

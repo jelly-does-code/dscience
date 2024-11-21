@@ -1,7 +1,0 @@
- joblib
- fastapi
- pydantic
- uvicorn
- xgboost
- pandas
- numpy

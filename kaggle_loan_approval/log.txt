@@ -1,4 +1,0 @@
-Number of samples in the dataset: 58637
-
-Using 80/20 split for large dataset.
-

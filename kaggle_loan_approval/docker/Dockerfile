@@ -1,20 +1,18 @@
 # Use a lightweight Python image
 FROM python:3.9-slim
 
+ENV MODEL_PATH="XGBClassifier_best.json"
+
 # Set the working directory in the container
 WORKDIR /app
 
-# Set environment variables
-ENV MODEL_PATH="XGBClassifier_best.json"
-
-
 # Copy requirements and install dependencies
-COPY deployment/requirements.txt ./requirements.txt
+COPY docker/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code and model
-COPY deployment/main.py ./main.py
-COPY models/XGBClassifier_best.json ./XGBClassifier_best.json
+COPY docker/main.py ./main.py
+COPY ../codebase/models/XGBClassifier_best.json ./XGBClassifier_best.json
 
 # Expose the port FastAPI will run on
 EXPOSE 8000
