@@ -15,5 +15,7 @@ To build the Docker image with the FastAPI:
 
     docker build -f docker/Dockerfile -t jeltopote/kaggle_loan_approval .
     sudo docker run -p 8000:8000 jeltopote/kaggle_loan_approval
+5. To push a newly built docker image to Docker Hub
+    docker push jeltopote/kaggle_loan_approval:latest	
 
 -> With Docker running, the application is accessible in a browser on http://127.0.0.1:8000/docs with the Swagger UI
